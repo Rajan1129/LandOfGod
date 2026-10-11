@@ -16,6 +16,7 @@ import { CalendarPage } from './pages/CalendarPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { UnaTattooArtistPage } from './pages/UnaTattooArtistPage';
 
 // Admin
 import { AdminLayout } from './admin/AdminLayout';
@@ -64,6 +65,16 @@ export const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+
+          {/* Una Local SEO Landing Pages */}
+          <Route path="/best-tattoo-artist-in-una" element={<UnaTattooArtistPage />} />
+          <Route path="/best-tattoo-artist-in-una/" element={<UnaTattooArtistPage />} />
+          <Route path="/tattoo-artist-in-una" element={<UnaTattooArtistPage />} />
+          <Route path="/tattoo-artist-in-una/" element={<UnaTattooArtistPage />} />
+          <Route path="/tattoo-designer-in-una" element={<UnaTattooArtistPage />} />
+          <Route path="/tattoo-designer-in-una/" element={<UnaTattooArtistPage />} />
+          <Route path="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una" element={<UnaTattooArtistPage />} />
+          <Route path="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/" element={<UnaTattooArtistPage />} />
 
           {/* Legacy Artists redirects to Portfolio */}
           <Route path="/artists" element={<Navigate to="/portfolio" replace />} />

@@ -50,6 +50,9 @@ export const AdminDesigns = () => {
   const [customAreaInput, setCustomAreaInput] = useState('');
   const [description, setDescription] = useState('');
   const [previewImage, setPreviewImage] = useState('');
+  const [customWidth, setCustomWidth] = useState(100);
+  const [customHeight, setCustomHeight] = useState(100);
+  const [customScale, setCustomScale] = useState(1.0);
   const [difficulty, setDifficulty] = useState('Intermediate');
   const [estTimeHours, setEstTimeHours] = useState(3);
   const [estPriceRange, setEstPriceRange] = useState('Direct Inquiry (WhatsApp)');
@@ -57,6 +60,7 @@ export const AdminDesigns = () => {
   const [submitting, setSubmitting] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const loadDesigns = async () => {
     setLoading(true);
@@ -75,23 +79,51 @@ export const AdminDesigns = () => {
     loadDesigns();
   }, []);
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const processFile = async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      toast.error('Please upload a valid image file (PNG, JPG, WEBP)');
+      return;
+    }
 
     setUploadingImage(true);
     try {
-      const compressedDataUrl = await compressImageFile(file, { maxWidth: 1600, maxHeight: 1600, quality: 0.85 });
+      const compressedDataUrl = await compressImageFile(file, { maxWidth: 1600, maxHeight: 1600, quality: 0.88 });
       setPreviewImage(compressedDataUrl);
       setImageError(false);
-      toast.success('Design motif optimized and ready to save!');
+      toast.success(`Design image "${file.name}" uploaded successfully!`);
     } catch (err) {
       console.error(err);
       toast.error('Failed to process image file');
     } finally {
       setUploadingImage(false);
-      e.target.value = '';
     }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+    e.target.value = '';
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
   };
 
   const toggleAreaSelection = (area) => {
@@ -115,10 +147,13 @@ export const AdminDesigns = () => {
     setEditingDesign(null);
     setName('');
     setStyle('Geometric');
-    setSelectedAreas(selectedBodyFilter !== 'All' ? [selectedBodyFilter] : ['Forearm', 'Upper Arm']);
+    setSelectedAreas(selectedBodyFilter !== 'All' ? [selectedBodyFilter] : ['Forearm']);
     setCustomAreaInput('');
     setDescription('');
-    setPreviewImage('https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=500&q=80');
+    setPreviewImage('');
+    setCustomWidth(100);
+    setCustomHeight(100);
+    setCustomScale(1.0);
     setDifficulty('Intermediate');
     setEstTimeHours(3);
     setEstPriceRange('Direct Inquiry (WhatsApp)');
@@ -135,6 +170,9 @@ export const AdminDesigns = () => {
     setCustomAreaInput('');
     setDescription(design.description || '');
     setPreviewImage(design.previewImage || '');
+    setCustomWidth(design.customWidth || 100);
+    setCustomHeight(design.customHeight || 100);
+    setCustomScale(design.customScale || 1.0);
     setDifficulty(design.difficulty || 'Intermediate');
     setEstTimeHours(design.estTimeHours || 3);
     setEstPriceRange(design.estPriceRange || 'Direct Inquiry (WhatsApp)');
@@ -182,6 +220,9 @@ export const AdminDesigns = () => {
         description,
         previewImage,
         transparentOverlay: previewImage,
+        customWidth: Number(customWidth) || 100,
+        customHeight: Number(customHeight) || 100,
+        customScale: Number(customScale) || 1.0,
         difficulty,
         estTimeHours: Number(estTimeHours),
         estPriceRange,
@@ -575,40 +616,110 @@ export const AdminDesigns = () => {
                 </label>
               </div>
 
-              {/* Upload Motif Image */}
-              <div className="space-y-2 border border-studio-border/50 bg-studio-secondary/60 p-3 rounded-lg">
+              {/* UPLOAD MOTIF IMAGE (DRAG & DROP OR SELECT IMAGE) */}
+              <div className="space-y-3 border border-studio-border/60 bg-studio-secondary/60 p-4 rounded-xl">
                 <div className="flex items-center justify-between">
-                  <label className="block font-bold text-studio-textMuted uppercase">
-                    Motif Artwork / PNG <span className="text-red-400">*</span>
+                  <label className="block font-bold text-amber-300 uppercase tracking-wider text-xs">
+                    Upload Tattoo Artwork <span className="text-red-400">*</span>
                   </label>
-                  <span className="text-[10px] text-studio-textMuted">Transparent PNG or Tattoo Photo</span>
+                  <span className="text-[10px] text-studio-textMuted">Drag & drop or click file</span>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 items-center">
-                  <div className="flex-1 w-full">
-                    <input
-                      type="text"
-                      required
-                      placeholder="Paste Image URL, Google Drive or Unsplash link..."
-                      value={previewImage}
-                      onChange={(e) => {
-                        const cleaned = cleanImageUrl(e.target.value);
-                        setPreviewImage(cleaned);
-                        setImageError(false);
-                      }}
-                      className="w-full bg-studio-card border border-studio-border rounded px-3 py-2 text-studio-textMain focus:outline-none focus:border-studio-bronze text-xs"
-                    />
+
+                {/* Drag and drop upload target */}
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all ${
+                    isDragOver
+                      ? 'border-amber-400 bg-amber-400/10 scale-[1.01]'
+                      : previewImage
+                      ? 'border-emerald-500/50 bg-emerald-500/5 hover:border-amber-400/70'
+                      : 'border-studio-border hover:border-amber-400/60 bg-studio-card/70'
+                  }`}
+                  onClick={() => document.getElementById('tattooFileInput')?.click()}
+                >
+                  <input
+                    id="tattooFileInput"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+
+                  <div className="flex flex-col items-center justify-center space-y-2">
+                    <div className="w-12 h-12 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-amber-400 shadow-md">
+                      <Upload className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-xs text-studio-textMain">
+                        {uploadingImage ? 'Processing & Optimizing Image...' : 'Drag & Drop your tattoo design here'}
+                      </p>
+                      <p className="text-[11px] text-studio-textMuted mt-0.5">
+                        or <span className="text-amber-400 underline font-semibold">Browse from your computer</span> (PNG, JPG, WEBP)
+                      </p>
+                    </div>
                   </div>
-                  <div className="shrink-0">
-                    <label className="cursor-pointer bg-studio-card border border-studio-border hover:border-studio-gold text-studio-gold px-3 py-2 rounded flex items-center space-x-1.5 text-xs font-semibold">
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? 'Optimizing...' : 'Upload File'}</span>
+                </div>
+
+                {/* IMAGE DIMENSIONS: HEIGHT & WIDTH ADJUSTMENT */}
+                <div className="p-3 bg-studio-card/90 border border-studio-border/60 rounded-xl space-y-3">
+                  <div className="flex items-center justify-between border-b border-studio-border/40 pb-1.5">
+                    <div className="flex items-center space-x-1.5">
+                      <Sliders className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="font-bold uppercase tracking-wider text-[11px] text-amber-300">
+                        Body Part Tattoo Dimensions (Width & Height)
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-zinc-400">
+                      {customWidth}% W × {customHeight}% H
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Width adjustment */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-zinc-300 font-semibold">Tattoo Width:</span>
+                        <span className="text-amber-400 font-bold">{customWidth}%</span>
+                      </div>
                       <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
+                        type="range"
+                        min="30"
+                        max="250"
+                        step="5"
+                        value={customWidth}
+                        onChange={(e) => setCustomWidth(Number(e.target.value))}
+                        className="w-full accent-amber-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
                       />
-                    </label>
+                      <div className="flex justify-between text-[9px] text-zinc-500">
+                        <span>Compact (30%)</span>
+                        <span>Default (100%)</span>
+                        <span>Wide (250%)</span>
+                      </div>
+                    </div>
+
+                    {/* Height adjustment */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-zinc-300 font-semibold">Tattoo Height:</span>
+                        <span className="text-amber-400 font-bold">{customHeight}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="30"
+                        max="250"
+                        step="5"
+                        value={customHeight}
+                        onChange={(e) => setCustomHeight(Number(e.target.value))}
+                        className="w-full accent-amber-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
+                      />
+                      <div className="flex justify-between text-[9px] text-zinc-500">
+                        <span>Short (30%)</span>
+                        <span>Default (100%)</span>
+                        <span>Tall (250%)</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

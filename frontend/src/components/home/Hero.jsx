@@ -1,328 +1,179 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Interactive3DStudio } from '../tattoo-studio/Interactive3DStudio';
-import { TATTOO_ARTWORKS_CATALOG } from '../tattoo-studio/TattooArtworks';
-import { designsAPI } from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
-import { Sparkles, Heart, ArrowRight, Check, Shield, Settings, MessageSquare, Star, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
+import {
+  ArrowRight,
+  MessageSquare,
+  ShieldCheck,
+  Award,
+  Sparkles,
+  Star,
+  Compass,
+  MapPin,
+  Calendar
+} from 'lucide-react';
 import { createArtworkInquiryUrl } from '../../utils/whatsapp';
-import { getFullImageUrl } from '../../utils/imageHelper';
 
 export const Hero = () => {
-  const { isAdmin } = useAuth();
   const { settings } = useSettings();
-  const [selectedBodyArea, setSelectedBodyArea] = useState('Forearm');
-  const [selectedStyleFilter, setSelectedStyleFilter] = useState('All');
-  const [designs, setDesigns] = useState(TATTOO_ARTWORKS_CATALOG);
-  const [selectedDesign, setSelectedDesign] = useState(TATTOO_ARTWORKS_CATALOG[0]);
-  const [savedFavorites, setSavedFavorites] = useState([]);
-  const [loadingDesigns, setLoadingDesigns] = useState(true);
   const navigate = useNavigate();
 
-  const heroHeadline = settings?.heroHeadline || 'Bespoke Tattoo\nArtistry & Precision.';
-  const heroSubtitle = settings?.heroSubtitle || 'Master Sunil and resident artists specialize in fine-line realism, sacred geometry, and bespoke custom tattoos with hospital-grade sterile hygiene.';
+  const studioName = settings?.studioName || 'LAND OF GOD TATTOO STUDIO';
   const street = settings?.address?.street || 'Friends Colony';
   const city = settings?.address?.city || 'Una';
+  const state = settings?.address?.state || 'Himachal Pradesh';
 
-  const stylesList = ['All', 'Sacred Devbhoomi', 'Fine Line', 'Geometric', 'Blackwork', 'Japanese', 'Traditional', 'Mandala', 'Neo-Traditional'];
+  const heroHeadline = settings?.heroHeadline;
+  const heroSubtitle = settings?.heroSubtitle;
 
-  // Fetch dynamic designs from Admin database and ensure 100% authentic named tattoo artworks
-  useEffect(() => {
-    const loadDynamicDesigns = async () => {
-      try {
-        const res = await designsAPI.getAll();
-        if (res.success && res.designs && res.designs.length > 0) {
-          // Filter out legacy unsplash/stale mock items
-          const dbList = res.designs
-            .filter((d) => !d.previewImage?.includes('images.unsplash.com') && !d.previewImage?.includes('photo-'))
-            .map((d) => ({
-              id: d._id,
-              _id: d._id,
-              name: d.name,
-              artist: d.artist || 'Master Sunil',
-              style: d.style || 'Custom',
-              description: d.description || '',
-              estTime: `${d.estTimeHours || 2} hrs`,
-              difficulty: d.difficulty || 'Custom',
-              previewImage: d.previewImage,
-              dataUri: d.previewImage || d.transparentOverlay,
-              bodyAreas: d.bodyAreas || ['Forearm'],
-              isDefaultReference: Boolean(d.isDefaultReference),
-              isFromDB: true,
-            }));
-
-          // Merge with TATTOO_ARTWORKS_CATALOG so all 15 authentic named tattoos are available
-          const combined = [...dbList];
-          TATTOO_ARTWORKS_CATALOG.forEach((catalogItem) => {
-            if (!combined.some((d) => d.name.toLowerCase() === catalogItem.name.toLowerCase())) {
-              combined.push(catalogItem);
-            }
-          });
-
-          setDesigns(combined.length > 0 ? combined : TATTOO_ARTWORKS_CATALOG);
-          if (!selectedDesign && combined.length > 0) {
-            setSelectedDesign(combined[0]);
-          }
-        } else {
-          setDesigns(TATTOO_ARTWORKS_CATALOG);
-          if (!selectedDesign) {
-            setSelectedDesign(TATTOO_ARTWORKS_CATALOG[0]);
-          }
-        }
-      } catch (err) {
-        setDesigns(TATTOO_ARTWORKS_CATALOG);
-      } finally {
-        setLoadingDesigns(false);
-      }
-    };
-
-    loadDynamicDesigns();
-  }, []);
-
-  const filteredTattoos = designs.filter((t) => {
-    const matchesStyle = selectedStyleFilter === 'All' || t.style.toLowerCase() === selectedStyleFilter.toLowerCase();
-    return matchesStyle;
-  });
-
-  const handleSelectBodyPart = (areaName) => {
-    setSelectedBodyArea(areaName);
-    if (selectedDesign) {
-      toast.success(`Testing "${selectedDesign.name}" on ${areaName}!`);
-    } else if (designs.length > 0) {
-      setSelectedDesign(designs[0]);
-      toast.success(`Testing "${designs[0].name}" on ${areaName}!`);
-    }
+  const handleBook = () => {
+    navigate('/booking');
   };
 
-  const handleSelectDesign = (design) => {
-    setSelectedDesign(design);
-    toast.success(`Selected "${design.name}". Testing on ${selectedBodyArea}!`);
-  };
-
-  const handleToggleFavorite = (design, e) => {
-    e.stopPropagation();
-    const isFav = savedFavorites.includes(design._id);
-    if (isFav) {
-      setSavedFavorites(savedFavorites.filter(id => id !== design._id));
-      toast.info(`Removed "${design.name}" from favorites`);
-    } else {
-      setSavedFavorites([...savedFavorites, design._id]);
-      toast.success(`Saved "${design.name}" to favorites!`);
-    }
-  };
-
-  const handleBookWithSelected = () => {
-    navigate(`/booking?style=${encodeURIComponent(selectedDesign?.style || 'Custom')}&placement=${encodeURIComponent(selectedBodyArea)}&design=${encodeURIComponent(selectedDesign?.name || 'Custom')}`);
+  const handleWhatsApp = () => {
+    const summary = 'Consultation Inquiry - Land of God Tattoo Studio';
+    const waUrl = createArtworkInquiryUrl(summary, 'Master Sunil', 'Custom');
+    window.open(waUrl, '_blank');
   };
 
   return (
-    <section id="hero" className="relative min-h-screen pt-24 pb-16 bg-studio-bg flex flex-col justify-center overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 w-full z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-[640px]">
-          
-          {/* LEFT COLUMN: HERO VALUE PROPOSITION */}
-          <div className="lg:col-span-4 space-y-6 text-left">
-            
-            {/* Top Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-xs font-semibold text-amber-300">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span>Premier Tattoo Studio • {street}, {city}</span>
-            </div>
+    <section
+      id="hero"
+      aria-label="Tattoo Studio Hero Section"
+      className="relative min-h-[92vh] pt-32 pb-24 flex flex-col justify-center items-center overflow-hidden bg-zinc-950 text-center"
+    >
+      {/* High-Resolution Tattoo Studio Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/tattoo_studio_hero.jpg"
+          alt="Land of God Tattoo Studio Interior - Professional Custom Tattoo Atelier in Una, Himachal Pradesh"
+          className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.15] scale-[1.02] transform transition-transform duration-1000"
+        />
 
-            {/* Main Headline */}
-            <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-[1.1] whitespace-pre-line">
-                {heroHeadline}
-              </h1>
-              <p className="text-sm sm:text-base text-zinc-400 leading-relaxed max-w-md">
-                {heroSubtitle}
-              </p>
-            </div>
+        {/* Multi-layered Cinematic Dark Atmospheric Overlays for Optimal Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-studio-bg" />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/40 to-black/90 pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-amber-500/[0.06] rounded-full blur-[140px] pointer-events-none" />
+      </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Link
-                to="/booking"
-                className="bg-amber-400 hover:bg-amber-300 text-black font-bold px-6 py-3 text-xs uppercase tracking-wider rounded-lg shadow-lg transition-all transform active:scale-95 text-center"
-              >
-                Book Appointment
-              </Link>
-              <Link
-                to="/portfolio"
-                className="border border-white/20 hover:border-amber-400 text-zinc-200 hover:text-white bg-zinc-900/60 hover:bg-zinc-800 px-6 py-3 text-xs uppercase tracking-wider rounded-lg transition-all text-center"
-              >
-                View Portfolio
-              </Link>
-            </div>
-
-            {/* Trust Metrics */}
-            <div className="pt-4 grid grid-cols-3 gap-4 border-t border-white/10 text-left">
-              <div>
-                <div className="text-lg font-black text-white">420+</div>
-                <div className="text-[11px] text-zinc-400">5.0★ Google Reviews</div>
-              </div>
-              <div>
-                <div className="text-lg font-black text-amber-400">100%</div>
-                <div className="text-[11px] text-zinc-400">Sterile Single-Use</div>
-              </div>
-              <div>
-                <div className="text-lg font-black text-white">10+ Yrs</div>
-                <div className="text-[11px] text-zinc-400">Master Experience</div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* CENTER COLUMN: 360° HUMAN MODEL STUDIO */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            <Interactive3DStudio
-              selectedBodyArea={selectedBodyArea}
-              onSelectBodyArea={handleSelectBodyPart}
-              selectedDesign={selectedDesign}
-              onSelectDesign={handleSelectDesign}
-              designs={designs}
-            />
-          </div>
-
-          {/* RIGHT COLUMN: DESIGN EXPLORER */}
-          <div className="lg:col-span-3 w-full">
-            <div className="bg-zinc-900/90 border border-white/10 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4 text-left">
-              
-              {/* Header */}
-              <div className="border-b border-white/10 pb-3 flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Design Catalog
-                  </h3>
-                  <p className="text-xs text-zinc-400 mt-0.5">
-                    Select a motif to test on the body
-                  </p>
-                </div>
-                {isAdmin && (
-                  <Link
-                    to="/admin/designs"
-                    className="bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1"
-                  >
-                    <Settings className="w-3 h-3" />
-                    <span>Admin</span>
-                  </Link>
-                )}
-              </div>
-
-              {/* Style Category Filter Pills */}
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-zinc-400 uppercase">
-                  <span>Category:</span>
-                  {selectedStyleFilter !== 'All' && (
-                    <button
-                      onClick={() => setSelectedStyleFilter('All')}
-                      className="text-amber-400 hover:underline"
-                    >
-                      All
-                    </button>
-                  )}
-                </div>
-                <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-thin">
-                  {stylesList.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setSelectedStyleFilter(s)}
-                      className={`px-2.5 py-1 rounded-md whitespace-nowrap transition-all text-[11px] font-medium shrink-0 ${
-                        selectedStyleFilter === s
-                          ? 'bg-amber-400 text-black font-bold'
-                          : 'bg-zinc-800 text-zinc-400 hover:text-white border border-white/5'
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tattoo List */}
-              <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin">
-                {filteredTattoos.map((idea) => {
-                  const isSelected = selectedDesign?._id === idea._id || selectedDesign?.name === idea.name;
-                  const isFavorite = savedFavorites.includes(idea._id);
-
-                  return (
-                    <div
-                      key={idea._id}
-                      onClick={() => handleSelectDesign(idea)}
-                      className={`flex items-center space-x-3 p-2.5 rounded-xl cursor-pointer transition-all border ${
-                        isSelected
-                          ? 'bg-zinc-800 border-amber-400 shadow-md'
-                          : 'bg-zinc-950/60 border-white/5 hover:border-white/20 hover:bg-zinc-800/60'
-                      }`}
-                    >
-                      {/* Artwork Thumbnail */}
-                      <div className="w-12 h-12 rounded-lg bg-black p-1 overflow-hidden shrink-0 border border-white/10 flex items-center justify-center">
-                        {idea.svg ? (
-                          idea.svg
-                        ) : (
-                          <img
-                            src={getFullImageUrl(idea.previewImage || idea.dataUri)}
-                            alt={idea.name}
-                            className="w-full h-full object-contain"
-                          />
-                        )}
-                      </div>
-
-                      {/* Details */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h4 className={`text-xs font-bold truncate ${isSelected ? 'text-amber-400' : 'text-zinc-200'}`}>
-                            {idea.name}
-                          </h4>
-                          <button
-                            onClick={(e) => handleToggleFavorite(idea, e)}
-                            className="p-1 text-zinc-500 hover:text-red-400"
-                          >
-                            <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-                          </button>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-[10px] text-zinc-400 mt-1">
-                          <span className="font-semibold text-zinc-300">{idea.style}</span>
-                          <span>{idea.estTime}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Booking Actions */}
-              <div className="pt-2 border-t border-white/10 space-y-2">
-                <button
-                  onClick={handleBookWithSelected}
-                  className="w-full bg-amber-400 hover:bg-amber-300 text-black font-bold py-2.5 px-4 text-xs uppercase tracking-wider rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-all"
-                >
-                  <span>Book with Selected Design</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => {
-                    const waUrl = createArtworkInquiryUrl(
-                      selectedDesign?.name || 'Tattoo Design',
-                      selectedDesign?.artist || 'Master Sunil',
-                      selectedBodyArea
-                    );
-                    window.open(waUrl, '_blank');
-                  }}
-                  className="w-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 font-semibold py-2 px-3 text-xs rounded-lg transition-all flex items-center justify-center space-x-1.5"
-                >
-                  <span>💬 WhatsApp Inquiry</span>
-                </button>
-              </div>
-
-            </div>
-          </div>
-
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 relative space-y-8">
+        
+        {/* SEO Location & Studio Trust Pill */}
+        <div className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-black/60 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/40">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">
+            {studioName}
+          </span>
+          <span className="text-zinc-500 text-xs">•</span>
+          <span className="text-[11px] sm:text-xs text-zinc-300 font-medium flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-amber-400" />
+            {street}, {city}, {state}
+          </span>
         </div>
+
+        {/* SEO Primary Heading (H1) */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white uppercase leading-[1.04] max-w-5xl mx-auto">
+          {heroHeadline && !heroHeadline.toLowerCase().includes('vision') ? (
+            <span className="whitespace-pre-line">{heroHeadline}</span>
+          ) : (
+            <>
+              Your Vision, <br />
+              <span className="font-serif italic font-normal normal-case text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200">
+                Our Ink.
+              </span>
+            </>
+          )}
+        </h1>
+
+        {/* SEO Body Paragraph */}
+        <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed">
+          {heroSubtitle ? (
+            heroSubtitle
+          ) : (
+            `Welcome to ${studioName} — Northern India's destination for custom tattoo masterpieces, sacred Devbhoomi calligraphy, hyper-realistic portraits, and fine-line geometry in Una, Himachal Pradesh. Executed with hospital-grade European sterilization, 100% single-use membrane needles, and personalized consultation.`
+          )}
+        </p>
+
+        {/* Action Buttons / CTAs */}
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <button
+            type="button"
+            onClick={handleBook}
+            className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:brightness-110 text-black font-bold py-4 px-8 text-xs sm:text-sm uppercase tracking-[0.16em] rounded-2xl shadow-[0_12px_30px_rgba(251,191,36,0.35)] flex items-center space-x-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Calendar className="w-4 h-4 stroke-[2.5]" />
+            <span>Book Consultation</span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleWhatsApp}
+            className="bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md hover:border-emerald-500/40"
+          >
+            <MessageSquare className="w-4 h-4 text-emerald-400" />
+            <span>WhatsApp Artist</span>
+          </button>
+
+          <Link
+            to="/interactive-3d"
+            className="bg-zinc-900/80 hover:bg-zinc-800 border border-amber-400/30 text-amber-300 hover:text-amber-200 font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md"
+          >
+            <Compass className="w-4 h-4 text-amber-400" />
+            <span>3D Anatomical Studio</span>
+          </Link>
+
+          <Link
+            to="/portfolio"
+            className="text-xs sm:text-sm font-medium text-zinc-400 hover:text-amber-300 underline underline-offset-4 px-3 py-2 transition-colors"
+          >
+            View Portfolio →
+          </Link>
+        </div>
+
+        {/* SEO Trust Badges & Clinical Standards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 max-w-4xl mx-auto border-t border-white/10 text-left">
+          <div className="p-4 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">100% Sterile</h3>
+              <p className="text-[11px] text-zinc-400 mt-0.5">Autoclave &amp; Single-Use</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 shrink-0">
+              <Award className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Master Artists</h3>
+              <p className="text-[11px] text-zinc-400 mt-0.5">10+ Yrs Craftsmanship</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 shrink-0">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Custom Stencils</h3>
+              <p className="text-[11px] text-zinc-400 mt-0.5">Bespoke Tattoo Design</p>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 shrink-0">
+              <Star className="w-5 h-5 fill-amber-400" />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider">4.9/5 Rating</h3>
+              <p className="text-[11px] text-zinc-400 mt-0.5">500+ Verified Reviews</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );

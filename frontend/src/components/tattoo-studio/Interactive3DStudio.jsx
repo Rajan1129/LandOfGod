@@ -1,123 +1,151 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { RotateCw, ZoomIn, ZoomOut, Sparkles, Sliders, Check, RefreshCcw, Eye, Layers, Compass, Move, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Crosshair, X, Flame, ArrowRight, Palette, Sun } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  Compass,
+  RotateCw,
+  RotateCcw,
+  Play,
+  Pause,
+  ZoomIn,
+  ZoomOut,
+  RefreshCw,
+  Eye,
+  Sliders,
+  Maximize2,
+  Move
+} from 'lucide-react';
 import { getFullImageUrl } from '../../utils/imageHelper';
 
-// 8 Anatomical Perspectives for Full 360° Volumetric Rotation
+// 8 High-Resolution Real Human Male Perspectives for 360° Studio Exploration
 const ANATOMY_360_FRAMES = [
-  { angle: 0, label: 'Front View (0°)', src: '/images/masculine_front.jpg', flip: false },
-  { angle: 45, label: 'Front-Right 3/4 (45°)', src: '/images/masculine_front_right.jpg', flip: false },
-  { angle: 90, label: 'Right Side Profile (90°)', src: '/images/masculine_right.jpg', flip: false },
-  { angle: 135, label: 'Back-Right 3/4 (135°)', src: '/images/masculine_back_right.jpg', flip: false },
-  { angle: 180, label: 'Full Back View (180°)', src: '/images/masculine_back.jpg', flip: false },
-  { angle: 225, label: 'Back-Left 3/4 (225°)', src: '/images/masculine_back_right.jpg', flip: true },
-  { angle: 270, label: 'Left Side Profile (270°)', src: '/images/masculine_left.jpg', flip: false },
-  { angle: 315, label: 'Front-Left 3/4 (315°)', src: '/images/masculine_front_right.jpg', flip: true },
+  { angle: 0, label: '0° Front', src: '/images/masculine_front.jpg', flip: false },
+  { angle: 45, label: '45° Front-Right', src: '/images/masculine_front_right.jpg', flip: false },
+  { angle: 90, label: '90° Right', src: '/images/masculine_right.jpg', flip: false },
+  { angle: 135, label: '135° Back-Right', src: '/images/masculine_back_right.jpg', flip: false },
+  { angle: 180, label: '180° Back', src: '/images/masculine_back.jpg', flip: false },
+  { angle: 225, label: '225° Back-Left', src: '/images/masculine_back_right.jpg', flip: true },
+  { angle: 270, label: '270° Left', src: '/images/masculine_right.jpg', flip: true },
+  { angle: 315, label: '315° Front-Left', src: '/images/masculine_front_right.jpg', flip: true },
 ];
 
-// Pixel-perfect anatomical coordinate mapping per viewing angle frame directly onto muscle bodies
+// Clean anatomical coordinates on the real human body across all 360° frames
 const ANATOMICAL_PLACEMENTS = {
   Forearm: {
-    name: 'Forearm (Right)',
-    label: 'Right Forearm',
+    name: 'Forearm',
+    label: 'Forearm',
     defaultTheta: 0,
     defaultScale: 1.15,
-    sizeDescription: 'Medium / Elongated',
     frames: {
-      0: { left: 19.5, top: 38.5, width: 11.0, height: 16.0, rotate: -26, opacity: 1 },
+      0: { left: 20.5, top: 38.5, width: 11.0, height: 16.0, rotate: -26, opacity: 1 },
       45: { left: 29.5, top: 42.0, width: 11.5, height: 16.5, rotate: -15, opacity: 1 },
       90: { left: 54.0, top: 43.5, width: 11.0, height: 16.0, rotate: 0, opacity: 1 },
       135: { left: 33.0, top: 42.0, width: 11.0, height: 16.0, rotate: 12, opacity: 1 },
-      180: { left: 19.5, top: 38.5, width: 11.0, height: 16.0, rotate: 26, opacity: 1 }
-    }
+      180: { left: 20.5, top: 38.5, width: 11.0, height: 16.0, rotate: 26, opacity: 1 },
+      225: { left: 67.0, top: 42.0, width: 11.0, height: 16.0, rotate: -12, opacity: 1 },
+      270: { left: 46.0, top: 43.5, width: 11.0, height: 16.0, rotate: 0, opacity: 1 },
+      315: { left: 70.5, top: 42.0, width: 11.5, height: 16.5, rotate: 15, opacity: 1 },
+    },
   },
   'Upper Arm': {
-    name: 'Upper Arm (Right)',
-    label: 'Right Bicep / Deltoid',
-    defaultTheta: 0,
+    name: 'Upper Arm',
+    label: 'Upper Arm',
+    defaultTheta: 45,
     defaultScale: 1.20,
-    sizeDescription: 'Medium / Cylindrical',
     frames: {
       0: { left: 25.0, top: 29.5, width: 12.0, height: 15.0, rotate: -22, opacity: 1 },
       45: { left: 33.0, top: 31.5, width: 12.0, height: 15.0, rotate: -12, opacity: 1 },
       90: { left: 54.0, top: 32.5, width: 12.0, height: 15.0, rotate: 0, opacity: 1 },
       135: { left: 36.5, top: 31.5, width: 12.0, height: 15.0, rotate: 10, opacity: 1 },
-      180: { left: 25.0, top: 29.5, width: 12.0, height: 15.0, rotate: 22, opacity: 1 }
-    }
+      180: { left: 25.0, top: 29.5, width: 12.0, height: 15.0, rotate: 22, opacity: 1 },
+      225: { left: 63.5, top: 31.5, width: 12.0, height: 15.0, rotate: -10, opacity: 1 },
+      270: { left: 46.0, top: 32.5, width: 12.0, height: 15.0, rotate: 0, opacity: 1 },
+      315: { left: 67.0, top: 31.5, width: 12.0, height: 15.0, rotate: 12, opacity: 1 },
+    },
   },
   Shoulder: {
-    name: 'Shoulder (Right)',
-    label: 'Right Shoulder Cap',
-    defaultTheta: 0,
+    name: 'Shoulder',
+    label: 'Shoulder',
+    defaultTheta: 45,
     defaultScale: 1.10,
-    sizeDescription: 'Curved / Round',
     frames: {
       0: { left: 31.0, top: 22.5, width: 12.5, height: 12.5, rotate: -12, opacity: 1 },
       45: { left: 36.5, top: 23.5, width: 12.5, height: 12.5, rotate: -8, opacity: 1 },
       90: { left: 54.0, top: 23.5, width: 12.5, height: 13.0, rotate: 0, opacity: 1 },
       135: { left: 40.0, top: 23.5, width: 12.5, height: 12.5, rotate: 8, opacity: 1 },
-      180: { left: 31.0, top: 22.5, width: 12.5, height: 12.5, rotate: 12, opacity: 1 }
-    }
+      180: { left: 31.0, top: 22.5, width: 12.5, height: 12.5, rotate: 12, opacity: 1 },
+      225: { left: 60.0, top: 23.5, width: 12.5, height: 12.5, rotate: -8, opacity: 1 },
+      270: { left: 46.0, top: 23.5, width: 12.5, height: 13.0, rotate: 0, opacity: 1 },
+      315: { left: 63.5, top: 23.5, width: 12.5, height: 12.5, rotate: 8, opacity: 1 },
+    },
   },
   Chest: {
     name: 'Chest',
-    label: 'Pectoral Chest & Sternum',
+    label: 'Chest',
     defaultTheta: 0,
     defaultScale: 1.40,
-    sizeDescription: 'Broad / Statement Plate',
     frames: {
       0: { left: 50.0, top: 26.5, width: 22.0, height: 15.0, rotate: 0, opacity: 1 },
       45: { left: 52.0, top: 26.5, width: 19.0, height: 15.0, rotate: -4, opacity: 1 },
-      90: { left: 46.0, top: 28.0, width: 12.0, height: 14.0, rotate: -4, opacity: 0.95 },
+      90: { left: 46.0, top: 28.0, width: 12.0, height: 14.0, rotate: -4, opacity: 0.8 },
+      135: { left: 44.0, top: 28.5, width: 10.0, height: 12.0, rotate: -2, opacity: 0.1 },
+      180: { left: 50.0, top: 27.0, width: 12.0, height: 12.0, rotate: 0, opacity: 0.0 },
+      225: { left: 56.0, top: 28.5, width: 10.0, height: 12.0, rotate: 2, opacity: 0.1 },
+      270: { left: 54.0, top: 28.0, width: 12.0, height: 14.0, rotate: 4, opacity: 0.8 },
       315: { left: 48.0, top: 26.5, width: 19.0, height: 15.0, rotate: 4, opacity: 1 },
-      270: { left: 54.0, top: 28.0, width: 12.0, height: 14.0, rotate: 4, opacity: 0.95 }
-    }
+    },
   },
   Back: {
     name: 'Back',
-    label: 'Upper Back & Lats',
+    label: 'Back',
     defaultTheta: 180,
     defaultScale: 1.50,
-    sizeDescription: 'Large / Full Canvas',
     frames: {
-      180: { left: 50.0, top: 26.5, width: 24.0, height: 18.0, rotate: 0, opacity: 1 },
+      0: { left: 50.0, top: 27.0, width: 12.0, height: 12.0, rotate: 0, opacity: 0.0 },
+      45: { left: 46.0, top: 28.0, width: 10.0, height: 12.0, rotate: -2, opacity: 0.1 },
+      90: { left: 42.0, top: 28.0, width: 12.0, height: 15.0, rotate: 4, opacity: 0.75 },
       135: { left: 52.0, top: 26.5, width: 20.0, height: 17.0, rotate: 4, opacity: 1 },
+      180: { left: 50.0, top: 26.5, width: 24.0, height: 18.0, rotate: 0, opacity: 1 },
       225: { left: 48.0, top: 26.5, width: 20.0, height: 17.0, rotate: -4, opacity: 1 },
-      90: { left: 42.0, top: 28.0, width: 12.0, height: 15.0, rotate: 4, opacity: 0.9 },
-      270: { left: 58.0, top: 28.0, width: 12.0, height: 15.0, rotate: -4, opacity: 0.9 }
-    }
+      270: { left: 58.0, top: 28.0, width: 12.0, height: 15.0, rotate: -4, opacity: 0.75 },
+      315: { left: 54.0, top: 28.0, width: 10.0, height: 12.0, rotate: 2, opacity: 0.1 },
+    },
   },
   Spine: {
     name: 'Spine',
-    label: 'Full Vertebral Spine Line',
+    label: 'Spine',
     defaultTheta: 180,
     defaultScale: 1.15,
-    sizeDescription: 'Tall / Vertical Linear',
     frames: {
-      180: { left: 50.0, top: 32.0, width: 10.0, height: 30.0, rotate: 0, opacity: 1 },
+      0: { left: 50.0, top: 32.0, width: 6.0, height: 15.0, rotate: 0, opacity: 0.0 },
+      45: { left: 46.0, top: 32.0, width: 6.0, height: 15.0, rotate: 0, opacity: 0.0 },
+      90: { left: 42.0, top: 32.0, width: 7.0, height: 25.0, rotate: 0, opacity: 0.6 },
       135: { left: 52.0, top: 32.0, width: 9.5, height: 28.0, rotate: 2, opacity: 1 },
-      225: { left: 48.0, top: 32.0, width: 9.5, height: 28.0, rotate: -2, opacity: 1 }
-    }
+      180: { left: 50.0, top: 32.0, width: 10.0, height: 30.0, rotate: 0, opacity: 1 },
+      225: { left: 48.0, top: 32.0, width: 9.5, height: 28.0, rotate: -2, opacity: 1 },
+      270: { left: 58.0, top: 32.0, width: 7.0, height: 25.0, rotate: 0, opacity: 0.6 },
+      315: { left: 54.0, top: 32.0, width: 6.0, height: 15.0, rotate: 0, opacity: 0.0 },
+    },
   },
   Ribs: {
     name: 'Ribs',
-    label: 'Ribcage & Flank',
+    label: 'Ribs',
     defaultTheta: 0,
     defaultScale: 1.15,
-    sizeDescription: 'Curved Flank / Ribs',
     frames: {
       0: { left: 50.0, top: 36.0, width: 16.0, height: 14.0, rotate: 0, opacity: 1 },
       45: { left: 50.0, top: 36.0, width: 15.0, height: 14.0, rotate: -4, opacity: 1 },
       90: { left: 47.0, top: 36.5, width: 13.0, height: 15.0, rotate: 0, opacity: 0.95 },
-      315: { left: 50.0, top: 36.0, width: 15.0, height: 14.0, rotate: 4, opacity: 1 }
-    }
+      135: { left: 46.0, top: 37.0, width: 13.0, height: 14.0, rotate: 2, opacity: 0.7 },
+      180: { left: 50.0, top: 36.5, width: 14.0, height: 14.0, rotate: 0, opacity: 0.2 },
+      225: { left: 54.0, top: 37.0, width: 13.0, height: 14.0, rotate: -2, opacity: 0.7 },
+      270: { left: 53.0, top: 36.5, width: 13.0, height: 15.0, rotate: 0, opacity: 0.95 },
+      315: { left: 50.0, top: 36.0, width: 15.0, height: 14.0, rotate: 4, opacity: 1 },
+    },
   },
   Thigh: {
     name: 'Thigh',
-    label: 'Quadriceps / Thigh',
+    label: 'Thigh',
     defaultTheta: 0,
     defaultScale: 1.40,
-    sizeDescription: 'Large / Quad Plate',
     frames: {
       0: { left: 42.0, top: 57.0, width: 15.0, height: 19.0, rotate: 0, opacity: 1 },
       45: { left: 46.0, top: 57.5, width: 15.0, height: 19.0, rotate: -2, opacity: 1 },
@@ -126,120 +154,164 @@ const ANATOMICAL_PLACEMENTS = {
       180: { left: 42.0, top: 57.0, width: 15.0, height: 19.0, rotate: 0, opacity: 1 },
       225: { left: 50.0, top: 58.0, width: 15.0, height: 19.0, rotate: -2, opacity: 1 },
       270: { left: 48.0, top: 58.0, width: 15.0, height: 19.0, rotate: 0, opacity: 1 },
-      315: { left: 54.0, top: 57.5, width: 15.0, height: 19.0, rotate: 2, opacity: 1 }
-    }
+      315: { left: 54.0, top: 57.5, width: 15.0, height: 19.0, rotate: 2, opacity: 1 },
+    },
   },
   Calf: {
     name: 'Calf',
-    label: 'Calf & Shin',
+    label: 'Calf',
     defaultTheta: 0,
-    defaultScale: 1.20,
-    sizeDescription: 'Medium / Tapered',
+    defaultScale: 1.25,
     frames: {
-      0: { left: 39.5, top: 76.5, width: 13.0, height: 17.0, rotate: 0, opacity: 1 },
-      45: { left: 43.5, top: 76.5, width: 13.0, height: 17.0, rotate: -2, opacity: 1 },
-      90: { left: 52.0, top: 77.0, width: 13.5, height: 17.0, rotate: 0, opacity: 1 },
-      135: { left: 48.0, top: 77.0, width: 13.0, height: 17.0, rotate: 2, opacity: 1 },
-      180: { left: 39.5, top: 76.5, width: 13.0, height: 17.0, rotate: 0, opacity: 1 },
-      225: { left: 52.0, top: 77.0, width: 13.0, height: 17.0, rotate: -2, opacity: 1 },
-      270: { left: 48.0, top: 77.0, width: 13.5, height: 17.0, rotate: 0, opacity: 1 },
-      315: { left: 56.5, top: 76.5, width: 13.0, height: 17.0, rotate: 2, opacity: 1 }
-    }
+      0: { left: 41.0, top: 76.5, width: 12.0, height: 18.0, rotate: 0, opacity: 1 },
+      45: { left: 45.0, top: 77.0, width: 12.0, height: 18.0, rotate: -2, opacity: 1 },
+      90: { left: 52.0, top: 77.5, width: 12.0, height: 18.0, rotate: 0, opacity: 1 },
+      135: { left: 49.0, top: 77.5, width: 12.0, height: 18.0, rotate: 2, opacity: 1 },
+      180: { left: 41.0, top: 76.5, width: 12.0, height: 18.0, rotate: 0, opacity: 1 },
+      225: { left: 51.0, top: 77.5, width: 12.0, height: 18.0, rotate: -2, opacity: 1 },
+      270: { left: 48.0, top: 77.5, width: 12.0, height: 18.0, rotate: 0, opacity: 1 },
+      315: { left: 55.0, top: 77.0, width: 12.0, height: 18.0, rotate: 2, opacity: 1 },
+    },
   },
   Wrist: {
     name: 'Wrist',
-    label: 'Wrist & Hand',
+    label: 'Wrist',
     defaultTheta: 0,
-    defaultScale: 0.85,
-    sizeDescription: 'Compact / Minimal',
+    defaultScale: 0.95,
     frames: {
-      0: { left: 15.5, top: 48.0, width: 9.0, height: 9.0, rotate: -28, opacity: 1 },
-      45: { left: 27.0, top: 51.5, width: 9.0, height: 9.0, rotate: -18, opacity: 1 },
-      90: { left: 54.0, top: 53.0, width: 9.0, height: 9.0, rotate: 0, opacity: 1 },
-      135: { left: 30.5, top: 51.5, width: 9.0, height: 9.0, rotate: 14, opacity: 1 },
-      180: { left: 15.5, top: 48.0, width: 9.0, height: 9.0, rotate: 28, opacity: 1 }
-    }
+      0: { left: 16.5, top: 48.5, width: 9.0, height: 10.0, rotate: -30, opacity: 1 },
+      45: { left: 26.0, top: 51.0, width: 9.0, height: 10.0, rotate: -18, opacity: 1 },
+      90: { left: 54.0, top: 52.0, width: 9.0, height: 10.0, rotate: 0, opacity: 1 },
+      135: { left: 29.5, top: 51.0, width: 9.0, height: 10.0, rotate: 15, opacity: 1 },
+      180: { left: 16.5, top: 48.5, width: 9.0, height: 10.0, rotate: 30, opacity: 1 },
+      225: { left: 70.5, top: 51.0, width: 9.0, height: 10.0, rotate: -15, opacity: 1 },
+      270: { left: 46.0, top: 52.0, width: 9.0, height: 10.0, rotate: 0, opacity: 1 },
+      315: { left: 73.5, top: 51.0, width: 9.0, height: 10.0, rotate: 18, opacity: 1 },
+    },
   },
   Neck: {
     name: 'Neck',
-    label: 'Neck & Throat',
+    label: 'Neck',
     defaultTheta: 0,
-    defaultScale: 0.85,
-    sizeDescription: 'Subtle / Compact',
+    defaultScale: 1.05,
     frames: {
-      0: { left: 50.0, top: 17.5, width: 10.0, height: 8.5, rotate: 0, opacity: 1 },
-      45: { left: 51.0, top: 18.0, width: 10.5, height: 8.5, rotate: -3, opacity: 1 },
-      90: { left: 50.0, top: 18.5, width: 10.0, height: 8.5, rotate: 0, opacity: 0.9 },
-      180: { left: 50.0, top: 17.5, width: 10.5, height: 8.5, rotate: 0, opacity: 1 },
-      315: { left: 49.0, top: 18.0, width: 10.5, height: 8.5, rotate: 3, opacity: 1 }
-    }
+      0: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: 0, opacity: 1 },
+      45: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: -2, opacity: 1 },
+      90: { left: 51.5, top: 16.5, width: 11.0, height: 8.5, rotate: 0, opacity: 1 },
+      135: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: 2, opacity: 1 },
+      180: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: 0, opacity: 1 },
+      225: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: -2, opacity: 1 },
+      270: { left: 48.5, top: 16.5, width: 11.0, height: 8.5, rotate: 0, opacity: 1 },
+      315: { left: 50.0, top: 16.0, width: 11.0, height: 8.5, rotate: 2, opacity: 1 },
+    },
   },
   Ankle: {
     name: 'Ankle',
-    label: 'Ankle & Foot',
+    label: 'Ankle',
     defaultTheta: 0,
-    defaultScale: 0.80,
-    sizeDescription: 'Small / Minimal Band',
+    defaultScale: 0.90,
     frames: {
       0: { left: 39.0, top: 90.0, width: 10.0, height: 8.5, rotate: 0, opacity: 1 },
+      45: { left: 43.0, top: 90.0, width: 10.0, height: 8.5, rotate: -2, opacity: 1 },
       90: { left: 52.0, top: 90.0, width: 10.0, height: 8.5, rotate: 0, opacity: 1 },
-      180: { left: 39.0, top: 90.0, width: 10.0, height: 8.5, rotate: 0, opacity: 1 }
-    }
+      135: { left: 48.0, top: 90.0, width: 10.0, height: 8.5, rotate: 2, opacity: 1 },
+      180: { left: 39.0, top: 90.0, width: 10.0, height: 8.5, rotate: 0, opacity: 1 },
+      225: { left: 52.0, top: 90.0, width: 10.0, height: 8.5, rotate: -2, opacity: 1 },
+      270: { left: 48.0, top: 90.0, width: 10.0, height: 8.5, rotate: 0, opacity: 1 },
+      315: { left: 57.0, top: 90.0, width: 10.0, height: 8.5, rotate: 2, opacity: 1 },
+    },
+  },
+};
+
+// Continuous smooth interpolation for coordinates across 360 degrees
+const getInterpolatedPlacement = (areaKey, theta) => {
+  const config = ANATOMICAL_PLACEMENTS[areaKey];
+  if (!config) return null;
+
+  const normalizedTheta = ((theta % 360) + 360) % 360;
+  const frameIdx = Math.floor(normalizedTheta / 45);
+  const nextIdx = (frameIdx + 1) % 8;
+  const t = (normalizedTheta - frameIdx * 45) / 45;
+
+  const frameA = ANATOMY_360_FRAMES[frameIdx];
+  const frameB = ANATOMY_360_FRAMES[nextIdx];
+
+  const coordsA = config.frames?.[frameA.angle];
+  const coordsB = config.frames?.[frameB.angle];
+
+  if (!coordsA && !coordsB) return null;
+
+  // Cubic smoothstep curve for natural organic blending
+  const easeT = t * t * (3 - 2 * t);
+
+  // Cylindrical foreshortening
+  const defaultAngle = config.defaultTheta ?? 0;
+  const angleDelta = Math.abs((((normalizedTheta - defaultAngle) % 360) + 540) % 360 - 180);
+  const cosFactor = Math.max(0.55, Math.cos((angleDelta * Math.PI) / 180));
+  const perspectiveX = cosFactor;
+
+  if (coordsA && coordsB) {
+    return {
+      left: coordsA.left + (coordsB.left - coordsA.left) * easeT,
+      top: coordsA.top + (coordsB.top - coordsA.top) * easeT,
+      width: coordsA.width + (coordsB.width - coordsA.width) * easeT,
+      height: coordsA.height + (coordsB.height - coordsA.height) * easeT,
+      rotate: coordsA.rotate + (coordsB.rotate - coordsA.rotate) * easeT,
+      opacity: (coordsA.opacity ?? 1) * (1 - easeT) + (coordsB.opacity ?? 1) * easeT,
+      scale: config.defaultScale || 1.15,
+      perspectiveX,
+    };
   }
+
+  if (coordsA) {
+    return {
+      ...coordsA,
+      opacity: (coordsA.opacity ?? 1) * (1 - easeT),
+      scale: config.defaultScale || 1.15,
+      perspectiveX,
+    };
+  }
+
+  return coordsB || null;
 };
 
 export const Interactive3DStudio = ({
   selectedBodyArea = 'Forearm',
   onSelectBodyArea,
   selectedDesign,
-  onSelectDesign,
-  designs = [],
+  placedTattoos = [],
   compact = false,
 }) => {
-  // Interaction Mode: 'tattoo' (Move/Rotate Tattoo) vs 'body' (Orbit 3D Mannequin)
-  const [interactionMode, setInteractionMode] = useState('tattoo');
+  // Continuous fluid angle physics refs
+  const targetAngleRef = useRef(0);
+  const currentAngleRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const lastPointerXRef = useRef(0);
+  const velocityRef = useRef(0);
+  const dragDistanceRef = useRef(0);
+  const isAutoSpinRef = useRef(false);
 
-  // Track if user has chosen a tattoo
-  const [hasUserChosenTattoo, setHasUserChosenTattoo] = useState(false);
-  const [showTattooPicker, setShowTattooPicker] = useState(false);
-  const [pickerStyleFilter, setPickerStyleFilter] = useState('All');
-
-  // Continuous 360-degree body rotation state (0° to 360°)
-  const [rotationDeg, setRotationDeg] = useState(0);
-  const [isAutoRotating, setIsAutoRotating] = useState(false);
-  const [isDraggingBody, setIsDraggingBody] = useState(false);
-  const dragStartXRef = useRef(0);
-  const dragStartAngleRef = useRef(0);
-  const animFrameRef = useRef(null);
-
-  // Direct Tattoo Dragging & Rotating State
-  const [isDraggingTattoo, setIsDraggingTattoo] = useState(false);
-  const [isRotatingTattooHandle, setIsRotatingTattooHandle] = useState(false);
-  const tattooDragStartRef = useRef({ x: 0, y: 0 });
-  const tattooCenterRef = useRef({ x: 0, y: 0 });
-  const tattooElemRef = useRef(null);
-
-  // Interactive Zoom State (0.8x to 2.8x)
-  const [zoomLevel, setZoomLevel] = useState(1.0);
-  const [zoomFocusMode, setZoomFocusMode] = useState('tattoo');
+  // States
+  const [displayAngle, setDisplayAngle] = useState(0);
   const [hoveredPart, setHoveredPart] = useState(null);
-  const [highlightPulse, setHighlightPulse] = useState(true);
+  const [isAutoSpin, setIsAutoSpin] = useState(false);
+  const [zoom, setZoom] = useState(1);
 
-  // Fine Tuning for Tattoo Placement, Size & 360° In-Place Rotation
-  const [tattooScale, setTattooScale] = useState(1.15);
-  const [tattooOpacity, setTattooOpacity] = useState(1.0); // 100% crisp pure opacity
-  const [tattooRotationOffset, setTattooRotationOffset] = useState(0); // 0° to 360° pure in-place spin
-  const [offsetNudgeX, setOffsetNudgeX] = useState(0);
-  const [offsetNudgeY, setOffsetNudgeY] = useState(0);
-  const [blendMode, setBlendMode] = useState('high-contrast');
+  // Interactive In-Skin Stencil Fine-Tuning Controls
+  const [userScale, setUserScale] = useState(1.0);
+  const [userOffsetY, setUserOffsetY] = useState(0);
+  const [userOffsetX, setUserOffsetX] = useState(0);
+  const [userRotate, setUserRotate] = useState(0);
 
-  // Active Control Panel Tab: 'transform' (size/rotate) | 'position' (drag/nudge)
-  const [activeTab, setActiveTab] = useState('transform');
+  // Reset user custom adjustments whenever the body part or design changes
+  useEffect(() => {
+    setUserScale(1.0);
+    setUserOffsetY(0);
+    setUserOffsetX(0);
+    setUserRotate(0);
+  }, [selectedBodyArea, selectedDesign?.id, selectedDesign?._id, selectedDesign?.name]);
 
-  const studioContainerRef = useRef(null);
-  const tattooPickerScrollRef = useRef(null);
-
-  // Preload all 360 frame images into browser cache for instant rotation
+  // Preload all real human 360 frame images into cache
   useEffect(() => {
     ANATOMY_360_FRAMES.forEach((frame) => {
       const img = new Image();
@@ -247,839 +319,626 @@ export const Interactive3DStudio = ({
     });
   }, []);
 
-  // Non-passive wheel event listener to avoid browser console warnings
+  // Frame-rate independent physics damping loop with ultra-smooth 60fps interpolation
   useEffect(() => {
-    const el = studioContainerRef.current;
-    if (!el) return;
-    const handleWheelNonPassive = (e) => {
-      // If user is hovering/scrolling over the horizontal tattoo slider or other interactive scroll areas, let it scroll naturally!
-      if (e.target && (e.target.closest('.interactive-scroll-area') || e.target.closest('.no-wheel-zoom'))) {
-        return;
-      }
-      e.preventDefault();
-      const zoomDelta = e.deltaY * -0.0015;
-      setZoomLevel((prev) => Math.min(Math.max(parseFloat((prev + zoomDelta).toFixed(2)), 0.8), 2.8));
-    };
-    el.addEventListener('wheel', handleWheelNonPassive, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheelNonPassive);
-  }, []);
-
-  // Automatically rotate toward chosen body area
-  useEffect(() => {
-    if (!selectedBodyArea) return;
-    const lower = selectedBodyArea.toLowerCase();
-    
-    const matchedKey = Object.keys(ANATOMICAL_PLACEMENTS).find(k => 
-      k.toLowerCase() === lower || lower.includes(k.toLowerCase()) || k.toLowerCase().includes(lower)
-    );
-    
-    if (matchedKey && ANATOMICAL_PLACEMENTS[matchedKey]) {
-      const config = ANATOMICAL_PLACEMENTS[matchedKey];
-      setRotationDeg(config.defaultTheta);
-      setTattooScale(config.defaultScale || 1.15);
-      setOffsetNudgeX(0);
-      setOffsetNudgeY(0);
-      setHighlightPulse(true);
-
-      // Only open horizontal picker if user has not picked a tattoo yet
-      if (!hasUserChosenTattoo && !selectedDesign) {
-        setShowTattooPicker(true);
-      }
-
-      const timer = setTimeout(() => setHighlightPulse(false), 1200);
-      return () => clearTimeout(timer);
-    }
-  }, [selectedBodyArea, hasUserChosenTattoo, selectedDesign]);
-
-  // Smooth Auto-rotate 360 animation loop
-  useEffect(() => {
-    if (!isAutoRotating) return;
     let animId;
     let lastTime = performance.now();
-    const animate = (time) => {
-      const delta = time - lastTime;
-      lastTime = time;
-      setRotationDeg((prev) => (prev + (delta * 0.035)) % 360);
-      animId = requestAnimationFrame(animate);
+
+    const loop = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.05); // Cap max dt to avoid jumps
+      lastTime = now;
+
+      // 1. Auto-spin continuous rotation (when active and user is not dragging)
+      if (isAutoSpinRef.current && !isDraggingRef.current) {
+        targetAngleRef.current = ((targetAngleRef.current + 20 * dt) % 360 + 360) % 360;
+      }
+
+      // 2. Smooth momentum throw decay after mouse release
+      if (!isDraggingRef.current && Math.abs(velocityRef.current) > 0.02) {
+        targetAngleRef.current = ((targetAngleRef.current - velocityRef.current * 42 * dt) % 360 + 360) % 360;
+        velocityRef.current *= Math.pow(0.85, dt * 60);
+      } else if (!isDraggingRef.current) {
+        velocityRef.current = 0;
+      }
+
+      // 3. Critically-damped exponential lerp towards targetAngle (avoids sudden snapping)
+      let diff = targetAngleRef.current - currentAngleRef.current;
+      while (diff < -180) diff += 360;
+      while (diff > 180) diff -= 360;
+
+      if (Math.abs(diff) > 0.01) {
+        // High responsive lerp factor for fluid responsiveness
+        const lerpFactor = 1 - Math.exp(-18 * dt);
+        currentAngleRef.current = ((currentAngleRef.current + diff * lerpFactor) % 360 + 360) % 360;
+        setDisplayAngle(currentAngleRef.current);
+      } else if (Math.abs(diff) > 0) {
+        currentAngleRef.current = targetAngleRef.current;
+        setDisplayAngle(targetAngleRef.current);
+      }
+
+      animId = requestAnimationFrame(loop);
     };
-    animId = requestAnimationFrame(animate);
+
+    animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [isAutoRotating]);
+  }, []);
 
-  // Unified Pointer Handlers
-  const handleStagePointerDown = (e) => {
-    const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
-    const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY) ?? 0;
-
-    if (interactionMode === 'tattoo') {
-      setIsDraggingTattoo(true);
-      tattooDragStartRef.current = { x: clientX, y: clientY };
-    } else {
-      setIsDraggingBody(true);
-      setIsAutoRotating(false);
-      dragStartXRef.current = clientX;
-      dragStartAngleRef.current = rotationDeg;
+  // Smoothly auto-align angle when a specific body region is selected
+  useEffect(() => {
+    if (selectedBodyArea && ANATOMICAL_PLACEMENTS[selectedBodyArea]) {
+      const idealTheta = ANATOMICAL_PLACEMENTS[selectedBodyArea].defaultTheta;
+      if (typeof idealTheta === 'number') {
+        velocityRef.current = 0;
+        targetAngleRef.current = idealTheta;
+      }
     }
+  }, [selectedBodyArea]);
+
+  // Pointer dragging handlers with direct 1:1 control and velocity tracking
+  const handlePointerDown = (e) => {
+    isDraggingRef.current = true;
+    dragDistanceRef.current = 0;
+    velocityRef.current = 0;
+
+    // Pause auto-spin during manual interaction
+    if (isAutoSpinRef.current) {
+      isAutoSpinRef.current = false;
+      setIsAutoSpin(false);
+    }
+
+    const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
+    lastPointerXRef.current = clientX;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch (_) {}
   };
 
   const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+
     const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
-    const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY) ?? 0;
+    const deltaX = clientX - lastPointerXRef.current;
 
-    // 1. In-Place Interactive Rotation Handle Drag
-    if (isRotatingTattooHandle && tattooCenterRef.current) {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      animFrameRef.current = requestAnimationFrame(() => {
-        const rad = Math.atan2(clientY - tattooCenterRef.current.y, clientX - tattooCenterRef.current.x);
-        let deg = Math.round((rad * 180) / Math.PI + 90);
-        deg = ((deg % 360) + 360) % 360;
-        setTattooRotationOffset(deg);
-      });
-      return;
-    }
+    dragDistanceRef.current += Math.abs(deltaX);
+    lastPointerXRef.current = clientX;
 
-    // 2. Tattoo Position Drag (Move Tattoo)
-    if (isDraggingTattoo) {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      animFrameRef.current = requestAnimationFrame(() => {
-        const deltaX = (clientX - tattooDragStartRef.current.x) * (0.22 / zoomLevel);
-        const deltaY = (clientY - tattooDragStartRef.current.y) * (0.22 / zoomLevel);
-        setOffsetNudgeX((prev) => prev + deltaX);
-        setOffsetNudgeY((prev) => prev + deltaY);
-        tattooDragStartRef.current = { x: clientX, y: clientY };
-      });
-      return;
-    }
+    // Smooth linear response: 0.55 degrees per pixel
+    targetAngleRef.current = ((targetAngleRef.current - deltaX * 0.55) % 360 + 360) % 360;
 
-    // 3. Body Model 360 Orbit Drag (Spin Human Body)
-    if (isDraggingBody) {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      animFrameRef.current = requestAnimationFrame(() => {
-        const deltaX = clientX - dragStartXRef.current;
-        const newAngle = (dragStartAngleRef.current - deltaX * 0.65 + 3600) % 360;
-        setRotationDeg(newAngle);
-      });
-    }
+    // Smooth filtered velocity calculation
+    velocityRef.current = velocityRef.current * 0.4 + (deltaX * 0.3) * 0.6;
   };
 
-  const handlePointerUp = () => {
-    setIsDraggingBody(false);
-    setIsDraggingTattoo(false);
-    setIsRotatingTattooHandle(false);
-    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+  const handlePointerUp = (e) => {
+    isDraggingRef.current = false;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (_) {}
   };
 
-  // Handle Tattoo Selection: Selects tattoo and closes the selector so user can test on all body parts
-  const handleSelectTattooArtwork = (design) => {
-    if (onSelectDesign) onSelectDesign(design);
-    setHasUserChosenTattoo(true);
-    setShowTattooPicker(false);
-    toast.success(`Selected "${design.name}". Tap any body part to test!`);
+  const handlePointerLeave = () => {
+    isDraggingRef.current = false;
   };
 
-  // Smooth Left / Right Scroll for Tattoo Selection Slider
-  const scrollTattooPicker = (dir) => {
-    if (tattooPickerScrollRef.current) {
-      const scrollAmount = dir === 'left' ? -260 : 260;
-      tattooPickerScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
+  // Step rotation by discrete angle increments (e.g., 45°)
+  const handleStepRotate = (delta) => {
+    velocityRef.current = 0;
+    setIsAutoSpin(false);
+    isAutoSpinRef.current = false;
+    const currentBase = Math.round(targetAngleRef.current / 45) * 45;
+    targetAngleRef.current = ((currentBase + delta) % 360 + 360) % 360;
   };
 
-  // Normalized 0 to 360 angle
-  const normalizedAngle = ((rotationDeg % 360) + 360) % 360;
-
-  // Find the exact active 360 frame based on angle
-  const getClosestFrame = (deg) => {
-    let bestFrame = ANATOMY_360_FRAMES[0];
-    let minDiff = 360;
-    for (const frame of ANATOMY_360_FRAMES) {
-      const diff = Math.min(
-        Math.abs(deg - frame.angle),
-        360 - Math.abs(deg - frame.angle)
-      );
-      if (diff < minDiff) {
-        minDiff = diff;
-        bestFrame = frame;
-      }
-    }
-    return bestFrame;
+  // Direct snap to preset perspective
+  const handleSnapToAngle = (angle) => {
+    velocityRef.current = 0;
+    setIsAutoSpin(false);
+    isAutoSpinRef.current = false;
+    targetAngleRef.current = ((angle % 360) + 360) % 360;
   };
 
-  const currentFrame = getClosestFrame(normalizedAngle);
-
-  // Sub-angle delta within current view quadrant
-  let subAngle = normalizedAngle - currentFrame.angle;
-  if (subAngle > 180) subAngle -= 360;
-  if (subAngle < -180) subAngle += 360;
-
-  // Active Placement definition
-  const activeZoneKey = Object.keys(ANATOMICAL_PLACEMENTS).find(k => 
-    k.toLowerCase() === selectedBodyArea.toLowerCase() || 
-    selectedBodyArea.toLowerCase().includes(k.toLowerCase()) || 
-    k.toLowerCase().includes(selectedBodyArea.toLowerCase())
-  ) || 'Forearm';
-
-  const placementConfig = ANATOMICAL_PLACEMENTS[activeZoneKey];
-  const frameCoords = placementConfig?.frames?.[currentFrame.angle];
-  const isTattooVisibleInAngle = Boolean(frameCoords && (frameCoords.opacity ?? 1) > 0.2);
+  // Toggle auto turntable spin
+  const toggleAutoSpin = () => {
+    const nextVal = !isAutoSpin;
+    setIsAutoSpin(nextVal);
+    isAutoSpinRef.current = nextVal;
+    velocityRef.current = 0;
+  };
 
   // Zoom handlers
-  const handleZoomIn = () => setZoomLevel((prev) => Math.min(parseFloat((prev + 0.3).toFixed(2)), 2.8));
-  const handleZoomOut = () => setZoomLevel((prev) => Math.max(parseFloat((prev - 0.3).toFixed(2)), 0.8));
-  const handleResetZoom = () => {
-    setZoomLevel(1.0);
-    toast.info('Zoom reset to 100%');
+  const handleZoomIn = () => setZoom((z) => Math.min(1.45, Math.round((z + 0.15) * 100) / 100));
+  const handleZoomOut = () => setZoom((z) => Math.max(0.9, Math.round((z - 0.15) * 100) / 100));
+  const handleResetView = () => {
+    setZoom(1);
+    setIsAutoSpin(false);
+    isAutoSpinRef.current = false;
+    velocityRef.current = 0;
+    targetAngleRef.current = 0;
   };
 
-  const handleReset = () => {
-    setZoomLevel(1.0);
-    setRotationDeg(placementConfig?.defaultTheta ?? 0);
-    setIsAutoRotating(false);
-    setTattooScale(placementConfig?.defaultScale || 1.15);
-    setTattooOpacity(1.0);
-    setTattooRotationOffset(0);
-    setOffsetNudgeX(0);
-    setOffsetNudgeY(0);
-    setBlendMode('high-contrast');
-    setInteractionMode('tattoo');
-    toast.info(`Centered on ${placementConfig?.label || selectedBodyArea}`);
+  // Continuous frame crossfade math
+  const normalizedTheta = ((displayAngle % 360) + 360) % 360;
+  const frameIdx = Math.floor(normalizedTheta / 45);
+  const nextIdx = (frameIdx + 1) % 8;
+  const t = (normalizedTheta - frameIdx * 45) / 45;
+  const easeT = t * t * (3 - 2 * t);
+
+  // Friendly perspective label
+  const getAngleLabel = (deg) => {
+    if (deg >= 337.5 || deg < 22.5) return 'Front View (0°)';
+    if (deg >= 22.5 && deg < 67.5) return 'Front-Right (45°)';
+    if (deg >= 67.5 && deg < 112.5) return 'Right Profile (90°)';
+    if (deg >= 112.5 && deg < 157.5) return 'Back-Right (135°)';
+    if (deg >= 157.5 && deg < 202.5) return 'Back View (180°)';
+    if (deg >= 202.5 && deg < 247.5) return 'Back-Left (225°)';
+    if (deg >= 247.5 && deg < 292.5) return 'Left Profile (270°)';
+    return 'Front-Left (315°)';
   };
 
-  // Filter designs for the horizontal transparent picker
-  const filteredPickerDesigns = designs.filter(d => {
-    const matchesStyle = pickerStyleFilter === 'All' || d.style.toLowerCase() === pickerStyleFilter.toLowerCase();
-    return matchesStyle;
-  });
-
-  const zoomOriginX = zoomFocusMode === 'tattoo' && frameCoords ? `${frameCoords.left + offsetNudgeX}%` : '50%';
-  const zoomOriginY = zoomFocusMode === 'tattoo' && frameCoords ? `${frameCoords.top + offsetNudgeY}%` : '50%';
-
-  // Always use transparent PNG if available
-  let imageSrc = '';
-  if (selectedDesign) {
-    const raw = selectedDesign.dataUri || selectedDesign.previewImage || selectedDesign.image || '';
-    imageSrc = getFullImageUrl(raw.replace(/\.jpg$/, '.png'));
-  }
-
-  const totalTattooRotation = ((frameCoords?.rotate || 0) + tattooRotationOffset) % 360;
-
-  // Calculate clean tattoo stencil filter without square background
-  const getInkImageStyle = () => {
-    const isPng = imageSrc.toLowerCase().includes('.png');
-    if (blendMode === 'high-contrast') {
-      return {
-        mixBlendMode: isPng ? 'normal' : 'multiply',
-        filter: 'contrast(1.2) saturate(1.25) brightness(1.02) drop-shadow(0 0 2px rgba(0,0,0,0.85))',
-        opacity: tattooOpacity,
-      };
-    }
-    if (blendMode === 'natural-skin') {
-      return {
-        mixBlendMode: isPng ? 'normal' : 'multiply',
-        filter: 'contrast(1.1) saturate(1.15) brightness(0.98) drop-shadow(0 0 1px rgba(0,0,0,0.65))',
-        opacity: tattooOpacity * 0.95,
-      };
-    }
-    // Direct Sharp Stencil
-    return {
-      mixBlendMode: isPng ? 'normal' : 'multiply',
-      filter: 'saturate(1.2) drop-shadow(0 0 2px rgba(0,0,0,0.8))',
-      opacity: tattooOpacity,
-    };
-  };
+  const anglePresets = [
+    { label: 'Front', angle: 0 },
+    { label: '45°', angle: 45 },
+    { label: 'Right', angle: 90 },
+    { label: 'Back', angle: 180 },
+    { label: 'Left', angle: 270 },
+  ];
 
   return (
-    <div
-      ref={studioContainerRef}
-      className={`relative w-full ${compact ? 'h-[540px] sm:h-[600px]' : 'h-[600px] sm:h-[680px] md:h-[740px]'} flex flex-col justify-between select-none overflow-hidden rounded-3xl bg-[#090b0e] border border-white/10 shadow-2xl transition-all`}
-      onPointerDown={handleStagePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-    >
+    <div className="relative w-full flex flex-col items-center select-none space-y-3">
       
-      {/* 1. ULTRA-CLEAN UNIFIED TOP HUD (SINGLE SLEEK ROW, ZERO OVERLAPS) */}
-      <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-auto gap-2">
+      {/* 1. TOP ATELIER CONTROL BAR (HUD) */}
+      <div className="w-full flex items-center justify-between px-3 py-2 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-lg z-30">
         
-        {/* Left: Active Placement & Change Tattoo Button */}
-        <div className="flex items-center space-x-1.5">
-          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-xl border border-white/15 text-xs font-bold text-white shadow-xl">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-zinc-400 hidden sm:inline">Area:</span>
-            <span className="text-amber-300">{placementConfig?.label || selectedBodyArea}</span>
+        {/* Left: Heading Compass Readout */}
+        <div className="flex items-center space-x-2.5">
+          <div className="w-7 h-7 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
+            <Compass className="w-4 h-4" />
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowTattooPicker(!showTattooPicker)}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xl ${
-              showTattooPicker
-                ? 'bg-amber-400 text-black shadow-[0_0_15px_rgba(245,158,11,0.5)]'
-                : 'bg-zinc-900/90 hover:bg-zinc-800 text-amber-300 border border-amber-500/40 hover:border-amber-400'
-            }`}
-          >
-            <Palette className="w-3.5 h-3.5" />
-            <span>{showTattooPicker ? 'Close' : 'Change Tattoo'}</span>
-          </button>
+          <div>
+            <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-400 block leading-tight">
+              360° Perspective
+            </span>
+            <span className="text-xs font-mono font-bold text-amber-300">
+              {getAngleLabel(Math.round(displayAngle))}
+            </span>
+          </div>
         </div>
 
-        {/* Right: Angle Indicator, 360 Spin & Reset */}
-        <div className="flex items-center space-x-1.5 bg-black/75 backdrop-blur-xl border border-white/15 p-1 rounded-full shadow-xl text-xs">
-          <button
-            type="button"
-            onClick={() => setRotationDeg((prev) => (prev + 45) % 360)}
-            className="flex items-center space-x-1 px-2.5 py-1 font-bold text-amber-300 hover:text-white bg-amber-950/50 border border-amber-500/30 rounded-full transition-colors"
-            title="Rotate 3D Body 45°"
-          >
-            <Compass className="w-3 h-3 text-amber-400" />
-            <span>{Math.round(normalizedAngle)}°</span>
-          </button>
+        {/* Center: Angle Quick Presets */}
+        <div className="hidden sm:flex items-center space-x-1 bg-black/60 p-1 rounded-xl border border-white/10">
+          {anglePresets.map((preset) => {
+            const isNear = Math.abs(normalizedTheta - preset.angle) < 22.5 ||
+              (preset.angle === 0 && normalizedTheta > 337.5);
 
-          <button
-            type="button"
-            onClick={() => setIsAutoRotating(!isAutoRotating)}
-            className={`px-2.5 py-1 text-[10px] font-bold uppercase rounded-full transition-all ${
-              isAutoRotating
-                ? 'bg-amber-400 text-black shadow-md'
-                : 'text-zinc-400 hover:text-white bg-zinc-900/80'
-            }`}
-            title="Auto 360 Turntable Orbit"
-          >
-            {isAutoRotating ? '⏸ Stop' : '▶ 360°'}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleReset}
-            className="p-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-full transition-colors"
-            title="Reset All"
-          >
-            <RefreshCcw className="w-3 h-3" />
-          </button>
-        </div>
-      </div>
-
-      {/* 2. SLEEK MINIMAL ZOOM PILL (BOTTOM-LEFT, NON-OBSTRUCTIVE) */}
-      <div className="absolute left-3 bottom-20 sm:bottom-16 z-20 flex items-center bg-black/75 backdrop-blur-xl border border-white/15 p-1 rounded-full shadow-xl pointer-events-auto space-x-1">
-        <button
-          type="button"
-          onClick={handleZoomOut}
-          className="w-6 h-6 flex items-center justify-center bg-zinc-900 hover:bg-amber-400 hover:text-black text-zinc-300 rounded-full transition-all"
-          title="Zoom Out"
-        >
-          <ZoomOut className="w-3 h-3" />
-        </button>
-        <button
-          type="button"
-          onClick={handleResetZoom}
-          className="px-1.5 py-0.5 text-[9px] font-mono font-bold text-amber-300"
-          title="Reset Zoom"
-        >
-          {Math.round(zoomLevel * 100)}%
-        </button>
-        <button
-          type="button"
-          onClick={handleZoomIn}
-          className="w-6 h-6 flex items-center justify-center bg-zinc-900 hover:bg-amber-400 hover:text-black text-zinc-300 rounded-full transition-all"
-          title="Zoom In"
-        >
-          <ZoomIn className="w-3 h-3" />
-        </button>
-      </div>
-
-      {/* 3. CENTER 3D TURNTABLE VIEWPORT */}
-      <div
-        className={`relative w-full h-full flex items-center justify-center pt-8 pb-20 transform-gpu will-change-transform ${
-          interactionMode === 'tattoo' ? 'cursor-move' : 'cursor-grab active:cursor-grabbing'
-        }`}
-        style={{
-          transformOrigin: `${zoomOriginX} ${zoomOriginY}`,
-          transform: `scale(${zoomLevel})`,
-          transition: isDraggingBody || isDraggingTattoo || isRotatingTattooHandle ? 'none' : 'transform 0.15s ease-out',
-        }}
-      >
-        <div className="relative h-[90%] max-h-[580px] aspect-[2/3] flex items-center justify-center transform-gpu">
-          
-          <div
-            className="relative w-full h-full flex items-center justify-center transform-gpu will-change-transform"
-            style={{
-              transform: `perspective(1000px) rotateY(${subAngle * 0.3}deg)`,
-              transformStyle: 'preserve-3d',
-              transition: isDraggingBody || isAutoRotating ? 'none' : 'transform 0.15s ease-out',
-            }}
-          >
-            {/* 3D Mannequin Frame */}
-            <img
-              key={currentFrame.src + (currentFrame.flip ? '_flip' : '')}
-              src={currentFrame.src}
-              alt="360 Body Model"
-              className="w-full h-full object-contain filter brightness-100 contrast-110 drop-shadow-[0_15px_35px_rgba(0,0,0,0.9)] pointer-events-none transform-gpu"
-              style={{ transform: currentFrame.flip ? 'scaleX(-1)' : 'none' }}
-            />
-
-            {/* REALISTIC INKED TATTOO WITH CLEAN ALPHA TRANSPARENCY & ZERO ROTATION DRIFT */}
-            {selectedDesign && frameCoords && isTattooVisibleInAngle && (
-              <div
-                ref={tattooElemRef}
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                  setIsDraggingTattoo(true);
-                  const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
-                  const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY) ?? 0;
-                  tattooDragStartRef.current = { x: clientX, y: clientY };
-                }}
-                className={`absolute z-30 pointer-events-auto flex items-center justify-center transform-gpu will-change-transform cursor-move group ${
-                  highlightPulse ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-black rounded-lg animate-pulse' : ''
+            return (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => handleSnapToAngle(preset.angle)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                  isNear
+                    ? 'bg-amber-400 text-black font-bold shadow-sm'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 }`}
-                style={{
-                  left: `calc(${frameCoords.left + offsetNudgeX}%)`,
-                  top: `calc(${frameCoords.top + offsetNudgeY}%)`,
-                  width: `${frameCoords.width}%`,
-                  height: `${frameCoords.height}%`,
-                  transform: 'translate3d(-50%, -50%, 0)',
-                  transformOrigin: '50% 50%',
-                }}
-                title="Drag to move tattoo • Drag top handle or use slider to rotate"
               >
-                {/* Pure 360° In-Place Rotation Canvas (Rotates strictly around 50% 50% center pivot) */}
-                <div
-                  className="relative w-full h-full flex items-center justify-center transform-gpu will-change-transform"
+                {preset.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right: Controls (Auto-Spin, Zoom, Reset) */}
+        <div className="flex items-center space-x-1.5">
+          {/* Step Rotate Left */}
+          <button
+            type="button"
+            onClick={() => handleStepRotate(-45)}
+            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
+            title="Rotate Left 45°"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Auto-Spin Toggle */}
+          <button
+            type="button"
+            onClick={toggleAutoSpin}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1.5 transition-all border ${
+              isAutoSpin
+                ? 'bg-amber-400 text-black font-bold border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.3)]'
+                : 'bg-zinc-900/90 text-zinc-300 hover:text-white border-white/10 hover:bg-zinc-800'
+            }`}
+            title="Toggle 360° Cinematic Turntable"
+          >
+            {isAutoSpin ? (
+              <>
+                <Pause className="w-3 h-3 fill-black" />
+                <span className="hidden md:inline">Pause</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3 h-3 fill-current" />
+                <span className="hidden md:inline">Auto-Spin</span>
+              </>
+            )}
+          </button>
+
+          {/* Step Rotate Right */}
+          <button
+            type="button"
+            onClick={() => handleStepRotate(45)}
+            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
+            title="Rotate Right 45°"
+          >
+            <RotateCw className="w-3.5 h-3.5" />
+          </button>
+
+          <div className="w-[1px] h-4 bg-white/10 mx-0.5" />
+
+          {/* Zoom Out */}
+          <button
+            type="button"
+            onClick={handleZoomOut}
+            disabled={zoom <= 0.9}
+            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
+            title="Zoom Out"
+          >
+            <ZoomOut className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Zoom In */}
+          <button
+            type="button"
+            onClick={handleZoomIn}
+            disabled={zoom >= 1.45}
+            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
+            title="Zoom In"
+          >
+            <ZoomIn className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Reset */}
+          <button
+            type="button"
+            onClick={handleResetView}
+            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-white/10 transition-colors"
+            title="Reset to 0° Front (1x)"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+      </div>
+
+      {/* 2. CENTER: 3D MANNEQUIN TURNTABLE CANVAS */}
+      <div
+        className={`relative w-full ${compact ? 'h-[480px] sm:h-[540px]' : 'h-[560px] sm:h-[620px] md:h-[680px]'} flex items-center justify-center bg-gradient-to-b from-zinc-950 via-zinc-900/70 to-zinc-950 rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing`}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
+        style={{ touchAction: 'none' }}
+      >
+        {/* Subtle Ambient Radial Glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-amber-500/[0.04] rounded-full blur-[130px]" />
+        </div>
+
+        {/* Scalable Container for Zoom */}
+        <div
+          className="relative h-full aspect-[2/3] flex items-center justify-center transition-transform duration-200 ease-out"
+          style={{
+            transform: `scale(${zoom})`,
+            transformOrigin: '50% 50%',
+          }}
+        >
+          {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (SEAMLESS 60FPS CROSSFADE) */}
+          <div className="relative w-full h-full">
+            {ANATOMY_360_FRAMES.map((f, i) => {
+              let frameOpacity = 0;
+              if (i === frameIdx) {
+                frameOpacity = 1 - easeT;
+              } else if (i === nextIdx) {
+                frameOpacity = easeT;
+              }
+
+              return (
+                <img
+                  key={`${f.src}-${f.flip ? 'flip' : 'normal'}`}
+                  src={f.src}
+                  alt={f.label}
+                  draggable={false}
+                  className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none filter contrast-105 brightness-105 drop-shadow-[0_20px_40px_rgba(0,0,0,0.85)] transform-gpu will-change-transform"
                   style={{
-                    transform: `rotate(${totalTattooRotation}deg) scale(${tattooScale})`,
+                    transform: f.flip ? 'scaleX(-1)' : 'none',
+                    opacity: frameOpacity,
+                    visibility: frameOpacity > 0.01 ? 'visible' : 'hidden',
+                  }}
+                />
+              );
+            })}
+
+            {/* REALISTIC IN-SKIN TATTOO ON THE HUMAN BODY */}
+            {(() => {
+              if (!selectedDesign) return null;
+              const coords = getInterpolatedPlacement(selectedBodyArea, displayAngle);
+              if (!coords || coords.opacity < 0.08) return null;
+
+              const rawSrc = selectedDesign.dataUri || selectedDesign.previewImage || selectedDesign.image || '';
+              const imgSrc = getFullImageUrl(rawSrc.replace(/\.jpg$/, '.png'));
+
+              const widthMultiplier = (selectedDesign.customWidth || 100) / 100;
+              const heightMultiplier = (selectedDesign.customHeight || 100) / 100;
+              const adminScale = selectedDesign.customScale || 1.0;
+
+              return (
+                <div
+                  className="absolute z-20 pointer-events-none flex items-center justify-center transform-gpu will-change-transform"
+                  style={{
+                    left: `${coords.left + userOffsetX}%`,
+                    top: `${coords.top + userOffsetY}%`,
+                    width: `${coords.width * widthMultiplier}%`,
+                    height: `${coords.height * heightMultiplier}%`,
+                    transform: 'translate3d(-50%, -50%, 0)',
                     transformOrigin: '50% 50%',
                   }}
                 >
-                  {/* Subtle Rotation Handle on Hover */}
-                  <div className="absolute inset-0 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div
+                    className="relative w-full h-full flex items-center justify-center transform-gpu will-change-transform"
+                    style={{
+                      transform: `rotate(${coords.rotate + userRotate}deg) scale(${coords.scale * adminScale * userScale})`,
+                      transformOrigin: '50% 50%',
+                    }}
+                  >
+                    {/* Realistic in-skin ink simulation */}
                     <div
-                      onPointerDown={(e) => {
-                        e.stopPropagation();
-                        setIsRotatingTattooHandle(true);
-                        if (tattooElemRef.current) {
-                          const rect = tattooElemRef.current.getBoundingClientRect();
-                          tattooCenterRef.current = {
-                            x: rect.left + rect.width / 2,
-                            y: rect.top + rect.height / 2,
-                          };
-                        }
+                      className="relative w-full h-full flex items-center justify-center pointer-events-none"
+                      style={{
+                        transform: `scaleX(${coords.perspectiveX || 1})`,
+                        WebkitMaskImage: 'radial-gradient(ellipse 92% 92% at 50% 50%, black 82%, transparent 100%)',
+                        maskImage: 'radial-gradient(ellipse 92% 92% at 50% 50%, black 82%, transparent 100%)',
                       }}
-                      className="absolute -top-5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-amber-400 text-black flex items-center justify-center cursor-grab active:cursor-grabbing shadow-lg pointer-events-auto hover:scale-110 transition-transform"
-                      title="Drag to Rotate Tattoo 360°"
                     >
-                      <RotateCw className="w-3 h-3" />
+                      {selectedDesign.svg ? (
+                        <div className="w-full h-full flex items-center justify-center text-zinc-950 font-bold">
+                          {selectedDesign.svg}
+                        </div>
+                      ) : imgSrc ? (
+                        <img
+                          src={imgSrc}
+                          alt={selectedDesign.name}
+                          draggable={false}
+                          className="w-full h-full object-contain pointer-events-none select-none"
+                          style={{
+                            mixBlendMode: 'multiply',
+                            filter: 'contrast(1.6) brightness(0.72) sepia(0.18) hue-rotate(-15deg) drop-shadow(0 0.5px 1px rgba(25, 15, 10, 0.45))',
+                            opacity: Math.min(0.92, coords.opacity * 0.92),
+                          }}
+                        />
+                      ) : null}
                     </div>
                   </div>
-
-                  {/* Clean Transparent Ink Rendering (NO background box or dark square) */}
-                  {selectedDesign.svg ? (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-950 font-bold pointer-events-none">
-                      {selectedDesign.svg}
-                    </div>
-                  ) : imageSrc ? (
-                    <img
-                      src={imageSrc}
-                      alt={selectedDesign.name}
-                      className="w-full h-full object-contain pointer-events-none"
-                      style={getInkImageStyle()}
-                    />
-                  ) : (
-                    <div className="text-[10px] text-amber-300 font-bold text-center bg-black/70 px-2 py-1 rounded pointer-events-none">
-                      {selectedDesign.name}
-                    </div>
-                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
-            {/* Clickable Muscle Hotspots (Seamless body part switching for testing on all body parts) */}
-            {Object.entries(ANATOMICAL_PLACEMENTS).map(([key, config]) => {
-              const activeCoords = config.frames?.[currentFrame.angle];
-              if (!activeCoords || (activeCoords.opacity ?? 1) < 0.4) return null;
+            {/* DIRECT BODY-PART CLICK HIT ZONES */}
+            {Object.keys(ANATOMICAL_PLACEMENTS).map((key) => {
+              const config = ANATOMICAL_PLACEMENTS[key];
+              const dynamicPlacement = getInterpolatedPlacement(key, displayAngle);
+              const fallbackCoords = config.frames?.[0] || config.frames?.[180] || { left: 50, top: 50, width: 20, height: 15 };
+              const currentCoords = dynamicPlacement || fallbackCoords;
 
-              const isSelected = selectedBodyArea.toLowerCase() === key.toLowerCase() || 
-                                 selectedBodyArea.toLowerCase().includes(key.toLowerCase());
+              if (dynamicPlacement && dynamicPlacement.opacity < 0.25) return null;
+
+              const isSelected = selectedBodyArea.toLowerCase() === key.toLowerCase();
               const isHovered = hoveredPart === key;
-
-              if (isSelected && selectedDesign) return null;
 
               return (
                 <div
                   key={key}
+                  onPointerDown={(e) => {
+                    // Prevent canvas drag capture from hijacking direct hit-zone taps
+                    e.stopPropagation();
+                  }}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (onSelectBodyArea) onSelectBodyArea(key);
-                    
-                    if (!hasUserChosenTattoo && !selectedDesign) {
-                      setShowTattooPicker(true);
-                    }
-                    toast.info(`Testing on ${config.name}!`);
                   }}
                   onMouseEnter={() => setHoveredPart(key)}
                   onMouseLeave={() => setHoveredPart(null)}
-                  className={`absolute z-20 cursor-pointer rounded-xl transition-all border pointer-events-auto ${
+                  className={`absolute z-30 cursor-pointer pointer-events-auto -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-all duration-200 group ${
                     isSelected
-                      ? 'bg-amber-500/10 border-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.3)]'
+                      ? 'ring-2 ring-amber-400 bg-amber-400/20 shadow-[0_0_20px_rgba(251,191,36,0.35)]'
                       : isHovered
-                      ? 'bg-cyan-500/15 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.3)]'
-                      : 'border-transparent hover:border-white/20'
+                      ? 'ring-1 ring-amber-300/80 bg-white/10 shadow-[0_0_12px_rgba(255,255,255,0.2)]'
+                      : 'hover:bg-amber-400/10'
                   }`}
                   style={{
-                    left: `${activeCoords.left}%`,
-                    top: `${activeCoords.top}%`,
-                    width: `${activeCoords.width}%`,
-                    height: `${activeCoords.height}%`,
-                    transform: 'translate3d(-50%, -50%, 0)',
+                    left: `${currentCoords.left}%`,
+                    top: `${currentCoords.top}%`,
+                    width: `${Math.max(15, currentCoords.width || 16)}%`,
+                    height: `${Math.max(13, currentCoords.height || 14)}%`,
                   }}
+                  title={`Click to preview design on ${config.name}`}
                 >
-                  {(isSelected || isHovered) && (
-                    <span className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-500/40 text-[9px] font-bold uppercase px-2 py-0.5 rounded shadow-lg whitespace-nowrap z-30 pointer-events-none">
-                      {config.name}
-                    </span>
+                  {/* Subtle target crosshair / indicator dot */}
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-200 ${
+                      isSelected || isHovered ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] animate-ping" />
+                  </div>
+
+                  {(isHovered || isSelected) && (
+                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/50 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-lg shadow-2xl whitespace-nowrap pointer-events-none flex items-center gap-1 z-40 backdrop-blur-md">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      <span>{config.name}</span>
+                    </div>
                   )}
                 </div>
               );
             })}
 
           </div>
+        </div>
 
+        {/* Drag Guidance Badge */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-20">
+          <div className="flex items-center space-x-2 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-[10px] text-zinc-300 shadow-xl">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span>Drag horizontally to rotate 360° • Click body region to fit stencil</span>
+          </div>
         </div>
 
       </div>
 
-      {/* 4. SLEEK HORIZONTAL TRANSPARENT TATTOO PICKER DOCK (SEAMLESS SLIDER WITH LEFT/RIGHT SCROLL & TOUCH/DRAG) */}
-      {showTattooPicker && (
-        <div
-          onPointerDown={(e) => e.stopPropagation()}
-          onTouchStart={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          className="interactive-scroll-area no-wheel-zoom absolute top-12 sm:top-14 left-2 right-2 sm:left-3 sm:right-3 z-40 bg-zinc-950/90 backdrop-blur-2xl border border-amber-500/30 rounded-2xl p-2.5 sm:p-3 shadow-[0_15px_40px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-200 pointer-events-auto"
-        >
-          {/* Header of Horizontal Bar */}
-          <div className="flex flex-wrap items-center justify-between pb-2 border-b border-white/10 mb-2 gap-1.5">
-            <div className="flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-              <span className="text-[11px] sm:text-xs font-bold text-white uppercase tracking-wider">
-                {selectedBodyArea} Tattoos
-              </span>
-              <span className="px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold">
-                {filteredPickerDesigns.length}
-              </span>
-            </div>
-
-            {/* Filter Styles in Horizontal Bar */}
-            <div className="flex items-center space-x-1 overflow-x-auto max-w-full sm:max-w-[55%] scrollbar-none py-0.5">
-              {['All', 'Sacred Devbhoomi', 'Geometric', 'Fine Line', 'Blackwork', 'Japanese'].map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setPickerStyleFilter(s)}
-                  className={`shrink-0 px-2 py-0.5 text-[9px] font-bold rounded-md transition-all ${
-                    pickerStyleFilter === s
-                      ? 'bg-amber-400 text-black shadow-sm'
-                      : 'bg-zinc-900/80 text-zinc-400 hover:text-white border border-white/5'
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowTattooPicker(false)}
-              className="p-1 text-zinc-400 hover:text-white bg-zinc-900/80 hover:bg-zinc-800 rounded-lg border border-white/10 transition-colors ml-auto"
-              title="Close picker"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+      {/* 3. STENCIL FIT & SCALE FINE-TUNING HUD */}
+      {selectedDesign && (
+        <div className="w-full bg-zinc-950/90 border border-amber-500/20 rounded-2xl p-3 px-4 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 shadow-lg">
+          
+          <div className="flex items-center space-x-2">
+            <Sliders className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider">
+              Stencil Fit:
+            </span>
+            <span className="text-xs text-amber-300 font-semibold">
+              {selectedDesign.name} on {selectedBodyArea}
+            </span>
           </div>
 
-          {/* Horizontal Scrollable Slider Container with Left & Right Scroll Buttons */}
-          <div className="relative group/slider flex items-center">
-            
-            {/* Left Scroll Arrow */}
-            <button
-              type="button"
-              onClick={() => scrollTattooPicker('left')}
-              className="absolute -left-1 z-10 p-1.5 bg-black/85 hover:bg-amber-400 hover:text-black text-amber-300 rounded-full border border-amber-500/40 shadow-xl transition-all hover:scale-110 active:scale-95"
-              title="Scroll Left"
-            >
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </button>
-
-            {/* Horizontal Scroll Track */}
-            <div
-              ref={tattooPickerScrollRef}
-              onWheel={(e) => {
-                e.stopPropagation();
-                if (e.deltaY && tattooPickerScrollRef.current) {
-                  tattooPickerScrollRef.current.scrollLeft += e.deltaY;
-                }
-              }}
-              className="interactive-scroll-area flex items-center space-x-2.5 overflow-x-auto px-6 py-1.5 scroll-smooth overscroll-contain touch-pan-x w-full"
-              style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#f59e0b #18181b',
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
-              {filteredPickerDesigns.map((design) => {
-                const isSelected = selectedDesign?._id === design._id || selectedDesign?.name === design.name;
-                const rawSrc = design.previewImage || design.dataUri || design.image || '';
-                const imgSrc = getFullImageUrl(rawSrc.replace(/\.jpg$/, '.png'));
-
-                return (
-                  <button
-                    key={design._id || design.name}
-                    type="button"
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onClick={() => handleSelectTattooArtwork(design)}
-                    className={`shrink-0 flex items-center space-x-2 p-1.5 pr-3 rounded-xl transition-all border select-none cursor-pointer ${
-                      isSelected
-                        ? 'bg-amber-500/25 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.35)] ring-1 ring-amber-400'
-                        : 'bg-zinc-900/70 hover:bg-zinc-800/90 border-white/10 hover:border-amber-400/50 text-left hover:scale-[1.02]'
-                    }`}
-                  >
-                    <div className="w-11 h-11 rounded-lg bg-black/90 p-0.5 overflow-hidden border border-white/10 shrink-0 flex items-center justify-center">
-                      {design.svg ? (
-                        design.svg
-                      ) : (
-                        <img src={imgSrc} alt={design.name} className="w-full h-full object-contain pointer-events-none" />
-                      )}
-                    </div>
-                    <div className="text-left">
-                      <div className="text-[11px] font-bold text-white uppercase truncate max-w-[120px]">
-                        {design.name}
-                      </div>
-                      <div className="text-[9px] text-amber-400/90 font-semibold">
-                        {design.style}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
+          <div className="flex items-center flex-wrap gap-2.5">
+            {/* Stencil Scale Slider */}
+            <div className="flex items-center space-x-2 bg-black/50 px-2.5 py-1 rounded-xl border border-white/5">
+              <span className="text-[10px] text-zinc-400 font-mono">Scale:</span>
+              <input
+                type="range"
+                min="0.6"
+                max="1.6"
+                step="0.05"
+                value={userScale}
+                onChange={(e) => setUserScale(parseFloat(e.target.value))}
+                className="w-20 accent-amber-400 h-1 bg-zinc-800 rounded cursor-pointer"
+              />
+              <span className="text-[10px] font-mono font-bold text-amber-400 w-8 text-right">
+                {Math.round(userScale * 100)}%
+              </span>
             </div>
 
-            {/* Right Scroll Arrow */}
-            <button
-              type="button"
-              onClick={() => scrollTattooPicker('right')}
-              className="absolute -right-1 z-10 p-1.5 bg-black/85 hover:bg-amber-400 hover:text-black text-amber-300 rounded-full border border-amber-500/40 shadow-xl transition-all hover:scale-110 active:scale-95"
-              title="Scroll Right"
-            >
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            {/* Shift Up/Down Offset */}
+            <div className="flex items-center space-x-1 bg-black/50 p-1 rounded-xl border border-white/5">
+              <button
+                type="button"
+                onClick={() => setUserOffsetY((y) => Math.max(-15, y - 2))}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-white/10"
+                title="Shift Stencil Up"
+              >
+                ▲ Up
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserOffsetY((y) => Math.min(15, y + 2))}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-white/10"
+                title="Shift Stencil Down"
+              >
+                ▼ Down
+              </button>
+            </div>
+
+            {/* Rotate Offset */}
+            <div className="flex items-center space-x-1 bg-black/50 p-1 rounded-xl border border-white/5">
+              <button
+                type="button"
+                onClick={() => setUserRotate((r) => r - 5)}
+                className="px-1.5 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-amber-300 hover:bg-white/10"
+                title="Rotate Stencil -5°"
+              >
+                ↺
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserRotate((r) => r + 5)}
+                className="px-1.5 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-amber-300 hover:bg-white/10"
+                title="Rotate Stencil +5°"
+              >
+                ↻
+              </button>
+            </div>
+
+            {/* Quick Fit Presets */}
+            <div className="flex items-center space-x-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setUserScale(0.85);
+                  setUserOffsetY(0);
+                  setUserRotate(0);
+                }}
+                className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
+                  userScale === 0.85 ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white'
+                }`}
+              >
+                Fit Small
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setUserScale(1.0);
+                  setUserOffsetY(0);
+                  setUserRotate(0);
+                }}
+                className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
+                  userScale === 1.0 && userOffsetY === 0 ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white'
+                }`}
+              >
+                Default
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setUserScale(1.25);
+                  setUserOffsetY(0);
+                  setUserRotate(0);
+                }}
+                className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
+                  userScale === 1.25 ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white'
+                }`}
+              >
+                Full Muscle
+              </button>
+            </div>
+
           </div>
+
         </div>
       )}
 
-      {/* 5. LUXURY MINIMALIST STUDIO DOCK (CLEAN SINGLE ROW, ZERO CLUTTER) */}
-      <div className="absolute bottom-2 left-2 right-2 sm:left-4 sm:right-4 z-30 flex flex-col pointer-events-auto pr-14 sm:pr-0">
-        
-        {/* Main Clean Control Bar */}
-        <div className="bg-zinc-950/85 backdrop-blur-2xl border border-white/15 p-2 sm:px-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.85)] flex flex-wrap items-center justify-between gap-2.5">
-          
-          {/* Mode Switcher */}
-          <div className="flex items-center space-x-1 bg-black/60 p-0.5 rounded-xl border border-white/5">
-            <button
-              type="button"
-              onClick={() => {
-                setInteractionMode('tattoo');
-                toast.info('Mode: Move Tattoo');
-              }}
-              className={`px-2.5 py-1 text-[10px] font-bold uppercase rounded-lg transition-all ${
-                interactionMode === 'tattoo'
-                  ? 'bg-amber-400 text-black shadow-sm'
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-              title="Move & rotate tattoo directly on body"
-            >
-              🎨 Move Tattoo
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setInteractionMode('body');
-                toast.info('Mode: Orbit 3D Body');
-              }}
-              className={`px-2.5 py-1 text-[10px] font-bold uppercase rounded-lg transition-all ${
-                interactionMode === 'body'
-                  ? 'bg-cyan-400 text-black shadow-sm'
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-              title="Drag anywhere to rotate 3D mannequin"
-            >
-              🧍 Spin Body
-            </button>
-          </div>
-
-          {/* Size Control */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-[10px] uppercase font-bold text-zinc-400">Size:</span>
-            <button
-              type="button"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setTattooScale((prev) => Math.max(parseFloat((prev - 0.1).toFixed(2)), 0.2))}
-              className="w-5 h-5 flex items-center justify-center bg-zinc-900 hover:bg-amber-400 hover:text-black rounded text-zinc-300 font-bold"
-            >
-              -
-            </button>
-            <input
-              type="range"
-              min="0.2"
-              max="3.0"
-              step="0.05"
-              value={tattooScale}
-              onPointerDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onChange={(e) => setTattooScale(parseFloat(e.target.value))}
-              className="w-16 sm:w-20 accent-amber-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
-            />
-            <button
-              type="button"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setTattooScale((prev) => Math.min(parseFloat((prev + 0.1).toFixed(2)), 3.0))}
-              className="w-5 h-5 flex items-center justify-center bg-zinc-900 hover:bg-amber-400 hover:text-black rounded text-zinc-300 font-bold"
-            >
-              +
-            </button>
-            <span className="text-[10px] font-mono text-amber-300 font-bold w-8 text-right">
-              {Math.round(tattooScale * 100)}%
-            </span>
-          </div>
-
-          {/* In-Place Rotate Control */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 flex items-center space-x-1">
-              <RotateCw className="w-3 h-3 text-amber-400 inline" />
-              <span>Rotate:</span>
-            </span>
-            <button
-              type="button"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setTattooRotationOffset((prev) => (prev - 15 + 360) % 360)}
-              className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              title="Rotate -15°"
-            >
-              ↺
-            </button>
-            <input
-              type="range"
-              min="0"
-              max="360"
-              step="5"
-              value={tattooRotationOffset}
-              onPointerDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onChange={(e) => setTattooRotationOffset(parseInt(e.target.value))}
-              className="w-16 sm:w-20 accent-amber-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
-            />
-            <button
-              type="button"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setTattooRotationOffset((prev) => (prev + 15) % 360)}
-              className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              title="Rotate +15°"
-            >
-              ↻
-            </button>
-            <span className="text-[10px] font-mono text-amber-300 font-bold w-8 text-right">
-              {tattooRotationOffset}°
-            </span>
-          </div>
-
-          {/* Optional Nudge & Ink Mode Toggle Button */}
-          <button
-            type="button"
-            onClick={() => setActiveTab(activeTab === 'advanced' ? 'transform' : 'advanced')}
-            className={`p-1 px-2 rounded-lg text-[10px] font-bold transition-colors ${
-              activeTab === 'advanced'
-                ? 'bg-amber-400/20 text-amber-300 border border-amber-500/40'
-                : 'text-zinc-500 hover:text-zinc-300 bg-zinc-900/60'
-            }`}
-            title="Toggle fine nudge and ink contrast"
-          >
-            ⚙️ Nudge
-          </button>
-        </div>
-
-        {/* Collapsible Advanced Nudge / Ink Contrast Bar (Only appears when clicked) */}
-        {activeTab === 'advanced' && (
-          <div className="mt-1.5 flex flex-wrap items-center justify-between bg-black/80 backdrop-blur-xl border border-white/10 p-2 rounded-xl text-xs text-zinc-300 shadow-xl gap-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
-            {/* Fine Nudge D-Pad */}
-            <div className="flex items-center space-x-1">
-              <span className="text-[10px] uppercase font-bold text-zinc-400 mr-1">Nudge:</span>
-              <button
-                type="button"
-                onClick={() => setOffsetNudgeX((prev) => prev - 1)}
-                className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              >
-                <ChevronLeft className="w-3 h-3" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setOffsetNudgeY((prev) => prev - 1)}
-                className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              >
-                <ChevronUp className="w-3 h-3" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setOffsetNudgeY((prev) => prev + 1)}
-                className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              >
-                <ChevronDown className="w-3 h-3" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setOffsetNudgeX((prev) => prev + 1)}
-                className="p-1 text-zinc-400 hover:text-amber-400 bg-zinc-900 rounded"
-              >
-                <ChevronRight className="w-3 h-3" />
-              </button>
-            </div>
-
-            {/* Ink Visibility Mode */}
-            <div className="flex items-center space-x-1">
-              {['high-contrast', 'natural-skin', 'direct'].map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setBlendMode(m)}
-                  className={`px-2 py-0.5 rounded text-[9px] uppercase font-bold transition-all ${
-                    blendMode === m ? 'bg-amber-400 text-black' : 'text-zinc-400 bg-zinc-900'
-                  }`}
-                >
-                  {m === 'high-contrast' ? '🔥 Bold' : m === 'natural-skin' ? '✨ Natural' : '💎 Direct'}
-                </button>
-              ))}
-            </div>
-
-            {/* Opacity slider */}
-            <div className="flex items-center space-x-1">
-              <Sun className="w-3 h-3 text-zinc-400" />
-              <input
-                type="range"
-                min="0.4"
-                max="1.0"
-                step="0.05"
-                value={tattooOpacity}
-                onPointerDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-                onMouseDown={(e) => e.stopPropagation()}
-                onChange={(e) => setTattooOpacity(parseFloat(e.target.value))}
-                className="w-14 accent-amber-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
-              />
-              <span className="text-[9px] font-mono text-zinc-400 w-6 text-right">
-                {Math.round(tattooOpacity * 100)}%
-              </span>
-            </div>
-          </div>
-        )}
-
+      {/* 4. BOTTOM SCRUB DIAL (Interactive 0° - 360° Slider) */}
+      <div className="w-full bg-zinc-950/80 border border-white/10 rounded-2xl p-2.5 px-4 backdrop-blur-xl flex items-center space-x-4 shadow-lg">
+        <span className="text-[10px] font-mono text-zinc-400 font-bold uppercase shrink-0">
+          Scrub 360°
+        </span>
+        <input
+          type="range"
+          min="0"
+          max="359"
+          value={Math.round(displayAngle)}
+          onChange={(e) => {
+            setIsAutoSpin(false);
+            isAutoSpinRef.current = false;
+            velocityRef.current = 0;
+            targetAngleRef.current = Number(e.target.value);
+          }}
+          className="w-full accent-amber-400 bg-zinc-800 h-1.5 rounded-lg cursor-pointer"
+        />
+        <span className="text-xs font-mono font-bold text-amber-400 shrink-0 w-12 text-right">
+          {Math.round(displayAngle)}°
+        </span>
       </div>
+
     </div>
   );
 };

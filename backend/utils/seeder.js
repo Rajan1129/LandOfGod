@@ -19,7 +19,14 @@ export const seedInitialData = async () => {
     const adminPhone = process.env.ADMIN_PHONE || '+91 78079 66080';
     const adminName = process.env.ADMIN_NAME || 'Master Sunil (Studio Director)';
 
-    let admin = await User.findOne({ email: adminEmail });
+    let admin = await User.findOne({
+      $or: [
+        { email: adminEmail },
+        { email: 'admin@landofgod.com' },
+        { email: 'admin@landofgod' },
+        { role: 'admin' }
+      ]
+    });
     if (!admin) {
       admin = await User.create({
         name: adminName,
@@ -30,6 +37,11 @@ export const seedInitialData = async () => {
         avatar: '',
       });
       console.log('[Seeder] Created Master Admin user.');
+    } else {
+      admin.password = adminPassword;
+      admin.role = 'admin';
+      await admin.save();
+      console.log('[Seeder] Synced and verified Master Admin password.');
     }
     const demoUser = admin;
 

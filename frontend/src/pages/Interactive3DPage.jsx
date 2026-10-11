@@ -27,22 +27,50 @@ export const Interactive3DPage = () => {
   ];
 
   // Helper to find best reference tattoo for a body area
+  // Exact 1-to-1 canonical signature tattoo design mapping for every anatomical body part
+  const EXACT_BODY_PART_TATTOOS = {
+    'Forearm': 'Sacred Mahadev Trishul & Damru',
+    'Chest': 'Polygonal Geometric Lion Monarch',
+    'Shoulder': 'Devbhoomi Radial Sacred Mandala',
+    'Upper Arm': 'Irezumi Dragon Koi Leaping Waves',
+    'Back': 'Phoenix Rising From Sacred Flames',
+    'Spine': 'Sacred Trishul Dagger Vertical Spine',
+    'Ribs': 'Fine Line Serpent & Blooming Peony',
+    'Thigh': 'Nordic Howling Wolf & Forest Moon',
+    'Calf': 'Baroque Filigree Obsidian Skull',
+    'Wrist': 'Fine Line Butterfly & Botanical Lavender',
+    'Neck': 'Om Namah Shivaya Sanskrit Mantra',
+    'Ankle': 'Devbhoomi Sacred Lotus Unalome',
+  };
+
+  // Helper to find the exact signature reference tattoo for any body area
   const findReferenceTattooForArea = useCallback((area, allDesigns) => {
     if (!area || !allDesigns || allDesigns.length === 0) return null;
-    const lowerArea = area.toLowerCase();
+    const cleanArea = area.trim();
+    const lowerArea = cleanArea.toLowerCase();
 
-    // 1. Look for admin default reference explicitly assigned to this body area
-    const defaultRef = allDesigns.find(d => 
-      Boolean(d.isDefaultReference) &&
-      (d.bodyAreas || []).some(a => a.toLowerCase() === lowerArea || lowerArea.includes(a.toLowerCase()) || a.toLowerCase().includes(lowerArea))
-    );
-    if (defaultRef) return defaultRef;
+    // 1. Strict Priority: Exact canonical artwork named specifically for this body part
+    const exactName = EXACT_BODY_PART_TATTOOS[cleanArea];
+    if (exactName) {
+      const canonicalMatch = allDesigns.find(d =>
+        d.name?.toLowerCase() === exactName.toLowerCase() ||
+        d.id?.includes(lowerArea)
+      );
+      if (canonicalMatch) return canonicalMatch;
+    }
 
-    // 2. Look for any design tagged with this body area
-    const matching = allDesigns.find(d => 
-      (d.bodyAreas || []).some(a => a.toLowerCase() === lowerArea || lowerArea.includes(a.toLowerCase()) || a.toLowerCase().includes(lowerArea))
+    // 2. Dedicated artwork whose bodyAreas list strictly includes this area
+    const strictAreaMatch = allDesigns.find(d =>
+      (d.bodyAreas || []).some(a => a.toLowerCase() === lowerArea) &&
+      Boolean(d.isDefaultReference)
     );
-    return matching || allDesigns[0];
+    if (strictAreaMatch) return strictAreaMatch;
+
+    // 3. Any design tagged with this body area
+    const anyTagged = allDesigns.find(d =>
+      (d.bodyAreas || []).some(a => a.toLowerCase() === lowerArea || lowerArea.includes(a.toLowerCase()))
+    );
+    return anyTagged || allDesigns[0];
   }, []);
 
   useEffect(() => {
@@ -68,14 +96,15 @@ export const Interactive3DPage = () => {
               isFromDB: true,
             }));
 
-          const combined = [...dbList];
-          TATTOO_ARTWORKS_CATALOG.forEach(catalogItem => {
-            if (!combined.some(d => d.name.toLowerCase() === catalogItem.name.toLowerCase())) {
-              combined.push(catalogItem);
+          // Put authentic catalog designs first so exact body-part designs are always preferred
+          const combined = [...TATTOO_ARTWORKS_CATALOG];
+          dbList.forEach(dbItem => {
+            if (!combined.some(d => d.name.toLowerCase() === dbItem.name.toLowerCase())) {
+              combined.push(dbItem);
             }
           });
 
-          setDesigns(combined.length > 0 ? combined : TATTOO_ARTWORKS_CATALOG);
+          setDesigns(combined);
 
           const initialDesign = findReferenceTattooForArea(selectedBodyArea, combined) || combined[0];
           setSelectedDesign(initialDesign);
@@ -93,9 +122,17 @@ export const Interactive3DPage = () => {
     fetchDesigns();
   }, [findReferenceTattooForArea, selectedBodyArea]);
 
-  // When body area is clicked, smoothly test current tattoo on that muscle
+  // When body area is clicked, smoothly switch to that body part and auto-show that part's exact design
   const handleSelectBodyArea = (area) => {
     setSelectedBodyArea(area);
+    const matchingDesign = findReferenceTattooForArea(area, designs);
+    if (matchingDesign) {
+      setSelectedDesign(matchingDesign);
+      toast.success(`Active on ${area}: ${matchingDesign.name}`, {
+        duration: 2500,
+        id: 'body-area-switch'
+      });
+    }
   };
 
   const handleProceedToBooking = () => {
@@ -173,6 +210,78 @@ export const Interactive3DPage = () => {
             onSelectDesign={setSelectedDesign}
             designs={designs}
           />
+        </div>
+
+        {/* AVAILABLE DESIGNS SPECIFIC TO SELECTED BODY PART */}
+        <div className="mt-5 bg-zinc-950/70 border border-white/10 rounded-2xl p-4 backdrop-blur-xl">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <h4 className="text-xs uppercase font-extrabold tracking-wider text-white">
+                Available Designs for <span className="text-amber-400">{selectedBodyArea}</span>
+              </h4>
+            </div>
+            <span className="text-[11px] text-zinc-400">
+              {designs.filter(d => (d.bodyAreas || []).some(a => a.toLowerCase() === selectedBodyArea.toLowerCase())).length || designs.length} options ready to preview
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            {(() => {
+              // Priority 1: designs explicitly matching this body area
+              const matchingDesigns = designs.filter(d =>
+                (d.bodyAreas || []).some(a => a.toLowerCase() === selectedBodyArea.toLowerCase() || selectedBodyArea.toLowerCase().includes(a.toLowerCase()))
+              );
+              const displayList = matchingDesigns.length > 0 ? matchingDesigns : designs.slice(0, 6);
+
+              return displayList.map((d) => {
+                const isCurrent = selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
+                const rawImg = d.previewImage || d.dataUri || '';
+                const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
+
+                return (
+                  <button
+                    key={d.id || d._id || d.name}
+                    type="button"
+                    onClick={() => {
+                      setSelectedDesign(d);
+                      toast.success(`Active on ${selectedBodyArea}: ${d.name}`, { duration: 1800, id: 'tattoo-pick' });
+                    }}
+                    className={`relative p-2 rounded-xl flex flex-col items-center text-center transition-all border ${
+                      isCurrent
+                        ? 'bg-amber-400/15 border-amber-400 ring-2 ring-amber-400/40 shadow-lg shadow-amber-500/10'
+                        : 'bg-zinc-900/90 border-white/10 hover:border-amber-400/40 hover:bg-zinc-800'
+                    }`}
+                  >
+                    <div className="relative w-16 h-16 rounded-lg bg-black/80 p-1 mb-1.5 flex items-center justify-center overflow-hidden">
+                      {imgSrc ? (
+                        <img
+                          src={imgSrc}
+                          alt={d.name}
+                          className="w-full h-full object-contain filter drop-shadow"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/images/tattoos/mahadev_trishul.png';
+                          }}
+                        />
+                      ) : (
+                        <Palette className="w-6 h-6 text-amber-400" />
+                      )}
+                      {isCurrent && (
+                        <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]" />
+                      )}
+                    </div>
+                    <span className="text-[11px] font-bold text-white line-clamp-1 leading-tight">
+                      {d.name}
+                    </span>
+                    <span className="text-[9px] text-amber-400/80 font-mono mt-0.5">
+                      {d.style || 'Custom'}
+                    </span>
+                  </button>
+                );
+              });
+            })()}
+          </div>
         </div>
 
         {/* SELECTED TATTOO SHOWCASE & PLACEMENT DETAILS */}

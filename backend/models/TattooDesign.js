@@ -43,6 +43,18 @@ const tattooDesignSchema = new mongoose.Schema({
     type: String,
     default: '₹3,500 - ₹6,500',
   },
+  customWidth: {
+    type: Number,
+    default: 100, // percentage or scale factor relative to default
+  },
+  customHeight: {
+    type: Number,
+    default: 100, // percentage or scale factor relative to default
+  },
+  customScale: {
+    type: Number,
+    default: 1.0,
+  },
   isDefaultReference: {
     type: Boolean,
     default: false,

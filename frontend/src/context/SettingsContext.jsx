@@ -4,8 +4,8 @@ import { settingsAPI } from '../services/api';
 const defaultSettings = {
   studioName: 'LAND OF GOD TATTOO STUDIO',
   tagline: 'Sacred Devbhoomi Inking & Fine Precision Artistry',
-  heroHeadline: 'SACRED DEVBHOOMI INK. MASTER CRAFTSMANSHIP.',
-  heroSubtitle: 'Where ancient sacred symbols, hyper-realism, and lifelong precision meet divine devotion in Una, Himachal Pradesh. Powered by our real-time 3D Anatomy Placement Studio.',
+  heroHeadline: 'YOUR VISION, OUR INK.',
+  heroSubtitle: 'Northern India\'s destination for custom tattoo masterpieces, sacred Devbhoomi calligraphy, hyper-realistic portraits, and fine-line geometry in Una, Himachal Pradesh. Executed with hospital-grade European sterilization and certified master precision.',
   phone: '+91 78079 66080',
   whatsapp: '+917807966080',
   email: 'admin@landofgodtattoos.com',

@@ -29,8 +29,8 @@ export const Footer = () => {
           
           {/* Column 1: Studio Brand & Quick Connect */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-11 h-11 rounded-full overflow-hidden bg-gradient-to-br from-amber-500/30 to-black flex items-center justify-center p-0.5 shadow-lg border border-amber-500/50">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-14 h-14 rounded-full overflow-hidden bg-black flex items-center justify-center p-0.5 shadow-xl border border-amber-400/50 shrink-0">
                 <img src="/logo.png" alt="Land of God Tattoo Studio" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-col">
@@ -109,6 +109,7 @@ export const Footer = () => {
               <li><Link to="/blog" className="hover:text-amber-300 transition-colors">Sacred Ink Journal &amp; Blogs</Link></li>
               <li><Link to="/calendar" className="hover:text-amber-300 transition-colors">Studio Calendar &amp; Slots</Link></li>
               <li><Link to="/booking" className="hover:text-amber-300 transition-colors">Book Custom Session</Link></li>
+              <li><Link to="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/" className="text-amber-400/90 font-medium hover:text-amber-300 transition-colors">Best Tattoo Artist in Una (HP)</Link></li>
             </ul>
           </div>
 

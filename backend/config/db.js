@@ -3,7 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongoMemoryServer = null;
 
-const DEFAULT_ATLAS_URI = 'mongodb+srv://sanehmandyal_db_user:ogCeU56GLTXWYdj9@cluster0.trkaywa.mongodb.net/tattoo-studio?retryWrites=true&w=majority';
+const DEFAULT_ATLAS_URI = 'mongodb://shrmarajn70_db_user:yW7N8U6N7eMYsNHQ@ac-6jtsyz1-shard-00-00.qoiilgr.mongodb.net:27017,ac-6jtsyz1-shard-00-01.qoiilgr.mongodb.net:27017,ac-6jtsyz1-shard-00-02.qoiilgr.mongodb.net:27017/tattoo-studio?ssl=true&replicaSet=atlas-qbrf9h-shard-0&authSource=admin&appName=Cluster0';
 
 export const connectDB = async () => {
   const uri = process.env.MONGODB_URI || DEFAULT_ATLAS_URI;

@@ -69,7 +69,9 @@ export const AdminLayout = () => {
           {/* Header */}
           <div className="p-6 border-b border-studio-border/30 flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3">
-              <img src="/logo.png" alt="Land of God Logo" className="w-8 h-8 object-contain" />
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-black flex items-center justify-center p-0.5 border border-amber-400/40 shrink-0 shadow-md">
+                <img src="/logo.png" alt="Land of God Logo" className="w-full h-full object-cover rounded-full" />
+              </div>
               <div className="text-left">
                 <span className="font-condensed font-black text-sm tracking-wider text-studio-textMain block uppercase leading-tight">
                   LAND OF GOD

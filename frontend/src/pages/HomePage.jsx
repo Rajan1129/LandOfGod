@@ -13,13 +13,13 @@ export const HomePage = () => {
   return (
     <div className="relative min-h-screen">
       <Helmet>
-        <title>LAND OF GOD TATTOO STUDIO — Premier Sacred & Custom Tattoo Atelier | Una, Himachal Pradesh</title>
+        <title>LAND OF GOD TATTOO STUDIO — Premier Custom Tattoo & Sacred Art Atelier | Una, Himachal Pradesh</title>
         <meta
           name="description"
-          content="Land of God Tattoo Studio in Una, Himachal Pradesh. Sacred Mahadev Trishul artistry, 3D placement lab, sterile clinical hygiene, and master tattooists."
+          content="Land of God Tattoo Studio in Una, Himachal Pradesh. Northern India's destination for custom tattoos, sacred Devbhoomi calligraphy, fine-line realism, 100% hospital-grade clinical hygiene, and master tattooists."
         />
-        <meta property="og:title" content="LAND OF GOD TATTOO STUDIO — Una, Himachal Pradesh" />
-        <meta property="og:description" content="Your Vision, Sacred Ink. Devbhoomi's premier tattoo studio in Una, HP." />
+        <meta property="og:title" content="LAND OF GOD TATTOO STUDIO — Premier Custom Tattoo Atelier | Una, HP" />
+        <meta property="og:description" content="Custom Tattoos, Sacred Devbhoomi Artistry & Fine-Line Realism in Una, Himachal Pradesh. 100% Sterile Hygiene & Certified Master Artists." />
       </Helmet>
 
       {/* Main Sections Stream */}
