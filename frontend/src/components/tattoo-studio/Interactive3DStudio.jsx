@@ -755,7 +755,7 @@ export const Interactive3DStudio = ({
               );
             })}
 
-            {/* CLEAN, SINGLE ANATOMICAL HIGHLIGHT FOR SELECTED BODY PART */}
+            {/* PURE ANATOMICAL SKIN & MUSCLE HIGHLIGHT - NO CARD, NO BORDERS, NO BADGES */}
             {(() => {
               const highlightCoords = getInterpolatedPlacement(selectedBodyArea, displayAngle);
               if (!highlightCoords || highlightCoords.opacity < 0.1) return null;
@@ -766,21 +766,30 @@ export const Interactive3DStudio = ({
                   style={{
                     left: `${highlightCoords.left + userOffsetX}%`,
                     top: `${highlightCoords.top + userOffsetY}%`,
-                    width: `${Math.max(highlightCoords.width * 1.35, 14)}%`,
-                    height: `${Math.max(highlightCoords.height * 1.3, 12)}%`,
+                    width: `${Math.max(highlightCoords.width * 1.6, 16)}%`,
+                    height: `${Math.max(highlightCoords.height * 1.6, 16)}%`,
                     transform: `translate3d(-50%, -50%, 0) rotate(${highlightCoords.rotate + userRotate}deg)`,
                     transformOrigin: '50% 50%',
                     opacity: highlightCoords.opacity,
                   }}
                 >
-                  {/* Single Clean Subtle Glow Outline */}
-                  <div className="w-full h-full rounded-2xl border border-amber-400/90 bg-amber-400/[0.08] shadow-[0_0_20px_rgba(251,191,36,0.35)]" />
-
-                  {/* Single Clean Body Part Badge */}
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/95 text-amber-300 border border-amber-400/70 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center space-x-1 shadow-xl">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                    <span>{selectedBodyArea}</span>
-                  </div>
+                  {/* Organic Luminous Muscle Highlight directly on the Body Part */}
+                  <div
+                    className="w-full h-full rounded-full animate-pulse pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, rgba(251, 191, 36, 0.55) 0%, rgba(245, 158, 11, 0.28) 45%, rgba(217, 119, 6, 0.08) 70%, transparent 85%)',
+                      filter: 'blur(10px)',
+                      mixBlendMode: 'screen',
+                    }}
+                  />
+                  <div
+                    className="absolute inset-1 rounded-full pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, rgba(255, 240, 180, 0.4) 0%, rgba(251, 191, 36, 0.18) 50%, transparent 75%)',
+                      filter: 'blur(5px)',
+                      mixBlendMode: 'color-dodge',
+                    }}
+                  />
                 </div>
               );
             })()}
@@ -874,11 +883,7 @@ export const Interactive3DStudio = ({
                   }}
                   onMouseEnter={() => setHoveredPart(key)}
                   onMouseLeave={() => setHoveredPart(null)}
-                  className={`absolute z-30 cursor-pointer pointer-events-auto -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-all duration-150 ${
-                    isHovered
-                      ? 'border border-amber-400/50 bg-amber-400/10 shadow-[0_0_12px_rgba(251,191,36,0.25)]'
-                      : 'border-transparent'
-                  }`}
+                  className="absolute z-30 cursor-pointer pointer-events-auto -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-150 border-0"
                   style={{
                     left: `${currentCoords.left}%`,
                     top: `${currentCoords.top}%`,
@@ -888,9 +893,13 @@ export const Interactive3DStudio = ({
                   title={`Click to preview design on ${config.name}`}
                 >
                   {isHovered && (
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/50 text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-lg shadow-xl whitespace-nowrap pointer-events-none flex items-center gap-1 z-40 backdrop-blur-md">
-                      <span>{config.name}</span>
-                    </div>
+                    <div
+                      className="absolute inset-0 rounded-full pointer-events-none"
+                      style={{
+                        background: 'radial-gradient(ellipse at center, rgba(251, 191, 36, 0.28) 0%, transparent 75%)',
+                        filter: 'blur(6px)',
+                      }}
+                    />
                   )}
                 </div>
               );
