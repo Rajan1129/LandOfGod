@@ -755,72 +755,35 @@ export const Interactive3DStudio = ({
               );
             })}
 
-            {/* ANATOMICAL HIGHLIGHT FOR SELECTED BODY PART */}
+            {/* CLEAN, SINGLE ANATOMICAL HIGHLIGHT FOR SELECTED BODY PART */}
             {(() => {
               const highlightCoords = getInterpolatedPlacement(selectedBodyArea, displayAngle);
-              if (!highlightCoords || highlightCoords.opacity < 0.05) return null;
+              if (!highlightCoords || highlightCoords.opacity < 0.1) return null;
 
               return (
                 <div
-                  className="absolute z-15 pointer-events-none flex items-center justify-center transition-all duration-300"
+                  className="absolute z-15 pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
                   style={{
                     left: `${highlightCoords.left + userOffsetX}%`,
                     top: `${highlightCoords.top + userOffsetY}%`,
-                    width: `${Math.max(highlightCoords.width * 1.55, 14)}%`,
-                    height: `${Math.max(highlightCoords.height * 1.45, 12)}%`,
+                    width: `${Math.max(highlightCoords.width * 1.35, 14)}%`,
+                    height: `${Math.max(highlightCoords.height * 1.3, 12)}%`,
                     transform: `translate3d(-50%, -50%, 0) rotate(${highlightCoords.rotate + userRotate}deg)`,
                     transformOrigin: '50% 50%',
-                    opacity: Math.max(0.4, highlightCoords.opacity),
+                    opacity: highlightCoords.opacity,
                   }}
                 >
-                  {/* Glowing Anatomical Target Aura */}
-                  <div className="absolute inset-0 rounded-2xl border-2 border-amber-400 bg-amber-400/15 shadow-[0_0_35px_rgba(251,191,36,0.65),inset_0_0_15px_rgba(251,191,36,0.3)] animate-pulse" />
+                  {/* Single Clean Subtle Glow Outline */}
+                  <div className="w-full h-full rounded-2xl border border-amber-400/90 bg-amber-400/[0.08] shadow-[0_0_20px_rgba(251,191,36,0.35)]" />
 
-                  {/* Corner Target Reticles */}
-                  <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-amber-300 shadow-sm" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-amber-300 shadow-sm" />
-                  <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-amber-300 shadow-sm" />
-                  <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-amber-300 shadow-sm" />
-
-                  {/* Selected Body Part Badge */}
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/95 text-amber-300 border border-amber-400/90 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center space-x-1 shadow-2xl">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                  {/* Single Clean Body Part Badge */}
+                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/95 text-amber-300 border border-amber-400/70 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center space-x-1 shadow-xl">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                     <span>{selectedBodyArea}</span>
                   </div>
                 </div>
               );
             })()}
-
-            {/* INTERACTIVE CLICKABLE BODY PART HOTSPOT PINS */}
-            {Object.keys(ANATOMICAL_PLACEMENTS).map((areaKey) => {
-              if (areaKey === selectedBodyArea) return null;
-              const areaCoords = getInterpolatedPlacement(areaKey, displayAngle);
-              if (!areaCoords || areaCoords.opacity < 0.3) return null;
-
-              return (
-                <button
-                  key={`hotspot-${areaKey}`}
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectBodyArea?.(areaKey);
-                  }}
-                  className="absolute z-25 group cursor-pointer -translate-x-1/2 -translate-y-1/2 p-1.5 transition-transform hover:scale-125 focus:outline-none"
-                  style={{
-                    left: `${areaCoords.left}%`,
-                    top: `${areaCoords.top}%`,
-                  }}
-                  title={`Click to highlight & fit on ${areaKey}`}
-                >
-                  <div className="w-4 h-4 rounded-full bg-black/85 border border-amber-400/70 flex items-center justify-center shadow-lg group-hover:border-amber-300 group-hover:bg-amber-400/30 group-hover:shadow-[0_0_12px_rgba(251,191,36,0.6)] transition-all">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:bg-amber-200" />
-                  </div>
-                  <span className="opacity-0 group-hover:opacity-100 absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider whitespace-nowrap pointer-events-none transition-opacity shadow-xl z-30">
-                    {areaKey}
-                  </span>
-                </button>
-              );
-            })}
 
             {/* REALISTIC IN-SKIN TATTOO ON THE HUMAN BODY */}
             {(() => {
@@ -896,13 +859,13 @@ export const Interactive3DStudio = ({
               if (dynamicPlacement && dynamicPlacement.opacity < 0.25) return null;
 
               const isSelected = selectedBodyArea.toLowerCase() === key.toLowerCase();
+              if (isSelected) return null; // Already rendered by the single unified highlight above!
               const isHovered = hoveredPart === key;
 
               return (
                 <div
                   key={key}
                   onPointerDown={(e) => {
-                    // Prevent canvas drag capture from hijacking direct hit-zone taps
                     e.stopPropagation();
                   }}
                   onClick={(e) => {
@@ -911,33 +874,21 @@ export const Interactive3DStudio = ({
                   }}
                   onMouseEnter={() => setHoveredPart(key)}
                   onMouseLeave={() => setHoveredPart(null)}
-                  className={`absolute z-30 cursor-pointer pointer-events-auto -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-all duration-200 group ${
-                    isSelected
-                      ? 'ring-2 ring-amber-400 bg-amber-400/20 shadow-[0_0_20px_rgba(251,191,36,0.35)]'
-                      : isHovered
-                      ? 'ring-1 ring-amber-300/80 bg-white/10 shadow-[0_0_12px_rgba(255,255,255,0.2)]'
-                      : 'hover:bg-amber-400/10'
+                  className={`absolute z-30 cursor-pointer pointer-events-auto -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-all duration-150 ${
+                    isHovered
+                      ? 'border border-amber-400/50 bg-amber-400/10 shadow-[0_0_12px_rgba(251,191,36,0.25)]'
+                      : 'border-transparent'
                   }`}
                   style={{
                     left: `${currentCoords.left}%`,
                     top: `${currentCoords.top}%`,
-                    width: `${Math.max(15, currentCoords.width || 16)}%`,
-                    height: `${Math.max(13, currentCoords.height || 14)}%`,
+                    width: `${Math.max(14, currentCoords.width || 16)}%`,
+                    height: `${Math.max(12, currentCoords.height || 14)}%`,
                   }}
                   title={`Click to preview design on ${config.name}`}
                 >
-                  {/* Subtle target crosshair / indicator dot */}
-                  <div
-                    className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-200 ${
-                      isSelected || isHovered ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  >
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] animate-ping" />
-                  </div>
-
-                  {(isHovered || isSelected) && (
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/50 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-lg shadow-2xl whitespace-nowrap pointer-events-none flex items-center gap-1 z-40 backdrop-blur-md">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  {isHovered && (
+                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/50 text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-lg shadow-xl whitespace-nowrap pointer-events-none flex items-center gap-1 z-40 backdrop-blur-md">
                       <span>{config.name}</span>
                     </div>
                   )}
