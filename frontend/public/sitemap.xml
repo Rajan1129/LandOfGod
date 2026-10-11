@@ -23,32 +23,62 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Best Tattoo Artist in Una Landing Page -->
+  <!-- Una & Regional Hub Landing Pages -->
   <url>
-    <loc>https://tattoo-studio-nine.vercel.app/best-tattoo-artist-in-una/</loc>
+    <loc>https://land-of-god-nine.vercel.app/best-tattoo-artist-in-una/</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://tattoo-studio-nine.vercel.app/tattoo-artist-in-una/</loc>
+    <loc>https://land-of-god-nine.vercel.app/best-tattoo-artist-in-una-himachal-pradesh/</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://tattoo-studio-nine.vercel.app/tattoo-designer-in-una/</loc>
+    <loc>https://land-of-god-nine.vercel.app/best-tattoo-studio-in-himachal-pradesh/</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://tattoo-studio-nine.vercel.app/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/</loc>
+    <loc>https://land-of-god-nine.vercel.app/amb-tattoo-studio/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://land-of-god-nine.vercel.app/nangal-tattoo-studio/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://land-of-god-nine.vercel.app/chintpurni-tattoo-studio/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://land-of-god-nine.vercel.app/tattoo-artist-in-una/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://land-of-god-nine.vercel.app/tattoo-designer-in-una/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://land-of-god-nine.vercel.app/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://tattoo-studio-nine.vercel.app/images/tattoo_studio_hero.jpg</image:loc>
+      <image:loc>https://land-of-god-nine.vercel.app/images/tattoo_studio_hero.jpg</image:loc>
       <image:title>Best Tattoo Artist &amp; Tattoo Designer in Una Himachal Pradesh</image:title>
       <image:caption>Land of God Tattoo Studio in Friends Colony Una</image:caption>
     </image:image>

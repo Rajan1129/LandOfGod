@@ -17,9 +17,29 @@ export const Navbar = () => {
 
   const unaMenuItems = [
     {
-      name: 'Best Tattoo Artist in Una',
+      name: 'Best Tattoo Artist in Una (HP)',
       path: '/best-tattoo-artist-in-una',
       desc: 'Top-rated master artistry & awards',
+    },
+    {
+      name: 'Best Tattoo Studio in Himachal',
+      path: '/best-tattoo-studio-in-himachal-pradesh',
+      desc: '#1 Premier atelier in Himachal Pradesh',
+    },
+    {
+      name: 'Amb Tattoo Studio',
+      path: '/amb-tattoo-studio',
+      desc: 'Top custom studio serving Amb & Una',
+    },
+    {
+      name: 'Nangal Tattoo Studio',
+      path: '/nangal-tattoo-studio',
+      desc: '15 mins from Nangal Dam & Punjab border',
+    },
+    {
+      name: 'Chintpurni Tattoo Studio',
+      path: '/chintpurni-tattoo-studio',
+      desc: 'Sacred Devbhoomi & Mata shrine ink',
     },
     {
       name: 'Tattoo Artist in Una',

@@ -68,7 +68,7 @@ export const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
 
-          {/* Una Local SEO Landing Pages */}
+          {/* Una & Regional SEO Landing Pages */}
           <Route path="/best-tattoo-artist-in-una" element={<UnaTattooArtistPage />} />
           <Route path="/best-tattoo-artist-in-una/" element={<UnaTattooArtistPage />} />
           <Route path="/tattoo-artist-in-una" element={<UnaTattooArtistPage />} />
@@ -77,6 +77,16 @@ export const App = () => {
           <Route path="/tattoo-designer-in-una/" element={<UnaTattooArtistPage />} />
           <Route path="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una" element={<UnaTattooArtistPage />} />
           <Route path="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/" element={<UnaTattooArtistPage />} />
+          <Route path="/amb-tattoo-studio" element={<UnaTattooArtistPage />} />
+          <Route path="/amb-tattoo-studio/" element={<UnaTattooArtistPage />} />
+          <Route path="/nangal-tattoo-studio" element={<UnaTattooArtistPage />} />
+          <Route path="/nangal-tattoo-studio/" element={<UnaTattooArtistPage />} />
+          <Route path="/chintpurni-tattoo-studio" element={<UnaTattooArtistPage />} />
+          <Route path="/chintpurni-tattoo-studio/" element={<UnaTattooArtistPage />} />
+          <Route path="/best-tattoo-studio-in-himachal-pradesh" element={<UnaTattooArtistPage />} />
+          <Route path="/best-tattoo-studio-in-himachal-pradesh/" element={<UnaTattooArtistPage />} />
+          <Route path="/best-tattoo-artist-in-una-himachal-pradesh" element={<UnaTattooArtistPage />} />
+          <Route path="/best-tattoo-artist-in-una-himachal-pradesh/" element={<UnaTattooArtistPage />} />
 
           {/* Legacy Artists redirects to Portfolio */}
           <Route path="/artists" element={<Navigate to="/portfolio" replace />} />
