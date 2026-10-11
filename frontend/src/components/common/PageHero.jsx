@@ -34,9 +34,9 @@ export const PageHero = ({
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           {badge && (
-            <div>
-              <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold text-studio-gold font-serif inline-flex items-center space-x-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-black/65 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/50 max-w-full truncate">
-                <span>{badge}</span>
+            <div className="max-w-full flex justify-center px-2">
+              <span className="text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-[0.2em] font-bold text-studio-gold font-serif inline-flex items-center justify-center space-x-1.5 sm:space-x-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-black/65 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/50 max-w-full truncate">
+                <span className="truncate">{badge}</span>
               </span>
             </div>
           )}

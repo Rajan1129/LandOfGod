@@ -66,27 +66,27 @@
   }
 
   html {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   body {
     background-color: var(--studio-bg);
     color: var(--studio-text-main);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
     position: relative;
     line-height: 1.6;
     letter-spacing: -0.01em;
   }
 
   #root {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
     position: relative;
   }
   

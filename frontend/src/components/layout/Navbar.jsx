@@ -331,7 +331,7 @@ export const Navbar = () => {
             className="bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 px-2 sm:px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase rounded flex items-center space-x-1"
           >
             <span>💬</span>
-            <span className="hidden xs:inline">WhatsApp</span>
+            <span className="hidden sm:inline">WhatsApp</span>
           </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

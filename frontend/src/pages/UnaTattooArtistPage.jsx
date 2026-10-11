@@ -404,27 +404,27 @@ export const UnaTattooArtistPage = () => {
         <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 relative space-y-6">
           
           {/* Location Badge */}
-          <div className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-black/60 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/40">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">
+          <div className="inline-flex max-w-[calc(100%-1rem)] sm:max-w-full items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/60 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/40">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-300 truncate">
               {pageMeta.badge}
             </span>
-            <span className="text-zinc-500 text-xs">•</span>
-            <span className="text-[11px] sm:text-xs text-zinc-300 font-medium flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-amber-400" />
-              {street}, {city}
+            <span className="text-zinc-500 text-xs hidden sm:inline">•</span>
+            <span className="text-[10px] sm:text-xs text-zinc-300 font-medium hidden sm:flex items-center gap-1 shrink-0">
+              <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+              <span>{street}, {city}</span>
             </span>
           </div>
 
           {/* H1 Heading targeting keyword */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white uppercase leading-[1.08] max-w-5xl mx-auto">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white uppercase leading-[1.08] max-w-5xl mx-auto break-words w-full px-2">
             {pageMeta.h1Main} <br />
             <span className="font-serif italic font-normal normal-case text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200">
               {pageMeta.h1Accent}
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-xs sm:text-base md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed break-words w-full px-2">
             {pageMeta.leadText}
           </p>
 

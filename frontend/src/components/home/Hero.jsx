@@ -56,23 +56,23 @@ export const Hero = () => {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-amber-500/[0.06] rounded-full blur-[140px] pointer-events-none" />
       </div>
 
-      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 relative space-y-8">
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 relative space-y-6 sm:space-y-8">
         
         {/* SEO Location & Studio Trust Pill */}
-        <div className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-black/60 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/40">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">
+        <div className="inline-flex max-w-[calc(100%-1rem)] sm:max-w-full items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/60 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/40">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-300 truncate">
             {studioName}
           </span>
-          <span className="text-zinc-500 text-xs">•</span>
-          <span className="text-[11px] sm:text-xs text-zinc-300 font-medium flex items-center gap-1">
-            <MapPin className="w-3 h-3 text-amber-400" />
-            {street}, {city}, {state}
+          <span className="text-zinc-500 text-xs hidden sm:inline">•</span>
+          <span className="text-[10px] sm:text-xs text-zinc-300 font-medium hidden sm:flex items-center gap-1 shrink-0">
+            <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+            <span>{city}, HP</span>
           </span>
         </div>
 
         {/* SEO Primary Heading (H1) */}
-        <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white uppercase leading-[1.04] max-w-5xl mx-auto break-words">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white uppercase leading-[1.08] max-w-5xl mx-auto break-words w-full">
           {heroHeadline && !heroHeadline.toLowerCase().includes('vision') ? (
             <span className="whitespace-pre-line">{heroHeadline}</span>
           ) : (
@@ -86,7 +86,7 @@ export const Hero = () => {
         </h1>
 
         {/* SEO Body Paragraph */}
-        <p className="text-sm sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed">
+        <p className="text-xs sm:text-base md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed break-words w-full px-2">
           {heroSubtitle ? (
             heroSubtitle
           ) : (
@@ -95,7 +95,7 @@ export const Hero = () => {
         </p>
 
         {/* Action Buttons / CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 w-full max-w-md sm:max-w-none mx-auto">
           <button
             type="button"
             onClick={handleBook}
