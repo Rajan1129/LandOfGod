@@ -291,7 +291,7 @@ export const AdminPortfolio = () => {
                 <label className="block font-bold text-studio-textMuted uppercase mb-1">Studio / Artist Credit</label>
                 <input
                   type="text"
-                  placeholder="e.g. Land of God Tattoo Studio / Master Sunil"
+                  placeholder="e.g. Land of God Tattoo Studio / Rahul Choudhary"
                   value={artistName}
                   onChange={(e) => setArtistName(e.target.value)}
                   className="w-full bg-studio-secondary border border-studio-border rounded px-3 py-2 text-studio-textMain focus:outline-none focus:border-studio-bronze"

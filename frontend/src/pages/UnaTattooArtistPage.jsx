@@ -31,10 +31,10 @@ export const UnaTattooArtistPage = () => {
     title: 'Land of God — Best Tattoo Artist in Una | #1 Tattoo Designer in Una, HP',
     h1Main: 'Best Tattoo Artist in Una',
     h1Accent: '& Premier Tattoo Designer.',
-    leadText: 'Welcome to Land of God Tattoo Studio in Friends Colony, Una, owned and founded by Rahul Choudhary. We are the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh, led by certified Master Artist Sunil Kumar with hospital-grade European hygiene standards.',
-    description: 'Looking for the best tattoo artist in Una? Land of God Tattoo Studio is the #1 rated tattoo designer in Una, Himachal Pradesh. Master Sunil specializes in sacred Devbhoomi Mahadev tattoos, fine-line realism, portraits, and 100% sterile hygiene. Book consultation today!',
+    leadText: 'Welcome to Land of God Tattoo Studio in Friends Colony, Una, owned and founded by Master Artist Rahul Choudhary. We are the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh, led by Rahul Choudhary with hospital-grade European hygiene standards.',
+    description: 'Looking for the best tattoo artist in Una? Land of God Tattoo Studio is the #1 rated tattoo designer in Una, Himachal Pradesh. Rahul Choudhary specializes in sacred Devbhoomi Mahadev tattoos, fine-line realism, portraits, and 100% sterile hygiene. Book consultation today!',
     badge: '#1 Rated in Una, Himachal Pradesh',
-    keywords: 'Best Tattoo Artist in Una, Tattoo Designer in Una, Tattoo Artist in Una, Land of God Tattoo Studio, Tattoo Shop in Una Himachal Pradesh, Master Sunil Tattoo Artist, Friends Colony Una Tattoos, Mahadev Trishul Tattoo Una, Sacred Devbhoomi Tattoos',
+    keywords: 'Best Tattoo Artist in Una, Tattoo Designer in Una, Tattoo Artist in Una, Land of God Tattoo Studio, Tattoo Shop in Una Himachal Pradesh, Rahul Choudhary Tattoo Artist, Friends Colony Una Tattoos, Mahadev Trishul Tattoo Una, Sacred Devbhoomi Tattoos',
     canonical: `https://land-of-god-nine.vercel.app${rawPath || '/best-tattoo-artist-in-una'}/`,
     whyHeading: 'The Gold Standard of Tattooing in Una, Himachal Pradesh',
     whySub: 'Why Choose Us in Una',
@@ -42,7 +42,7 @@ export const UnaTattooArtistPage = () => {
     regionalPillars: [
       {
         title: 'Custom Anatomical Stencil Design in Una',
-        desc: 'As Una\'s leading bespoke tattoo designer, Master Sunil creates 100% original stencils calibrated to your muscle structure using our exclusive 3D body placement visualizer.'
+        desc: 'As Una\'s leading bespoke tattoo designer, Rahul Choudhary creates 100% original stencils calibrated to your muscle structure using our exclusive 3D body placement visualizer.'
       },
       {
         title: 'Hospital-Grade Sterilization & Safety',
@@ -289,7 +289,7 @@ export const UnaTattooArtistPage = () => {
   const whatsapp = settings?.whatsapp || '+917807966080';
 
   const handleWhatsApp = (topic = `Consultation for ${pageMeta.h1Main}`) => {
-    const waUrl = createArtworkInquiryUrl(topic, 'Master Sunil', 'Una Studio');
+    const waUrl = createArtworkInquiryUrl(topic, 'Rahul Choudhary', 'Una Studio');
     window.open(waUrl, '_blank');
   };
 
@@ -469,7 +469,7 @@ export const UnaTattooArtistPage = () => {
               <Award className="w-5 h-5 text-amber-400 shrink-0" />
               <div>
                 <h4 className="text-xs font-bold text-white uppercase">10+ Years Exp.</h4>
-                <p className="text-[11px] text-zinc-400">Master Sunil (Una)</p>
+                <p className="text-[11px] text-zinc-400">Rahul Choudhary (Una)</p>
               </div>
             </div>
             <div className="p-3.5 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3">
@@ -533,7 +533,7 @@ export const UnaTattooArtistPage = () => {
               Tattoo Styles Mastered in Una
             </h2>
             <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-              Explore the signature aesthetics crafted by Master Sunil at our Una atelier:
+              Explore the signature aesthetics crafted by Rahul Choudhary at our Una atelier:
             </p>
           </div>
 

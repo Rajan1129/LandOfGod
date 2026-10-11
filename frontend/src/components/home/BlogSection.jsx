@@ -66,7 +66,7 @@ const DEFAULT_BLOGS = [
     coverImage: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1000&q=80',
     category: 'Tattoo Aftercare',
     readTimeMinutes: 6,
-    author: 'Aman Verma',
+    author: 'Rahul Choudhary',
   },
 ];
 
@@ -105,7 +105,7 @@ export const BlogSection = () => {
               Studio Journal &amp; Insights
             </h2>
             <p className="text-zinc-400 text-xs sm:text-sm mt-1">
-              Expert advice on tattoo care, preparation, and styling by Master Sunil
+              Expert advice on tattoo care, preparation, and styling by Rahul Choudhary
             </p>
           </div>
           <Link

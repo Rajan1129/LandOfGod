@@ -49,7 +49,7 @@ export const CalendarPage = () => {
         <title>Studio Calendar &amp; Live Availability — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
           name="description"
-          content="View Master Sunil's open tattoo session availability calendar in Friends Colony, Una, HP. Select your preferred date and time slot for direct WhatsApp confirmation."
+          content="View Rahul Choudhary's open tattoo session availability calendar in Friends Colony, Una, HP. Select your preferred date and time slot for direct WhatsApp confirmation."
         />
         <meta name="keywords" content="Tattoo Appointment Calendar Una, Tattoo Artist Availability Himachal, Land of God Booking Schedule" />
       </Helmet>
@@ -64,7 +64,7 @@ export const CalendarPage = () => {
             ॥ STUDIO BOOKING CALENDAR ॥
           </h1>
           <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Check open appointment slots with Master Sunil at Land of God Tattoo Studio, Friends Colony, Una (HP).
+            Check open appointment slots with Rahul Choudhary at Land of God Tattoo Studio, Friends Colony, Una (HP).
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export const CalendarPage = () => {
 
                 <div className="flex justify-between items-center py-1.5 border-b border-studio-border/30">
                   <span className="text-studio-textMuted">Lead Artist:</span>
-                  <span className="font-bold text-studio-textMain">Master Sunil ({city})</span>
+                  <span className="font-bold text-studio-textMain">Rahul Choudhary ({city})</span>
                 </div>
 
                 <div className="space-y-1.5 pt-2">

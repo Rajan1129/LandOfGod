@@ -23,7 +23,7 @@ export const ReviewsPage = () => {
       authorName: 'Vikram Choudhary',
       rating: 5,
       location: 'Friends Colony, Una',
-      reviewText: 'Got a full forearm Mahadev Trishul with Sacred Om. Master Sunil is truly a divine artist! The level of fine detailing and painless precision is mindblowing. 100% recommended for everyone in Himachal!',
+      reviewText: 'Got a full forearm Mahadev Trishul with Sacred Om. Rahul Choudhary is truly a divine artist! The level of fine detailing and painless precision is mindblowing. 100% recommended for everyone in Himachal!',
       tattooStyle: 'Sacred Geometry',
       verifiedCustomer: true,
       reviewDate: '3 weeks ago',
@@ -45,7 +45,7 @@ export const ReviewsPage = () => {
       authorName: 'Sahil Sharma',
       rating: 5,
       location: 'Chandigarh / Una HP',
-      reviewText: 'Traveled to Friends Colony Una specifically for Master Sunil\'s portrait realism work. The lion and Himalayan mountains tattoo looks like a real photograph. Hospital-grade cleanliness and top-tier inks.',
+      reviewText: 'Traveled to Friends Colony Una specifically for Rahul Choudhary\'s portrait realism work. The lion and Himalayan mountains tattoo looks like a real photograph. Hospital-grade cleanliness and top-tier inks.',
       tattooStyle: 'Realism Portrait',
       verifiedCustomer: true,
       reviewDate: '1 month ago',
@@ -56,7 +56,7 @@ export const ReviewsPage = () => {
       authorName: 'Ankita Rana',
       rating: 5,
       location: 'Friends Colony, Una',
-      reviewText: 'Extremely polite and artistic staff. Eliza and Sunil guided me through the placement and design customization. Best experience for my first tattoo!',
+      reviewText: 'Extremely polite and artistic staff. Rahul Choudhary guided me through the placement and design customization. Best experience for my first tattoo!',
       tattooStyle: 'Mandala & Floral',
       verifiedCustomer: true,
       reviewDate: '2 months ago',
@@ -67,7 +67,7 @@ export const ReviewsPage = () => {
       authorName: 'Rohit Sharma',
       rating: 5,
       location: 'Hamirpur / Una',
-      reviewText: 'Got a custom geometric sleeve. Single-use needle cartridges opened right in front of me. 100% infection-free healing. Master Sunil has decades of mastery.',
+      reviewText: 'Got a custom geometric sleeve. Single-use needle cartridges opened right in front of me. 100% infection-free healing. Rahul Choudhary has decades of mastery.',
       tattooStyle: 'Sleeve Realism',
       verifiedCustomer: true,
       reviewDate: '2 months ago',
@@ -145,7 +145,7 @@ export const ReviewsPage = () => {
         <title>Google Verified Client Reviews (5.0★) — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
           name="description"
-          content="Read verified 5.0-Star Google reviews and client testimonials for Land of God Tattoo Studio in Friends Colony, Una, Himachal Pradesh. Master Sunil sacred ink artistry."
+          content="Read verified 5.0-Star Google reviews and client testimonials for Land of God Tattoo Studio in Friends Colony, Una, Himachal Pradesh. Rahul Choudhary sacred ink artistry."
         />
         <meta name="keywords" content="Land of God Tattoo Studio Reviews, Tattoo Shop Reviews Una, Best Tattoo Artist Himachal Reviews" />
       </Helmet>
@@ -208,7 +208,7 @@ export const ReviewsPage = () => {
               </div>
               <div className="flex items-center space-x-2 text-studio-gold font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Master Sunil Sacred Geometry &amp; Realism</span>
+                <span>Rahul Choudhary Sacred Geometry &amp; Realism</span>
               </div>
               <div className="flex items-center space-x-2 text-studio-bronzeLight font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
@@ -218,7 +218,7 @@ export const ReviewsPage = () => {
           </div>
 
           <a
-            href="https://wa.me/917807966080?text=Hello%20Master%20Sunil%2C%20I%20saw%20your%205-star%20reviews%20and%20would%20like%20to%20consult%20for%20a%20tattoo%20session."
+            href="https://wa.me/917807966080?text=Hello%20Rahul%20Choudhary%2C%20I%20saw%20your%205-star%20reviews%20and%20would%20like%20to%20consult%20for%20a%20tattoo%20session."
             target="_blank"
             rel="noreferrer"
             className="bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/60 text-emerald-400 px-5 py-3 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md"

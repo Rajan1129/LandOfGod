@@ -434,7 +434,7 @@ export const BookingSection = () => {
                     const waUrl = createBookingWhatsAppUrl({
                       name: customerName,
                       phone: customerPhone,
-                      artist: artistObj?.name || 'Master Sunil (Una)',
+                      artist: artistObj?.name || 'Rahul Choudhary (Una)',
                       style: selectedStyle,
                       design: selectedDesignName || 'Custom Concept',
                       placement: selectedPlacement,

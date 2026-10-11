@@ -17,7 +17,7 @@ export const FloatingWhatsAppButton = () => {
   const quickPrompts = [
     {
       title: '🔱 Mahadev / Sacred Tattoo Consultation',
-      text: `Hello Master Sunil! I want to get a custom Lord Shiva / Mahadev Trishul sacred geometry tattoo done at ${studioName}. Can we discuss ideas and pricing?`,
+      text: `Hello Rahul Choudhary! I want to get a custom Lord Shiva / Mahadev Trishul sacred geometry tattoo done at ${studioName}. Can we discuss ideas and pricing?`,
     },
     {
       title: '📅 Book Tattoo Session',
@@ -66,7 +66,7 @@ export const FloatingWhatsAppButton = () => {
                 <h4 className="font-display font-bold text-sm text-white flex items-center space-x-1.5">
                   <span>{studioName}</span>
                 </h4>
-                <p className="text-[11px] text-emerald-300 font-serif">Online • Master Sunil ({phone})</p>
+                <p className="text-[11px] text-emerald-300 font-serif">Online • Rahul Choudhary ({phone})</p>
               </div>
             </div>
             <button
@@ -118,7 +118,7 @@ export const FloatingWhatsAppButton = () => {
 
           {/* Bottom Footer Note */}
           <div className="bg-black/80 px-4 py-2 text-[10px] text-studio-textMuted/70 text-center border-t border-studio-border/20 font-serif">
-            ⚡ Direct connection to Master Sunil & Land of God Studio team
+            ⚡ Direct connection to Rahul Choudhary & Land of God Studio team
           </div>
         </div>
       )}

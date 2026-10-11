@@ -19,7 +19,7 @@ export const getStudioWhatsAppUrl = (customText = '') => {
 export const createBookingWhatsAppUrl = ({
   name = '',
   phone = '',
-  artist = 'Sunil Kumar',
+  artist = 'Rahul Choudhary',
   style = 'Custom',
   design = 'Custom Concept',
   placement = 'Forearm',

@@ -325,7 +325,7 @@ export const PortfolioSection = () => {
                 </div>
 
                 <p className="text-xs text-zinc-400 line-clamp-2">
-                  {item.description || `${item.style} custom piece by Master Sunil.`}
+                  {item.description || `${item.style} custom piece by Rahul Choudhary.`}
                 </p>
 
                 <div className="pt-2 flex items-center justify-between text-xs border-t border-white/5">

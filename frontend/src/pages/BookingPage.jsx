@@ -10,7 +10,7 @@ export const BookingPage = () => {
         <title>Reserve Studio Appointment — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
           name="description"
-          content="Reserve your sacred tattoo appointment at Land of God Tattoo Studio in Friends Colony, Una, Himachal Pradesh. Master Sunil, direct WhatsApp booking (+91 78079 66080)."
+          content="Reserve your sacred tattoo appointment at Land of God Tattoo Studio in Friends Colony, Una, Himachal Pradesh. Rahul Choudhary, direct WhatsApp booking (+91 78079 66080)."
         />
       </Helmet>
 
@@ -36,7 +36,7 @@ export const BookingPage = () => {
           </div>
           <div className="ancient-stone-card ancient-ornate-corner p-4 rounded-lg flex items-center space-x-3 text-xs font-serif">
             <Clock className="w-5 h-5 text-studio-gold shrink-0" />
-            <span>Pre-session sacred geometry alignment with Master Sunil</span>
+            <span>Pre-session sacred geometry alignment with Rahul Choudhary</span>
           </div>
           <div className="ancient-stone-card ancient-ornate-corner p-4 rounded-lg flex items-center space-x-3 text-xs font-serif">
             <Sparkles className="w-5 h-5 text-studio-gold shrink-0" />

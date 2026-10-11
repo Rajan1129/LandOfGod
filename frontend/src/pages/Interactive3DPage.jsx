@@ -84,7 +84,7 @@ export const Interactive3DPage = () => {
               id: d._id,
               _id: d._id,
               name: d.name,
-              artist: d.artist || 'Master Sunil',
+              artist: d.artist || 'Rahul Choudhary',
               style: d.style || 'Custom',
               description: d.description || '',
               estTime: `${d.estTimeHours || 2} hrs`,

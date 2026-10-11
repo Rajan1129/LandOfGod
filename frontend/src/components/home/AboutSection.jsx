@@ -9,7 +9,7 @@ export const AboutSection = () => {
   const street = settings?.address?.street || 'Friends Colony';
   const city = settings?.address?.city || 'Una';
   const state = settings?.address?.state || 'Himachal Pradesh';
-  const mainStory = settings?.aboutContent?.mainStory || `${studioName} is Northern India's premier bespoke tattoo atelier, owned and founded by Rahul Choudhary alongside resident artist Aman Verma. Located in ${street}, ${city}, we specialize in hyper-realistic portraits, sacred geometry, fine-line mantras, and custom body art.`;
+  const mainStory = settings?.aboutContent?.mainStory || `${studioName} is Northern India's premier bespoke tattoo atelier, owned and founded by Master Artist Rahul Choudhary. Located in ${street}, ${city}, we specialize in hyper-realistic portraits, sacred geometry, fine-line mantras, and custom body art.`;
   const mission = settings?.aboutContent?.mission || 'We prioritize client safety with hospital-grade sterilization, 100% single-use membrane needle cartridges, and premium vegan, hypoallergenic organic pigments.';
 
   return (

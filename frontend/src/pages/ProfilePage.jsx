@@ -104,7 +104,7 @@ export const ProfilePage = () => {
     !user.avatar.includes('ui-avatars.com') &&
     user.avatar.trim() !== ''
   );
-  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'Master Sunil')}&background=181512&color=d4a359&size=256&bold=true`;
+  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'Rahul Choudhary')}&background=181512&color=d4a359&size=256&bold=true`;
   const displayAvatar = hasCustomAvatar ? getFullImageUrl(user.avatar) : defaultAvatar;
 
   return (

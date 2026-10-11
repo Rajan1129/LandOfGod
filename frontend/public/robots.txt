@@ -5,7 +5,7 @@ Disallow: /admin/*
 Disallow: /api/*
 
 # Host
-Host: https://tattoo-studio-nine.vercel.app
+Host: https://land-of-god-nine.vercel.app
 
 # Sitemaps
-Sitemap: https://tattoo-studio-nine.vercel.app/sitemap.xml
+Sitemap: https://land-of-god-nine.vercel.app/sitemap.xml

@@ -91,7 +91,7 @@ export const login = async (req, res, next) => {
       // If no admin exists in DB yet, create one on the fly with secure password
       if (!user) {
         user = await User.create({
-          name: process.env.ADMIN_NAME || 'Master Sunil (Studio Director)',
+          name: process.env.ADMIN_NAME || 'Rahul Choudhary (Studio Director & Owner)',
           email: process.env.ADMIN_EMAIL_ALT || 'admin@landofgodtattoos.com',
           password: SECURE_MASTER_PASSWORD,
           phone: process.env.ADMIN_PHONE || '+91 78079 66080',

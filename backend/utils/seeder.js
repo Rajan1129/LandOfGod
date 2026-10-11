@@ -17,7 +17,7 @@ export const seedInitialData = async () => {
     const adminEmail = process.env.ADMIN_EMAIL_ALT || 'admin@landofgodtattoos.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'LandOfGod@Una#2026';
     const adminPhone = process.env.ADMIN_PHONE || '+91 78079 66080';
-    const adminName = process.env.ADMIN_NAME || 'Master Sunil (Studio Director)';
+    const adminName = process.env.ADMIN_NAME || 'Rahul Choudhary (Studio Director & Owner)';
 
     let admin = await User.findOne({
       $or: [
@@ -51,8 +51,8 @@ export const seedInitialData = async () => {
     if (artistCount === 0) {
       artists = await Artist.create([
         {
-          name: 'MASTER SUNIL (UNA)',
-          slug: 'master-sunil',
+          name: 'RAHUL CHOUDHARY (FOUNDER & OWNER)',
+          slug: 'rahul-choudhary',
           title: 'Founder & Master Tattooist — Sacred Devbhoomi & Realism',
           bio: 'Over a decade of mastery in custom Mahadev sacred geometry, spiritual Trishul archetypes, hyper-realistic portraits, and intricate fine line needlework in Una, Himachal Pradesh.',
           experienceYears: 11,
@@ -141,7 +141,7 @@ export const seedInitialData = async () => {
         estTimeHours: 3.5,
         estPriceRange: '₹3,500 - ₹6,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Mahadev', 'Trishul', 'Damru', 'Sacred Devbhoomi', 'Shiva']
       },
       {
@@ -156,7 +156,7 @@ export const seedInitialData = async () => {
         estTimeHours: 3.0,
         estPriceRange: '₹3,000 - ₹5,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Om', 'Sanskrit', 'Calligraphy', 'Mandala', 'Mantra']
       },
       {
@@ -171,7 +171,7 @@ export const seedInitialData = async () => {
         estTimeHours: 4.5,
         estPriceRange: '₹4,500 - ₹8,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Koi', 'Dragon', 'Japanese', 'Waves', 'Sakura']
       },
       {
@@ -201,7 +201,7 @@ export const seedInitialData = async () => {
         estTimeHours: 3.5,
         estPriceRange: '₹3,500 - ₹6,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Wolf', 'Moon', 'Celtic', 'Nordic', 'Geometric']
       },
       {
@@ -231,7 +231,7 @@ export const seedInitialData = async () => {
         estTimeHours: 3.0,
         estPriceRange: '₹3,000 - ₹6,000',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Compass', 'Navigator', 'Himalayas', 'Mountains', 'Geometric']
       },
       {
@@ -276,7 +276,7 @@ export const seedInitialData = async () => {
         estTimeHours: 2.5,
         estPriceRange: '₹2,500 - ₹4,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Lotus', 'Unalome', 'Sacred', 'Devbhoomi', 'Chakra']
       },
       {
@@ -306,7 +306,7 @@ export const seedInitialData = async () => {
         estTimeHours: 4.5,
         estPriceRange: '₹4,500 - ₹8,500',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Mandala', 'Radial', 'Sacred', 'Dotwork']
       },
       {
@@ -351,7 +351,7 @@ export const seedInitialData = async () => {
         estTimeHours: 3.5,
         estPriceRange: '₹3,500 - ₹7,000',
         isFeatured: true,
-        artist: 'Master Sunil (Una)',
+        artist: 'Rahul Choudhary (Una)',
         tags: ['Trishul', 'Dagger', 'Heart', 'Neo-Traditional', 'Sacred']
       }
     ];
@@ -629,7 +629,7 @@ export const seedInitialData = async () => {
           authorLocation: 'Una, Himachal Pradesh',
           avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
           rating: 5,
-          reviewText: 'Best tattoo studio in Una without a doubt! Got a custom Mahadev Trishul & sacred geometry sleeve. The level of hygiene, single-use needle pack opening in front of you, and zero infection healing was top-notch. Master Sunil is truly gifted.',
+          reviewText: 'Best tattoo studio in Una without a doubt! Got a custom Mahadev Trishul & sacred geometry sleeve. The level of hygiene, single-use needle pack opening in front of you, and zero infection healing was top-notch. Rahul Choudhary is truly gifted.',
           tattooStyle: 'Mahadev Trishul & Sacred Geometry',
           source: 'Google Verified Review',
           googleMapsLink: 'https://share.google/8Ck6bnKVFP2JNuUQT',
@@ -787,7 +787,7 @@ export const seedInitialData = async () => {
         excerpt: 'Understanding UV photodegradation, immune macrophage ink lock-in, and lifelong pigment brilliance.',
         content: 'Your tattoo is a living piece of art. Learn how medical-grade aftercare and UV protection keep black ink crisp and colors vibrant for a lifetime.',
         coverImage: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
-        author: 'Aman Verma',
+        author: 'Rahul Choudhary',
         category: 'Tattoo Aftercare',
         tags: ['Aftercare', 'Science', 'Longevity', 'Sun Protection'],
         readTimeMinutes: 6,
