@@ -13,7 +13,7 @@ export const AboutSection = () => {
   const mission = settings?.aboutContent?.mission || 'We prioritize client safety with hospital-grade sterilization, 100% single-use membrane needle cartridges, and premium vegan, hypoallergenic organic pigments.';
 
   return (
-    <section id="about" className="py-20 bg-studio-secondary/50 border-t border-b border-white/5 relative">
+    <section id="about" className="py-20 bg-studio-secondary/50 border-t border-b border-white/5 relative overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           

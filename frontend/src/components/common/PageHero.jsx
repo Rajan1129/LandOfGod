@@ -14,7 +14,7 @@ export const PageHero = ({
   return (
     <section
       aria-label={typeof title === 'string' ? title : 'Page Header'}
-      className={`relative pt-28 sm:pt-32 ${compact ? 'pb-10 sm:pb-14' : 'pb-14 sm:pb-20'} overflow-hidden text-center ${className}`}
+      className={`relative pt-28 sm:pt-32 ${compact ? 'pb-10 sm:pb-14' : 'pb-14 sm:pb-20'} overflow-hidden text-center w-full max-w-full ${className}`}
     >
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">

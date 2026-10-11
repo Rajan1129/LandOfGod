@@ -376,7 +376,7 @@ export const UnaTattooArtistPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-studio-bg text-studio-textMain">
+    <div className="min-h-screen bg-studio-bg text-studio-textMain w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>{pageMeta.title}</title>
         <meta name="description" content={pageMeta.description} />
@@ -390,7 +390,7 @@ export const UnaTattooArtistPage = () => {
       </Helmet>
 
       {/* HERO BANNER */}
-      <section className="relative min-h-[85vh] pt-32 pb-20 flex flex-col justify-center items-center text-center overflow-hidden bg-zinc-950">
+      <section className="relative min-h-[85vh] pt-32 pb-20 flex flex-col justify-center items-center text-center overflow-hidden bg-zinc-950 w-full max-w-full">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/tattoo_studio_hero.jpg"

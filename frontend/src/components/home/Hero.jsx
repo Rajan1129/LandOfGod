@@ -40,7 +40,7 @@ export const Hero = () => {
     <section
       id="hero"
       aria-label="Tattoo Studio Hero Section"
-      className="relative min-h-[92vh] pt-32 pb-24 flex flex-col justify-center items-center overflow-hidden bg-zinc-950 text-center"
+      className="relative min-h-[92vh] pt-32 pb-24 flex flex-col justify-center items-center overflow-hidden bg-zinc-950 text-center w-full max-w-full"
     >
       {/* High-Resolution Tattoo Studio Background Image */}
       <div className="absolute inset-0 z-0">

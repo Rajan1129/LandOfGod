@@ -121,7 +121,7 @@ export const BlogDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>{blog.seoTitle || blog.title} — LAND OF GOD TATTOO STUDIO Journal</title>
         <meta name="description" content={blog.seoDescription || blog.excerpt} />

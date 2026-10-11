@@ -229,7 +229,7 @@ export const PortfolioSection = () => {
     : portfolioItems.filter(p => p.style?.toLowerCase() === activeFilter.toLowerCase());
 
   return (
-    <section id="portfolio" className="py-20 bg-studio-bg border-t border-b border-white/5 relative">
+    <section id="portfolio" className="py-20 bg-studio-bg border-t border-b border-white/5 relative overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header */}
@@ -247,7 +247,7 @@ export const PortfolioSection = () => {
           </div>
 
           {/* Style Filter Chips */}
-          <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-4 md:mt-0 max-w-full">
             {styles.map(style => (
               <button
                 key={style}

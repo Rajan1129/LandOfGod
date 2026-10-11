@@ -36,7 +36,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-studio-bg flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen pt-28 pb-20 bg-studio-bg flex items-center justify-center px-4 relative overflow-hidden w-full max-w-full">
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">
         <img

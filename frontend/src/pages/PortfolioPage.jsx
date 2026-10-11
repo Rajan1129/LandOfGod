@@ -116,7 +116,7 @@ const getAuthenticImageForTitle = (title, currentImage) => {
   }, [selectedStyle, selectedArtist, selectedPlacement, search]);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>Curated Sacred Portfolio &amp; Gallery — LAND OF GOD TATTOO STUDIO</title>
         <meta

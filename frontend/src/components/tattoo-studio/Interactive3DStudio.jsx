@@ -488,10 +488,10 @@ export const Interactive3DStudio = ({
     <div className="relative w-full flex flex-col items-center select-none space-y-3">
       
       {/* 1. TOP ATELIER CONTROL BAR (HUD) */}
-      <div className="w-full flex items-center justify-between px-3 py-2 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-lg z-30">
+      <div className="w-full flex items-center justify-between px-2.5 sm:px-3 py-2 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-lg z-30 max-w-full overflow-hidden">
         
         {/* Left: Heading Compass Readout */}
-        <div className="flex items-center space-x-2.5">
+        <div className="flex items-center space-x-2 shrink-0">
           <div className="w-7 h-7 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
             <Compass className="w-4 h-4" />
           </div>
@@ -506,7 +506,7 @@ export const Interactive3DStudio = ({
         </div>
 
         {/* Center: Angle Quick Presets */}
-        <div className="hidden sm:flex items-center space-x-1 bg-black/60 p-1 rounded-xl border border-white/10">
+        <div className="hidden lg:flex items-center space-x-1 bg-black/60 p-1 rounded-xl border border-white/10">
           {anglePresets.map((preset) => {
             const isNear = Math.abs(normalizedTheta - preset.angle) < 22.5 ||
               (preset.angle === 0 && normalizedTheta > 337.5);
@@ -529,12 +529,12 @@ export const Interactive3DStudio = ({
         </div>
 
         {/* Right: Controls (Auto-Spin, Zoom, Reset) */}
-        <div className="flex items-center space-x-1.5">
+        <div className="flex items-center space-x-1 sm:space-x-1.5 shrink-0">
           {/* Step Rotate Left */}
           <button
             type="button"
             onClick={() => handleStepRotate(-45)}
-            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
+            className="hidden sm:inline-flex p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
             title="Rotate Left 45°"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -544,7 +544,7 @@ export const Interactive3DStudio = ({
           <button
             type="button"
             onClick={toggleAutoSpin}
-            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1.5 transition-all border ${
+            className={`px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold flex items-center gap-1 sm:gap-1.5 transition-all border ${
               isAutoSpin
                 ? 'bg-amber-400 text-black font-bold border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.3)]'
                 : 'bg-zinc-900/90 text-zinc-300 hover:text-white border-white/10 hover:bg-zinc-800'
@@ -554,12 +554,12 @@ export const Interactive3DStudio = ({
             {isAutoSpin ? (
               <>
                 <Pause className="w-3 h-3 fill-black" />
-                <span className="hidden md:inline">Pause</span>
+                <span className="hidden xs:inline">Pause</span>
               </>
             ) : (
               <>
                 <Play className="w-3 h-3 fill-current" />
-                <span className="hidden md:inline">Auto-Spin</span>
+                <span className="hidden xs:inline">Auto-Spin</span>
               </>
             )}
           </button>
@@ -568,20 +568,20 @@ export const Interactive3DStudio = ({
           <button
             type="button"
             onClick={() => handleStepRotate(45)}
-            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
+            className="hidden sm:inline-flex p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-amber-300 border border-white/10 transition-colors"
             title="Rotate Right 45°"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
 
-          <div className="w-[1px] h-4 bg-white/10 mx-0.5" />
+          <div className="hidden sm:block w-[1px] h-4 bg-white/10 mx-0.5" />
 
           {/* Zoom Out */}
           <button
             type="button"
             onClick={handleZoomOut}
             disabled={zoom <= 0.9}
-            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
+            className="hidden sm:inline-flex p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
             title="Zoom Out"
           >
             <ZoomOut className="w-3.5 h-3.5" />
@@ -592,7 +592,7 @@ export const Interactive3DStudio = ({
             type="button"
             onClick={handleZoomIn}
             disabled={zoom >= 1.45}
-            className="p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
+            className="hidden sm:inline-flex p-1.5 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 disabled:opacity-40 transition-colors"
             title="Zoom In"
           >
             <ZoomIn className="w-3.5 h-3.5" />

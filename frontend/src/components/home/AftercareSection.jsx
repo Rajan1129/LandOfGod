@@ -73,7 +73,7 @@ export const AftercareSection = () => {
   }, []);
 
   return (
-    <section id="aftercare" className="py-20 bg-studio-bg border-t border-b border-white/5 relative">
+    <section id="aftercare" className="py-20 bg-studio-bg border-t border-b border-white/5 relative overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header */}

@@ -37,10 +37,10 @@ export const App = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div className="min-h-screen bg-studio-bg text-studio-textMain flex flex-col justify-between selection:bg-studio-bronze selection:text-black">
+    <div className="min-h-screen bg-studio-bg text-studio-textMain flex flex-col justify-between selection:bg-studio-bronze selection:text-black w-full max-w-full overflow-x-hidden">
       {!isAdminRoute && <Navbar />}
 
-      <div className="flex-1 relative">
+      <div className="flex-1 relative w-full max-w-full overflow-x-hidden">
         <Routes>
           {/* Public Pages matching Admin Modules */}
           <Route path="/" element={<HomePage />} />

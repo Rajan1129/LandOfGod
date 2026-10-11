@@ -6,7 +6,7 @@ import { ShieldAlert, CheckCircle, XCircle, HeartPulse, HelpCircle } from 'lucid
 
 export const AftercarePage = () => {
   return (
-    <div className="min-h-screen pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>Official Tattoo Aftercare &amp; Pigment Preservation — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta

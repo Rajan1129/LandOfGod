@@ -74,7 +74,7 @@ export const ReviewsSection = () => {
   }, []);
 
   return (
-    <section id="reviews" className="py-20 bg-studio-secondary/30 border-t border-b border-white/5 relative">
+    <section id="reviews" className="py-20 bg-studio-secondary/30 border-t border-b border-white/5 relative overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header with Google Rating Badge */}
@@ -92,7 +92,7 @@ export const ReviewsSection = () => {
           </div>
 
           {/* Google 5.0 Rating Badge */}
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 flex items-center space-x-4 shadow-lg shrink-0">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-center space-x-3 sm:space-x-4 shadow-lg w-full sm:w-auto max-w-full">
             <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center font-bold text-blue-600 text-lg shadow-sm">
               G
             </div>

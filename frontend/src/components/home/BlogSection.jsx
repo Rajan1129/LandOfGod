@@ -92,7 +92,7 @@ export const BlogSection = () => {
   }, []);
 
   return (
-    <section id="blog" className="py-20 bg-studio-secondary/20 relative border-t border-b border-white/5">
+    <section id="blog" className="py-20 bg-studio-secondary/20 relative border-t border-b border-white/5 overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header */}

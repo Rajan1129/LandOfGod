@@ -11,7 +11,7 @@ import { ContactSection } from '../components/home/ContactSection';
 
 export const HomePage = () => {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>LAND OF GOD TATTOO STUDIO — Premier Custom Tattoo & Sacred Art Atelier | Una, Himachal Pradesh</title>
         <meta

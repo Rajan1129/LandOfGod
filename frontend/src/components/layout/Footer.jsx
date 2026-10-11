@@ -23,8 +23,8 @@ export const Footer = () => {
   const facebook = settings?.socialLinks?.facebook || 'https://facebook.com/landofgodtattoostudio';
 
   return (
-    <footer className="bg-[#08090c] border-t border-white/10 text-zinc-400 pt-16 pb-12 transition-colors relative z-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <footer className="bg-[#08090c] border-t border-white/10 text-zinc-400 pt-16 pb-12 transition-colors relative z-20 overflow-hidden w-full max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           
           {/* Column 1: Studio Brand & Quick Connect */}
@@ -166,7 +166,7 @@ export const Footer = () => {
             © {new Date().getFullYear()} LAND OF GOD TATTOO STUDIO (Friends Colony, Una, HP). Owner: Rahul Choudhary. All rights reserved.
           </p>
           
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 pr-0 sm:pr-24">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-5 pr-0">
             <a
               href="https://share.google/8Ck6bnKVFP2JNuUQT"
               target="_blank"

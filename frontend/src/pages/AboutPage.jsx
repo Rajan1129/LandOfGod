@@ -6,7 +6,7 @@ import { ShieldCheck, Award, HeartHandshake, Sparkles, Check, Clock } from 'luci
 
 export const AboutPage = () => {
   return (
-    <div className="min-h-screen pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>About Us — Sacred Heritage &amp; Clinical Safety | LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta

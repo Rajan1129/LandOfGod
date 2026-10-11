@@ -53,7 +53,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-studio-secondary/30 relative border-t border-b border-white/5">
+    <section id="contact" className="py-20 bg-studio-secondary/30 relative border-t border-b border-white/5 overflow-hidden w-full max-w-full">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header */}

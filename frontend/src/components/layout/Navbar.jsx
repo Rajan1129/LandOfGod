@@ -101,17 +101,17 @@ export const Navbar = () => {
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-md shadow-xl border-b border-white/10' : 'bg-studio-darker/90 backdrop-blur-sm border-b border-white/5'}`}>
       {/* Top Header Bar */}
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+      <div className="max-w-[1680px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink-0 group">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink min-w-0 group">
           <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden bg-black p-0.5 border border-amber-400/50 shadow-md group-hover:border-amber-400 group-hover:scale-105 transition-all flex items-center justify-center shrink-0">
             <img src="/logo.png" alt="Land of God Tattoo Studio Logo" className="w-full h-full object-cover rounded-full" />
           </div>
-          <div className="flex flex-col text-left">
-            <span className="font-extrabold text-xs sm:text-base tracking-wider text-white uppercase leading-tight">
+          <div className="flex flex-col text-left min-w-0">
+            <span className="font-extrabold text-xs sm:text-base tracking-wider text-white uppercase leading-tight truncate">
               LAND OF <span className="text-amber-400">GOD</span>
             </span>
-            <span className="text-[8px] sm:text-[9px] tracking-wider text-zinc-400 uppercase font-semibold">
+            <span className="text-[8px] sm:text-[9px] tracking-wider text-zinc-400 uppercase font-semibold truncate">
               TATTOO STUDIO • UNA, HP
             </span>
           </div>
@@ -323,12 +323,12 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Hamburger Toggle */}
-        <div className="xl:hidden flex items-center space-x-2 shrink-0">
+        <div className="xl:hidden flex items-center space-x-1.5 sm:space-x-2 shrink-0">
           <a
             href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
             rel="noreferrer"
-            className="bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 px-2 sm:px-2.5 py-1.5 text-[11px] font-bold uppercase rounded flex items-center space-x-1"
+            className="bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 px-2 sm:px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase rounded flex items-center space-x-1"
           >
             <span>💬</span>
             <span className="hidden xs:inline">WhatsApp</span>

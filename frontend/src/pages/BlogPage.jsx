@@ -92,7 +92,7 @@ export const BlogPage = () => {
   }, [selectedCategory, search]);
 
   return (
-    <div className="min-h-screen pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>Sacred Ink Journal — Tattoo Guides, Symbolism &amp; Culture | LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta

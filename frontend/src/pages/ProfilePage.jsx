@@ -108,7 +108,7 @@ export const ProfilePage = () => {
   const displayAvatar = hasCustomAvatar ? getFullImageUrl(user.avatar) : defaultAvatar;
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pt-24 pb-20 bg-studio-bg w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>{user.name}'s Studio Dashboard — LAND OF GOD TATTOO STUDIO</title>
       </Helmet>

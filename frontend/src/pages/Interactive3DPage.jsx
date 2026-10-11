@@ -141,7 +141,7 @@ export const Interactive3DPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 bg-[#090b0e] text-left text-zinc-100 relative">
+    <div className="min-h-screen pt-24 pb-16 bg-[#090b0e] text-left text-zinc-100 relative w-full max-w-full overflow-x-hidden">
       <Helmet>
         <title>3D Tattoo Body Placement Studio — LAND OF GOD TATTOO STUDIO (Una)</title>
         <meta
