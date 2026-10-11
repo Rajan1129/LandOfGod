@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
-import { Menu, X, User as UserIcon, Shield, Calendar, LogOut, Compass, ChevronDown, MapPin } from 'lucide-react';
+import { Menu, X, User as UserIcon, Shield, Calendar, LogOut, Compass, ChevronDown, MapPin, Phone } from 'lucide-react';
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -100,6 +100,48 @@ export const Navbar = () => {
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-md shadow-xl border-b border-white/10' : 'bg-studio-darker/90 backdrop-blur-sm border-b border-white/5'}`}>
+      {/* Topmost Micro-Bar with Phone Icon */}
+      <div className="bg-black/95 border-b border-white/[0.08] py-1 sm:py-1.5 px-3 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-[1680px] mx-auto flex items-center justify-between gap-2">
+          {/* Direct Phone Call Action with Phone Icon */}
+          <a
+            href="tel:+917807966080"
+            className="inline-flex items-center gap-1.5 sm:gap-2 text-amber-400 hover:text-amber-300 font-bold transition-all group shrink-0"
+            title="Call Land of God Tattoo Studio (+91 78079 66080)"
+          >
+            <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-400/15 border border-amber-400/30 flex items-center justify-center group-hover:bg-amber-400/30 group-hover:scale-105 transition-all">
+              <Phone className="w-3 h-3 text-amber-400" />
+            </span>
+            <span className="text-[11px] sm:text-xs font-black tracking-wider text-amber-300 group-hover:text-amber-200">
+              +91 78079 66080
+            </span>
+          </a>
+
+          {/* Location & Studio Hours */}
+          <div className="hidden sm:flex items-center gap-2 text-zinc-400 text-[10px] md:text-[11px]">
+            <span className="flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+              <span>Friends Colony, Una, HP</span>
+            </span>
+            <span className="text-zinc-600">•</span>
+            <span>10:30 AM – 8:30 PM</span>
+          </div>
+
+          {/* WhatsApp Direct Inquiry Shortcut */}
+          <div className="flex items-center gap-2">
+            <a
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[10px] sm:text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition-colors"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>WhatsApp Inquiries</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Top Header Bar */}
       <div className="max-w-[1680px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
         {/* Brand Logo */}
@@ -302,6 +344,16 @@ export const Navbar = () => {
             </Link>
           )}
 
+          {/* Direct Phone Call Action */}
+          <a
+            href="tel:+917807966080"
+            className="h-9 px-3.5 rounded-full flex items-center gap-1.5 text-xs font-bold tracking-wide text-amber-300 bg-amber-950/40 hover:bg-amber-900/60 border border-amber-400/40 hover:border-amber-400 shadow-sm transition-all"
+            title="Call +91 78079 66080"
+          >
+            <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span>+91 78079 66080</span>
+          </a>
+
           {/* Direct WhatsApp Action */}
           <a
             href={`https://wa.me/${whatsappNumber}`}
@@ -310,7 +362,7 @@ export const Navbar = () => {
             className="h-9 px-3.5 rounded-full flex items-center gap-2 text-xs font-bold tracking-wide text-emerald-400 bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-500/40 hover:border-emerald-400 shadow-sm transition-all"
           >
             <span className="text-sm leading-none">💬</span>
-            <span>{phoneDisplay.replace(/^\+91\s*/, '')}</span>
+            <span>WhatsApp</span>
           </a>
 
           {/* BOOK NOW Primary CTA */}
@@ -322,8 +374,17 @@ export const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
-        <div className="xl:hidden flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+        {/* Mobile Call, WhatsApp & Hamburger Toggle */}
+        <div className="xl:hidden flex items-center space-x-1 sm:space-x-2 shrink-0">
+          <a
+            href="tel:+917807966080"
+            className="bg-amber-950/70 border border-amber-400/40 text-amber-300 hover:text-white px-2 sm:px-2.5 py-1.5 text-[10px] sm:text-[11px] font-bold rounded flex items-center space-x-1 transition-colors"
+            title="Call +91 78079 66080"
+          >
+            <Phone className="w-3 h-3 text-amber-400 shrink-0" />
+            <span className="hidden sm:inline">+91 78079 66080</span>
+            <span className="inline sm:hidden">Call</span>
+          </a>
           <a
             href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
@@ -444,10 +505,18 @@ export const Navbar = () => {
               </Link>
             )}
 
+            <a
+              href="tel:+917807966080"
+              className="flex items-center justify-center space-x-2 text-center bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 font-bold py-2.5 text-xs uppercase tracking-wider rounded-lg transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 text-amber-400" />
+              <span>Call: +91 78079 66080</span>
+            </a>
+
             <Link
               to="/booking"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-center bg-gradient-to-r from-studio-bronze to-studio-bronzeDark text-studio-darker font-bold py-3 uppercase tracking-widest text-xs shadow-bronze"
+              className="text-center bg-gradient-to-r from-studio-bronze to-studio-bronzeDark text-studio-darker font-bold py-3 uppercase tracking-widest text-xs shadow-bronze rounded-lg"
             >
               Book Studio Appointment
             </Link>
