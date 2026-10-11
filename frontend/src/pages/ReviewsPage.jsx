@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { reviewsAPI } from '../services/api';
 import { Star, CheckCircle2, ExternalLink, Quote, MessageSquare, Plus, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { PageHero } from '../components/common/PageHero';
 
 export const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
@@ -140,7 +141,7 @@ export const ReviewsPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Google Verified Client Reviews (5.0★) — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -150,43 +151,37 @@ export const ReviewsPage = () => {
         <meta name="keywords" content="Land of God Tattoo Studio Reviews, Tattoo Shop Reviews Una, Best Tattoo Artist Himachal Reviews" />
       </Helmet>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            🔱 5.0★ VERIFIED CLIENT EXPERIENCES 🔱
-          </span>
-          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Reviews for Best Tattoo Artist in Una, Himachal Pradesh
-          </h1>
-          <h2 className="text-sm sm:text-base text-studio-gold font-serif">
-            Land of God Tattoo Studio — Client Testimonials from Una, Nangal, Amb &amp; Chintpurni
-          </h2>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
-            Discover why tattoo collectors across Himachal Pradesh and Punjab rate Rahul Choudhary 5.0★ on Google for sterile safety, custom Devbhoomi designs, and hyper-realistic body art.
-          </p>
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="🔱 5.0★ VERIFIED CLIENT EXPERIENCES 🔱"
+        title="Reviews for Best Tattoo Artist in Una, Himachal Pradesh"
+        subtitle="Land of God Tattoo Studio — Client Testimonials from Una, Nangal, Amb & Chintpurni"
+        description="Discover why tattoo collectors across Himachal Pradesh and Punjab rate Rahul Choudhary 5.0★ on Google for sterile safety, custom Devbhoomi designs, and hyper-realistic body art."
+        bgImage="/images/tattoo_studio_hero.jpg"
+        bgAlt="Land of God Tattoo Studio Client Reviews"
+      >
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <a
+            href="https://share.google/8Ck6bnKVFP2JNuUQT"
+            target="_blank"
+            rel="noreferrer"
+            className="bg-black/60 hover:bg-black/80 border border-studio-gold/60 text-studio-gold px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md backdrop-blur-md"
+          >
+            <span>⭐ Write a Google Review</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <a
-              href="https://share.google/8Ck6bnKVFP2JNuUQT"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-studio-card hover:bg-studio-secondary border border-studio-gold/60 text-studio-gold px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-md"
-            >
-              <span>⭐ Write a Google Review</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-
-            <button
-              onClick={() => setShowModal(true)}
-              className="bg-gradient-to-r from-studio-bronze to-amber-700 hover:from-amber-600 hover:to-studio-bronze text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-lg border border-amber-400/30"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Submit Studio Feedback</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-gradient-to-r from-studio-bronze to-amber-700 hover:from-amber-600 hover:to-studio-bronze text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center space-x-2 transition-all shadow-lg border border-amber-400/30"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Submit Studio Feedback</span>
+          </button>
         </div>
+      </PageHero>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
 
         {/* Rating Summary Card */}
         <div className="glass-panel-dark p-6 sm:p-8 rounded-2xl border border-studio-bronze/50 mb-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">

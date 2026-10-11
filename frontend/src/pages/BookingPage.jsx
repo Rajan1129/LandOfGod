@@ -1,11 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { PageHero } from '../components/common/PageHero';
 import { BookingSection } from '../components/home/BookingSection';
 import { ShieldCheck, Sparkles, Clock, Calendar } from 'lucide-react';
 
 export const BookingPage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Reserve Studio Appointment — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -14,19 +15,21 @@ export const BookingPage = () => {
         />
       </Helmet>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            🔱 DEVBHOOMI ATELIER APPOINTMENTS 🔱
-          </span>
-          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-wider text-studio-textMain">
-            ॥ RESERVE YOUR INK SESSION ॥
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif italic">
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="🔱 DEVBHOOMI ATELIER APPOINTMENTS 🔱"
+        title="॥ RESERVE YOUR INK SESSION ॥"
+        subtitle="Custom Tattoo Consultations & Appointments — Friends Colony, Una (HP)"
+        description={
+          <>
             Select your preferred sacred style, placement, and resident artist. You can also chat directly on WhatsApp at <strong className="text-studio-gold">+91 78079 66080</strong>.
-          </p>
-        </div>
+          </>
+        }
+        bgImage="/images/tattoo_studio_hero_bg.jpg"
+        bgAlt="Land of God Tattoo Studio Appointment Booking"
+      />
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
 
         {/* Studio Policy Badges */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-4xl mx-auto">

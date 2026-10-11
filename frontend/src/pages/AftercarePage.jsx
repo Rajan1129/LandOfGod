@@ -1,11 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { PageHero } from '../components/common/PageHero';
 import { AftercareSection } from '../components/home/AftercareSection';
 import { ShieldAlert, CheckCircle, XCircle, HeartPulse, HelpCircle } from 'lucide-react';
 
 export const AftercarePage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Official Tattoo Aftercare &amp; Pigment Preservation — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -15,19 +16,17 @@ export const AftercarePage = () => {
         <meta name="keywords" content="Tattoo Aftercare Una, Tattoo Healing Guide Himachal Pradesh, Sterile Tattoo Care Land of God" />
       </Helmet>
 
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="॥ CLINICAL HEALING PROTOCOL ॥"
+        title="Tattoo Aftercare Guide"
+        subtitle="Medical Dermal Preservation & Color Lock-in — Land of God Tattoo Studio (Una)"
+        description="Proper aftercare accounts for 50% of the final healed outcome. Follow our clinical stages for flawless pigment stabilization."
+        bgImage="/images/tattoo_studio_interior_lux.jpg"
+        bgAlt="Land of God Tattoo Studio Sterile Aftercare Cleanroom"
+      />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            ॥ CLINICAL HEALING PROTOCOL ॥
-          </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Tattoo Aftercare Guide
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted">
-            Proper aftercare accounts for 50% of the final healed outcome. Follow our clinical stages for flawless pigment stabilization.
-          </p>
-        </div>
 
         {/* Healing Stages Progression Timeline */}
         <div className="glass-panel-dark p-6 sm:p-8 rounded-2xl border border-studio-border/60 mb-16 space-y-6">

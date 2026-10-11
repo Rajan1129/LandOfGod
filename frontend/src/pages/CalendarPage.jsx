@@ -6,6 +6,7 @@ import { useSettings } from '../context/SettingsContext';
 import { Calendar as CalendarIcon, Clock, Check, Sparkles, MessageSquare, ChevronLeft, ChevronRight, ShieldCheck, MapPin } from 'lucide-react';
 import { format, addDays, isSameDay, startOfWeek, endOfWeek, addWeeks, subWeeks } from 'date-fns';
 import { createBookingInquiryUrl } from '../utils/whatsapp';
+import { PageHero } from '../components/common/PageHero';
 
 export const CalendarPage = () => {
   const { settings } = useSettings();
@@ -44,7 +45,7 @@ export const CalendarPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Studio Calendar &amp; Live Availability — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -54,19 +55,17 @@ export const CalendarPage = () => {
         <meta name="keywords" content="Tattoo Appointment Calendar Una, Tattoo Artist Availability Himachal, Land of God Booking Schedule" />
       </Helmet>
 
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="🔱 LIVE ATELIER AVAILABILITY 🔱"
+        title="॥ STUDIO BOOKING CALENDAR ॥"
+        subtitle="Reserve Your Sacred Tattoo Session — Friends Colony, Una (HP)"
+        description="Check open appointment slots with Rahul Choudhary at Land of God Tattoo Studio, Friends Colony, Una (HP)."
+        bgImage="/images/tattoo_studio_interior_lux.jpg"
+        bgAlt="Land of God Tattoo Studio Availability Calendar"
+      />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            🔱 LIVE ATELIER AVAILABILITY 🔱
-          </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            ॥ STUDIO BOOKING CALENDAR ॥
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Check open appointment slots with Rahul Choudhary at Land of God Tattoo Studio, Friends Colony, Una (HP).
-          </p>
-        </div>
 
         {/* Calendar Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

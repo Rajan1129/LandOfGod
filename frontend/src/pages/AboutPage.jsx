@@ -1,11 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { PageHero } from '../components/common/PageHero';
 import { AboutSection } from '../components/home/AboutSection';
 import { ShieldCheck, Award, HeartHandshake, Sparkles, Check, Clock } from 'lucide-react';
 
 export const AboutPage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>About Us — Sacred Heritage &amp; Clinical Safety | LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -15,22 +16,21 @@ export const AboutPage = () => {
         <meta name="keywords" content="About Land of God Tattoo Studio, Best Tattoo Shop Una, Rahul Choudhary Tattoo Artist, Sterile Tattooing Himachal Pradesh, Friends Colony Una Tattoos" />
       </Helmet>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            ॥ DEVBHOOMI HERITAGE &amp; MASTER ARTISTRY ॥
-          </span>
-          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Best Tattoo Artist in Una, Himachal Pradesh
-          </h1>
-          <h2 className="text-sm sm:text-base text-studio-gold font-serif">
-            Land of God Tattoo Studio — Owned &amp; Led by Rahul Choudhary • Friends Colony, Una (HP)
-          </h2>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="॥ DEVBHOOMI HERITAGE & MASTER ARTISTRY ॥"
+        title="Best Tattoo Artist in Una, Himachal Pradesh"
+        subtitle="Land of God Tattoo Studio — Owned & Led by Rahul Choudhary • Friends Colony, Una (HP)"
+        bgImage="/images/tattoo_studio_interior_lux.jpg"
+        bgAlt="Land of God Tattoo Studio Interior - Friends Colony Una"
+        description={
+          <>
             Welcome to Land of God Tattoo Studio in Friends Colony, Una (HP), founded, owned, and led by Master Tattoo Artist <strong className="text-white font-semibold">Rahul Choudhary</strong>. Our atelier brings world-class custom stenciling, hyper-realistic portraits, sacred Mahadev calligraphy, and single-use cartridge safety to tattoo lovers across Himachal Pradesh and Punjab.
-          </p>
-        </div>
+          </>
+        }
+      />
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
 
         <AboutSection />
 

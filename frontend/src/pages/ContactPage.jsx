@@ -1,11 +1,12 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { PageHero } from '../components/common/PageHero';
 import { ContactSection } from '../components/home/ContactSection';
 import { MapPin, Phone, Mail, Clock, MessageSquare } from 'lucide-react';
 
 export const ContactPage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Contact &amp; Studio Location — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -14,22 +15,21 @@ export const ContactPage = () => {
         />
       </Helmet>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            ॥ VISIT OUR FRIENDS COLONY UNA ATELIER ॥
-          </span>
-          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-wider text-studio-textMain">
-            Contact Best Tattoo Studio in Una, Himachal Pradesh
-          </h1>
-          <h2 className="text-sm sm:text-base text-studio-gold font-serif">
-            Land of God Tattoo Studio — Owner: Rahul Choudhary • Friends Colony, Una, HP (174303)
-          </h2>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="॥ VISIT OUR FRIENDS COLONY UNA ATELIER ॥"
+        title="Contact Best Tattoo Studio in Una, Himachal Pradesh"
+        subtitle="Land of God Tattoo Studio — Owner: Rahul Choudhary • Friends Colony, Una, HP (174303)"
+        description={
+          <>
             Directly accessible for clients across Una, Nangal (15 mins), Amb (25 mins via NH503), Chintpurni, and Anandpur Sahib. Connect directly with Owner Rahul Choudhary and Master Artists on WhatsApp at <strong className="text-studio-gold">+91 78079 66080</strong> for custom stencil consultations and appointments.
-          </p>
-        </div>
+          </>
+        }
+        bgImage="/images/tattoo_studio_interior_lux.jpg"
+        bgAlt="Land of God Tattoo Studio Location in Una"
+      />
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
 
         <ContactSection />
 

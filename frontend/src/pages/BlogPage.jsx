@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { blogsAPI } from '../services/api';
 import { Search, Clock, ArrowRight, User } from 'lucide-react';
 import { getFullImageUrl } from '../utils/imageHelper';
+import { PageHero } from '../components/common/PageHero';
 
 const getArticleCoverImage = (blog) => {
   if (!blog) return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
@@ -91,7 +92,7 @@ export const BlogPage = () => {
   }, [selectedCategory, search]);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>Sacred Ink Journal — Tattoo Guides, Symbolism &amp; Culture | LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
@@ -101,20 +102,17 @@ export const BlogPage = () => {
         <meta name="keywords" content="Tattoo Blog Himachal Pradesh, Mahadev Tattoo Meaning, Sacred Geometry Tattoo Articles Una, Land of God Journal" />
       </Helmet>
 
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="॥ SACRED INK JOURNAL & CULTURE ॥"
+        title="Sacred Ink Journal"
+        subtitle="Spiritual Symbology, Devbhoomi Heritage & Master Tattoo Insights"
+        description="Spiritual symbology, Devbhoomi heritage, master tattoo techniques, and longevity secrets from Friends Colony, Una (HP)."
+        bgImage="/images/tattoo_studio_hero.jpg"
+        bgAlt="Land of God Tattoo Studio Sacred Ink Journal"
+      />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            ॥ SACRED INK JOURNAL &amp; CULTURE ॥
-          </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Sacred Ink Journal
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Spiritual symbology, Devbhoomi heritage, master tattoo techniques, and longevity secrets from Friends Colony, Una (HP).
-          </p>
-        </div>
 
         {/* Filter bar */}
         <div className="glass-panel p-4 rounded-xl border border-studio-border/50 mb-10 space-y-4">

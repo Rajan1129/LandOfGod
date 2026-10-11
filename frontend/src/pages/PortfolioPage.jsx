@@ -5,6 +5,7 @@ import { portfolioAPI, artistsAPI } from '../services/api';
 import { Search, Filter, Heart, Eye, Maximize2, X } from 'lucide-react';
 import { createPortfolioInquiryUrl } from '../utils/whatsapp';
 import { getFullImageUrl } from '../utils/imageHelper';
+import { PageHero } from '../components/common/PageHero';
 
 export const PortfolioPage = () => {
   const [portfolio, setPortfolio] = useState([]);
@@ -124,20 +125,17 @@ const getAuthenticImageForTitle = (title, currentImage) => {
         />
       </Helmet>
 
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="Sacred Devbhoomi Archive"
+        title="Master Portfolio Gallery"
+        subtitle="Custom Sacred & Fine-Line Tattoos — Land of God Tattoo Studio • Friends Colony, Una (HP)"
+        description="Browse our living gallery of bespoke sacred ink and custom needlework in Friends Colony, Una (HP)."
+        bgImage="/images/tattoo_studio_hero_bg.jpg"
+        bgAlt="Land of God Tattoo Studio Portfolio Gallery"
+      />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-bronzeLight">
-            Sacred Devbhoomi Archive
-          </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Master Portfolio Gallery
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Browse our living gallery of bespoke sacred ink and custom needlework in Friends Colony, Una (HP).
-          </p>
-        </div>
 
         {/* Filter Bar */}
         <div className="glass-panel p-4 rounded-xl border border-studio-border/50 mb-10 space-y-4">

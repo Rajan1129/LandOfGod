@@ -152,33 +152,45 @@ export const Interactive3DPage = () => {
 
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Clean Professional Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 mb-4 gap-3">
-          <div className="space-y-1">
-            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold uppercase tracking-widest">
-              <Sparkles className="w-3 h-3" />
-              <span>3D Anatomical Studio • Friends Colony, Una (HP)</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              3D Tattoo Placement Simulator — Best Tattoo Designer in Una
-            </h1>
-            <h2 className="text-xs sm:text-sm text-zinc-300">
-              Interactive 360° Anatomical Fitting Lab by Land of God Tattoo Studio, Himachal Pradesh
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400">
-              Select your design, then touch any body part to test exact anatomical scale, rotation, and flow before getting inked in Una.
-            </p>
+        {/* Clean Professional Header with Background Image */}
+        <div className="relative rounded-2xl overflow-hidden border border-white/10 mb-6 p-6 sm:p-8">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/images/tattoo_studio_hero_bg.jpg"
+              alt="3D Placement Simulator Studio - Land of God Tattoo Studio"
+              className="w-full h-full object-cover object-center filter brightness-[0.22] contrast-[1.1] scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/70" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/[0.08] via-transparent to-transparent pointer-events-none" />
           </div>
 
-          {/* Active Testing Badge */}
-          {selectedDesign && (
-            <div className="flex items-center space-x-2 bg-zinc-900/90 border border-white/10 px-3.5 py-2 rounded-xl text-xs shadow-lg">
-              <span className="text-zinc-400 font-medium">Testing:</span>
-              <span className="font-bold text-amber-300">{selectedDesign.name}</span>
-              <span className="text-zinc-500">•</span>
-              <span className="text-white font-semibold">{selectedBodyArea}</span>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-black/60 border border-amber-500/30 text-amber-300 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+                <Sparkles className="w-3 h-3" />
+                <span>3D Anatomical Studio • Friends Colony, Una (HP)</span>
+              </div>
+              <h1 className="ancient-carved-heading text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">
+                3D Tattoo Placement Simulator — Best Tattoo Designer in Una
+              </h1>
+              <h2 className="text-xs sm:text-sm text-studio-gold font-serif">
+                Interactive 360° Anatomical Fitting Lab by Land of God Tattoo Studio, Himachal Pradesh
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-serif">
+                Select your design, then touch any body part to test exact anatomical scale, rotation, and flow before getting inked in Una.
+              </p>
             </div>
-          )}
+
+            {/* Active Testing Badge */}
+            {selectedDesign && (
+              <div className="flex items-center space-x-2 bg-black/80 border border-amber-400/30 px-4 py-2.5 rounded-xl text-xs shadow-xl backdrop-blur-md self-start md:self-end">
+                <span className="text-zinc-400 font-medium">Testing:</span>
+                <span className="font-bold text-amber-300">{selectedDesign.name}</span>
+                <span className="text-zinc-500">•</span>
+                <span className="text-white font-semibold">{selectedBodyArea}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Anatomical Zone Filter Pills */}

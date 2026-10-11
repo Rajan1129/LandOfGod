@@ -5,12 +5,23 @@ import { ShieldAlert, ArrowLeft, MessageSquare } from 'lucide-react';
 
 export const RegisterPage = () => {
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-studio-bg flex items-center justify-center px-4">
+    <div className="min-h-screen pt-28 pb-20 bg-studio-bg flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/tattoo_studio_hero_bg.jpg"
+          alt="Land of God Tattoo Studio Portal"
+          className="w-full h-full object-cover object-center filter brightness-[0.25] blur-[1px]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-studio-bg" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/[0.08] via-transparent to-transparent pointer-events-none" />
+      </div>
+
       <Helmet>
         <title>Registration Restricted — LAND OF GOD TATTOO STUDIO</title>
       </Helmet>
 
-      <div className="max-w-md w-full glass-panel-dark p-8 rounded-2xl border border-studio-bronze/60 shadow-2xl space-y-6 text-center">
+      <div className="max-w-md w-full glass-panel-dark p-8 rounded-2xl border border-studio-bronze/60 shadow-2xl space-y-6 text-center relative z-10">
         <div className="w-14 h-14 bg-studio-bronze/20 border border-studio-gold/60 rounded-full flex items-center justify-center mx-auto text-studio-gold shadow-lg">
           <ShieldAlert className="w-8 h-8 text-studio-gold" />
         </div>

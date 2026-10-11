@@ -121,7 +121,7 @@ export const BlogDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
         <title>{blog.seoTitle || blog.title} — LAND OF GOD TATTOO STUDIO Journal</title>
         <meta name="description" content={blog.seoDescription || blog.excerpt} />
@@ -129,47 +129,62 @@ export const BlogDetailPage = () => {
         <meta property="og:image" content={blog.coverImage} />
       </Helmet>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <Link
-          to="/blog"
-          className="inline-flex items-center space-x-2 text-xs font-bold text-studio-textMuted hover:text-studio-bronzeLight uppercase tracking-wider mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Journal</span>
-        </Link>
+      {/* Hero Header with Cinematic Background Image */}
+      <div className="relative pt-32 pb-12 mb-8 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={getFullImageUrl(blog.coverImage) || '/images/tattoo_studio_hero_bg.jpg'}
+            alt={blog.title}
+            className="w-full h-full object-cover object-center filter brightness-[0.35] blur-[2px] scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/80 to-studio-bg" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/[0.08] via-transparent to-transparent pointer-events-none" />
+        </div>
 
-        {/* Header Content */}
-        <div className="space-y-4 mb-8">
-          <span className="text-xs uppercase tracking-widest font-bold text-studio-bronzeLight bg-studio-card px-3 py-1 rounded border border-studio-border/40 inline-block">
-            {blog.category}
-          </span>
-          <h1 className="font-condensed font-black text-3xl sm:text-5xl uppercase tracking-tight text-studio-textMain leading-tight">
-            {blog.title}
-          </h1>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <Link
+            to="/blog"
+            className="inline-flex items-center space-x-2 text-xs font-bold text-studio-textMuted hover:text-studio-bronzeLight uppercase tracking-wider mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Journal</span>
+          </Link>
 
-          <div className="flex flex-wrap items-center justify-between text-xs text-studio-textMuted border-t border-b border-studio-border/30 py-3 gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-xs">
-                <User className="w-3.5 h-3.5 text-amber-400" />
-                <span>Written by: {blog.author || 'Rahul Choudhary'}</span>
-              </span>
-              <span>•</span>
-              <span className="flex items-center space-x-1">
-                <Clock className="w-3.5 h-3.5 text-studio-bronze" />
-                <span>{blog.readTimeMinutes || 4} min read</span>
-              </span>
+          {/* Header Content */}
+          <div className="space-y-4">
+            <span className="text-xs uppercase tracking-widest font-bold text-studio-gold bg-black/60 px-3.5 py-1.5 rounded-full border border-amber-400/30 backdrop-blur-md inline-block">
+              {blog.category}
+            </span>
+            <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-white leading-tight">
+              {blog.title}
+            </h1>
+
+            <div className="flex flex-wrap items-center justify-between text-xs text-studio-textMuted border-t border-b border-white/10 py-3 gap-4">
+              <div className="flex items-center space-x-4">
+                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-xs">
+                  <User className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Written by: {blog.author || 'Rahul Choudhary'}</span>
+                </span>
+                <span>•</span>
+                <span className="flex items-center space-x-1 text-zinc-300">
+                  <Clock className="w-3.5 h-3.5 text-studio-bronze" />
+                  <span>{blog.readTimeMinutes || 4} min read</span>
+                </span>
+              </div>
+
+              <button
+                onClick={handleShare}
+                className="flex items-center space-x-1.5 text-studio-bronzeLight hover:text-white transition-colors"
+              >
+                <Share2 className="w-4 h-4" />
+                <span>Share Article</span>
+              </button>
             </div>
-
-            <button
-              onClick={handleShare}
-              className="flex items-center space-x-1.5 text-studio-bronzeLight hover:text-studio-textMain transition-colors"
-            >
-              <Share2 className="w-4 h-4" />
-              <span>Share Article</span>
-            </button>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Featured Image */}
         <div className="rounded-2xl overflow-hidden border border-studio-border shadow-2xl mb-10 h-80 sm:h-[420px] bg-black flex items-center justify-center">
