@@ -714,14 +714,16 @@ export const Interactive3DStudio = ({
 
         {/* Scalable Container for Zoom */}
         <div
-          className="relative h-full aspect-[2/3] flex items-center justify-center transition-transform duration-200 ease-out"
+          className="relative h-full aspect-[2/3] w-auto max-w-full flex items-center justify-center transition-transform duration-200 ease-out"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: '50% 50%',
+            minWidth: 'min(280px, 100%)',
+            height: '100%',
           }}
         >
           {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (SEAMLESS 60FPS CROSSFADE) */}
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full min-w-[260px] min-h-[380px] flex items-center justify-center">
             {activeFrames.map((f, i) => {
               let frameOpacity = 0;
               if (i === frameIdx) {
@@ -742,7 +744,81 @@ export const Interactive3DStudio = ({
                     opacity: frameOpacity,
                     visibility: frameOpacity > 0.01 ? 'visible' : 'hidden',
                   }}
+                  onError={(e) => {
+                    if (avatarGender === 'female' && !e.target.src.includes('female_front')) {
+                      e.target.src = '/images/female_front.jpg';
+                    } else if (avatarGender === 'male' && !e.target.src.includes('masculine_front')) {
+                      e.target.src = '/images/masculine_front.jpg';
+                    }
+                  }}
                 />
+              );
+            })}
+
+            {/* ANATOMICAL HIGHLIGHT FOR SELECTED BODY PART */}
+            {(() => {
+              const highlightCoords = getInterpolatedPlacement(selectedBodyArea, displayAngle);
+              if (!highlightCoords || highlightCoords.opacity < 0.05) return null;
+
+              return (
+                <div
+                  className="absolute z-15 pointer-events-none flex items-center justify-center transition-all duration-300"
+                  style={{
+                    left: `${highlightCoords.left + userOffsetX}%`,
+                    top: `${highlightCoords.top + userOffsetY}%`,
+                    width: `${Math.max(highlightCoords.width * 1.55, 14)}%`,
+                    height: `${Math.max(highlightCoords.height * 1.45, 12)}%`,
+                    transform: `translate3d(-50%, -50%, 0) rotate(${highlightCoords.rotate + userRotate}deg)`,
+                    transformOrigin: '50% 50%',
+                    opacity: Math.max(0.4, highlightCoords.opacity),
+                  }}
+                >
+                  {/* Glowing Anatomical Target Aura */}
+                  <div className="absolute inset-0 rounded-2xl border-2 border-amber-400 bg-amber-400/15 shadow-[0_0_35px_rgba(251,191,36,0.65),inset_0_0_15px_rgba(251,191,36,0.3)] animate-pulse" />
+
+                  {/* Corner Target Reticles */}
+                  <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-amber-300 shadow-sm" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-amber-300 shadow-sm" />
+                  <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-amber-300 shadow-sm" />
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-amber-300 shadow-sm" />
+
+                  {/* Selected Body Part Badge */}
+                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/95 text-amber-300 border border-amber-400/90 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center space-x-1 shadow-2xl">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                    <span>{selectedBodyArea}</span>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* INTERACTIVE CLICKABLE BODY PART HOTSPOT PINS */}
+            {Object.keys(ANATOMICAL_PLACEMENTS).map((areaKey) => {
+              if (areaKey === selectedBodyArea) return null;
+              const areaCoords = getInterpolatedPlacement(areaKey, displayAngle);
+              if (!areaCoords || areaCoords.opacity < 0.3) return null;
+
+              return (
+                <button
+                  key={`hotspot-${areaKey}`}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectBodyArea?.(areaKey);
+                  }}
+                  className="absolute z-25 group cursor-pointer -translate-x-1/2 -translate-y-1/2 p-1.5 transition-transform hover:scale-125 focus:outline-none"
+                  style={{
+                    left: `${areaCoords.left}%`,
+                    top: `${areaCoords.top}%`,
+                  }}
+                  title={`Click to highlight & fit on ${areaKey}`}
+                >
+                  <div className="w-4 h-4 rounded-full bg-black/85 border border-amber-400/70 flex items-center justify-center shadow-lg group-hover:border-amber-300 group-hover:bg-amber-400/30 group-hover:shadow-[0_0_12px_rgba(251,191,36,0.6)] transition-all">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:bg-amber-200" />
+                  </div>
+                  <span className="opacity-0 group-hover:opacity-100 absolute -bottom-5 left-1/2 -translate-x-1/2 bg-black/95 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider whitespace-nowrap pointer-events-none transition-opacity shadow-xl z-30">
+                    {areaKey}
+                  </span>
+                </button>
               );
             })}
 
