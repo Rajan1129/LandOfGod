@@ -17,15 +17,18 @@ export const AboutPage = () => {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
         
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
           <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            ॥ DEVBHOOMI HERITAGE &amp; PHILOSOPHY ॥
+            ॥ DEVBHOOMI HERITAGE &amp; MASTER ARTISTRY ॥
           </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            The Land of God Story
+          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
+            Best Tattoo Artist in Una, Himachal Pradesh
           </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Where sacred spiritual Devbhoomi art meets hospital-grade sterile precision in Friends Colony, Una (HP).
+          <h2 className="text-sm sm:text-base text-studio-gold font-serif">
+            The Land of God Atelier — Sacred Devbhoomi Heritage &amp; Hospital-Grade Sterile Tattooing
+          </h2>
+          <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
+            Welcome to Land of God Tattoo Studio in Friends Colony, Una (HP). Led by acclaimed Master Artist Sunil, our studio brings world-class custom stenciling, hyper-realistic portraits, sacred Mahadev calligraphy, and single-use cartridge safety to tattoo lovers across Himachal Pradesh and Punjab.
           </p>
         </div>
 

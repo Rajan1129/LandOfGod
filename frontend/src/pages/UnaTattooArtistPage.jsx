@@ -31,9 +31,28 @@ export const UnaTattooArtistPage = () => {
     title: 'Land of God — Best Tattoo Artist in Una | #1 Tattoo Designer in Una, HP',
     h1Main: 'Best Tattoo Artist in Una',
     h1Accent: '& Premier Tattoo Designer.',
+    leadText: 'Welcome to Land of God Tattoo Studio — the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh. Led by certified Master Artist Sunil with hospital-grade European hygiene standards.',
     description: 'Looking for the best tattoo artist in Una? Land of God Tattoo Studio is the #1 rated tattoo designer in Una, Himachal Pradesh. Master Sunil specializes in sacred Devbhoomi Mahadev tattoos, fine-line realism, portraits, and 100% sterile hygiene. Book consultation today!',
     badge: '#1 Rated in Una, Himachal Pradesh',
-    canonical: `https://tattoo-studio-nine.vercel.app${rawPath || '/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una'}/`,
+    keywords: 'Best Tattoo Artist in Una, Tattoo Designer in Una, Tattoo Artist in Una, Land of God Tattoo Studio, Tattoo Shop in Una Himachal Pradesh, Master Sunil Tattoo Artist, Friends Colony Una Tattoos, Mahadev Trishul Tattoo Una, Sacred Devbhoomi Tattoos',
+    canonical: `https://land-of-god-nine.vercel.app${rawPath || '/best-tattoo-artist-in-una'}/`,
+    whyHeading: 'The Gold Standard of Tattooing in Una, Himachal Pradesh',
+    whySub: 'Why Choose Us in Una',
+    whyDesc: 'When searching for the best tattoo artist in Una, artistic mastery, custom design capability, and strict hospital-level sterility are paramount. Located in Friends Colony, Una, we craft lifelong permanent artwork tailored to your anatomy.',
+    regionalPillars: [
+      {
+        title: 'Custom Anatomical Stencil Design in Una',
+        desc: 'As Una\'s leading bespoke tattoo designer, Master Sunil creates 100% original stencils calibrated to your muscle structure using our exclusive 3D body placement visualizer.'
+      },
+      {
+        title: 'Hospital-Grade Sterilization & Safety',
+        desc: 'Your skin and health come first. We strictly use 100% single-use membrane cartridge needles, autoclave sterilization, medical-grade skin prep, and certified hypoallergenic European pigments.'
+      },
+      {
+        title: 'Sacred Devbhoomi Spiritual Artistry',
+        desc: 'Rooted in the spiritual heritage of Himachal Pradesh, our studio specializes in Mahadev Trishul, Sanskrit mantras, sacred geometry, and photorealistic portraits.'
+      }
+    ]
   };
 
   if (rawPath === '/amb-tattoo-studio') {
@@ -41,72 +60,224 @@ export const UnaTattooArtistPage = () => {
       title: 'Amb Tattoo Studio — Best Custom Tattoo Parlor near Amb, HP | Land of God',
       h1Main: 'Amb Tattoo Studio',
       h1Accent: '& Premier Tattoo Atelier near Amb, HP.',
+      leadText: 'Searching for the best tattoo studio near Amb, Himachal Pradesh? Land of God Tattoo Studio in Friends Colony, Una is situated just 25 minutes from Amb via NH503. Clients from Amb, Gagret, and Bharwain travel to our studio for Master Sunil\'s acclaimed fine-line realism and sterile clinical standards.',
       description: 'Looking for a top-rated tattoo studio near Amb, Himachal Pradesh? Land of God Tattoo Studio in Friends Colony, Una (just 25 mins from Amb) delivers master fine-line tattooing, 100% sterile safety, and custom Devbhoomi designs.',
       badge: 'Premier Tattoo Studio for Amb & Una Region',
+      keywords: 'Amb Tattoo Studio, Best Tattoo Studio in Amb, Tattoo Artist near Amb Himachal Pradesh, Tattoo Shop Amb HP, Land of God Tattoo Studio Una, Master Sunil Tattoo Artist Amb',
       canonical: 'https://land-of-god-nine.vercel.app/amb-tattoo-studio/',
+      whyHeading: 'Why Clients Travel from Amb to Land of God Studio',
+      whySub: 'Top-Rated Studio Serving Amb, HP',
+      whyDesc: 'Located a quick 25-minute drive from Amb via NH503, our Friends Colony atelier provides residents of Amb with world-class tattooing that isn\'t available in local uncertified shops.',
+      regionalPillars: [
+        {
+          title: 'Quick 25-Min Drive from Amb via NH503',
+          desc: 'Convenient direct highway access from Amb, Gagret, and Chururu directly to our spacious private atelier in Friends Colony, Una with hassle-free parking.'
+        },
+        {
+          title: 'Certified Hospital-Grade Hygiene',
+          desc: 'Avoid unsterilized local setups. We use 100% medical-grade single-use cartridge needles, sterile autoclave instruments, and EU-compliant non-toxic organic inks.'
+        },
+        {
+          title: 'Custom Devbhoomi & Realism Tattoos',
+          desc: 'Specialized in sacred Mahadev stencils, intricate script mantras, and portrait realism crafted exclusively by Master Sunil with 10+ years of award-winning mastery.'
+        }
+      ]
     };
   } else if (rawPath === '/nangal-tattoo-studio') {
     pageMeta = {
       title: 'Nangal Tattoo Studio — Top Rated Tattoo Parlor near Nangal Punjab & Una HP',
       h1Main: 'Nangal Tattoo Studio',
       h1Accent: '& Master Ink Artistry near Nangal.',
+      leadText: 'Seeking the finest tattoo studio near Nangal? Land of God Tattoo Studio in Friends Colony, Una is situated just 15 minutes across the Punjab-Himachal border from Nangal Dam and Anandpur Sahib. Experience world-class tattoo design, single-use needle safety, and master realism.',
       description: 'Looking for the best tattoo studio near Nangal? Land of God Tattoo Studio is located right next door in Friends Colony, Una (15 mins from Nangal Dam). Renowned for sacred Devbhoomi realism, portraits, and clinical hospital-grade sterilization.',
       badge: 'Trusted by Clients Across Nangal & Una',
+      keywords: 'Nangal Tattoo Studio, Tattoo Artist Nangal Punjab, Tattoo Studio near Nangal Dam, Anandpur Sahib Tattoo Artist, Best Tattoo Shop Nangal, Land of God Tattoo Studio Una',
       canonical: 'https://land-of-god-nine.vercel.app/nangal-tattoo-studio/',
+      whyHeading: 'The Premier Choice for Tattoo Lovers in Nangal & Anandpur Sahib',
+      whySub: '15 Minutes from Nangal Dam',
+      whyDesc: 'Only a short 15-minute commute from Nangal Dam, our studio serves clients from Nangal, Anandpur Sahib, Mehatpur, and Ropar looking for bespoke tattoo craft without traveling to Chandigarh.',
+      regionalPillars: [
+        {
+          title: '15-Minute Easy Drive from Nangal Dam',
+          desc: 'Cross the border with ease into Friends Colony, Una. Avoid high Chandigarh prices while enjoying higher hygiene standards and personalized master artist care.'
+        },
+        {
+          title: 'International Tattoo Hygiene Protocols',
+          desc: 'Equipped with medical autoclaves, single-use needle membrane cartridges, sealed sterile packs, and organic hypoallergenic inks safe for all skin types.'
+        },
+        {
+          title: 'Bespoke Custom Tattoo Stencils',
+          desc: 'No duplicate stencils. Every design is customized to your exact physique with our digital 3D interactive simulator before touching your skin.'
+        }
+      ]
     };
   } else if (rawPath === '/chintpurni-tattoo-studio') {
     pageMeta = {
       title: 'Chintpurni Tattoo Studio — Sacred Devbhoomi Tattooing near Mata Chintpurni',
       h1Main: 'Chintpurni Tattoo Studio',
       h1Accent: '& Sacred Devbhoomi Tattoo Atelier.',
+      leadText: 'Visiting holy Mata Chintpurni Devi Shrine in Devbhoomi Himachal? Commemorate your sacred pilgrimage with an authentic spiritual tattoo by Master Sunil at Land of God Tattoo Studio in Friends Colony, Una (located conveniently on the route to Chintpurni).',
       description: 'Visiting sacred Maa Chintpurni Dham? Commemorate your spiritual journey with an authentic sacred tattoo from Master Sunil at Land of God Tattoo Studio in Friends Colony, Una. Specialists in Mahadev Trishul, Sanskrit mantras, and Maa Shakti iconography.',
       badge: 'Sacred Devbhoomi Tattoos • Near Chintpurni Shrine',
+      keywords: 'Chintpurni Tattoo Studio, Mata Chintpurni Tattoo, Sacred Devbhoomi Tattoo, Shiva Trishul Tattoo Una, Sanskrit Mantra Tattoo Himachal Pradesh, Spiritual Tattoo Studio Chintpurni',
       canonical: 'https://land-of-god-nine.vercel.app/chintpurni-tattoo-studio/',
+      whyHeading: 'Spiritual Artistry & Sacred Tattoos for Chintpurni Pilgrims',
+      whySub: 'Sacred Devbhoomi Heritage',
+      whyDesc: 'Located along the primary highway corridor connecting Una to Chintpurni Dham, our studio provides pilgrims and spiritual seekers with sacred Devanagari, Trishul, and Maa Shakti motifs.',
+      regionalPillars: [
+        {
+          title: 'Sacred Sanskrit Mantras & Yantras',
+          desc: 'Specialists in Mahamrityunjaya, Gayatri Mantra, Om Namah Shivaya, and Maa Durga / Chintpurni sacred geometry etched with razor-sharp single-needle lines.'
+        },
+        {
+          title: 'Purity, Cleanliness & Hospital Sterility',
+          desc: 'We honor sacred art with sacred cleanliness: 100% single-use needles, certified organic vegan pigments, and an immaculate, peaceful private studio environment.'
+        },
+        {
+          title: 'Convenient Route to Chintpurni Dham',
+          desc: 'Located on the main transit axis in Friends Colony, Una, making it seamless to schedule your session on your way to or from the holy shrine.'
+        }
+      ]
     };
   } else if (rawPath === '/best-tattoo-studio-in-himachal-pradesh') {
     pageMeta = {
       title: 'Best Tattoo Studio in Himachal Pradesh — Award-Winning Ink | Land of God',
       h1Main: 'Best Tattoo Studio in Himachal Pradesh',
       h1Accent: '& Northern India Premier Atelier.',
+      leadText: 'Recognized as the best tattoo studio in Himachal Pradesh, Land of God Tattoo Studio in Una combines cutting-edge 3D anatomical placement technology, international hospital-level hygiene, and master craftsmanship. Clients travel from Dharamshala, Shimla, Mandi, and Kangra for our custom artistry.',
       description: 'Discover the #1 best tattoo studio in Himachal Pradesh. Land of God Tattoo Studio in Una combines international hygiene standards, 3D anatomical placement simulator, and master fine-line craftsmanship.',
       badge: '#1 Premier Tattoo Atelier in Himachal Pradesh',
+      keywords: 'Best Tattoo Studio in Himachal Pradesh, Top Tattoo Artist Himachal, Best Tattoo Parlour HP, Una Himachal Tattoo Studio, Master Sunil Tattoo Studio, Clean Tattoo Studio Himachal',
       canonical: 'https://land-of-god-nine.vercel.app/best-tattoo-studio-in-himachal-pradesh/',
+      whyHeading: 'Setting the Benchmark for Tattoo Studios Across Himachal Pradesh',
+      whySub: 'State-of-the-Art Ink Atelier',
+      whyDesc: 'From Kangra to Solan, tattoo collectors across Himachal Pradesh choose Land of God Tattoo Studio in Una for clinical safety, custom-drawn artwork, and 3D preview visualization.',
+      regionalPillars: [
+        {
+          title: 'Himachal\'s 1st 3D Anatomical Fitting Studio',
+          desc: 'Experience our real-time 3D human body simulator that allows you to preview your tattoo on any muscle group before getting inked.'
+        },
+        {
+          title: 'Gold Standard Clinical Safety in HP',
+          desc: 'Medical-grade autoclaves, sealed single-use needle cartridges, vegan organic pigments, and zero cross-contamination protocols guaranteed.'
+        },
+        {
+          title: 'Master-Level Fine Line & Realism',
+          desc: '10+ years of award-winning tattooing across sacred Devbhoomi themes, photorealistic animal portraits, neo-traditional scripts, and cover-up restorations.'
+        }
+      ]
     };
   } else if (rawPath === '/best-tattoo-artist-in-una-himachal-pradesh') {
     pageMeta = {
       title: 'Best Tattoo Artist in Una Himachal Pradesh — Master Sunil | Land of God',
       h1Main: 'Best Tattoo Artist in Una Himachal Pradesh',
       h1Accent: '& Master Ink Artisan in Devbhoomi.',
+      leadText: 'Master Sunil at Land of God Tattoo Studio in Friends Colony, Una is hailed as the best tattoo artist in Una, Himachal Pradesh. With over a decade of dedicated artistry, he specializes in custom sacred Devbhoomi Shiva designs, micro-realism, portraits, and fine-line geometry.',
       description: 'Looking for the best tattoo artist in Una, Himachal Pradesh? Master Sunil at Land of God Tattoo Studio offers 10+ years of award-winning mastery in sacred Devbhoomi ink, fine-line realism, and sterile clinical safety.',
       badge: 'Master Tattooist • Friends Colony, Una, HP',
+      keywords: 'Best Tattoo Artist in Una Himachal Pradesh, Master Sunil Una, Tattoo Artist Una HP, Famous Tattooist Una, Top Tattoo Designer Una Himachal Pradesh, Friends Colony Una Tattooist',
       canonical: 'https://land-of-god-nine.vercel.app/best-tattoo-artist-in-una-himachal-pradesh/',
+      whyHeading: 'Why Master Sunil is the Best Tattoo Artist in Una, Himachal Pradesh',
+      whySub: '10+ Years of Master Craftsmanship',
+      whyDesc: 'With hundreds of five-star reviews from clients across Una and Punjab, Master Sunil pairs visionary drawing talent with patient one-on-one design consultations and gentle tattooing technique.',
+      regionalPillars: [
+        {
+          title: '10+ Years of Mastery in Una',
+          desc: 'Extensive portfolio spanning hundreds of large-scale sleeves, fine-line scripts, cover-ups, and hyper-realistic black-and-grey portraits.'
+        },
+        {
+          title: 'Bespoke Drawing & Anatomical Flow',
+          desc: 'Never copy-pasted. Each tattoo is drafted to harmonize with your muscles, ensuring zero warping and lifelong aesthetic elegance.'
+        },
+        {
+          title: 'Painless Gentle Needle Technique',
+          desc: 'Advanced rotary cartridge machines calibrated for minimal skin trauma, faster healing, and vibrant lifelong ink retention.'
+        }
+      ]
     };
   } else if (rawPath === '/best-tattoo-artist-in-una') {
     pageMeta = {
       title: 'Best Tattoo Artist in Una — Master Sunil | Land of God Tattoo Studio',
       h1Main: 'Best Tattoo Artist in Una',
       h1Accent: '& Master Ink Artisan in Himachal Pradesh.',
+      leadText: 'Book a session with the best tattoo artist in Una, HP. Master Sunil at Land of God Tattoo Studio brings 10+ years of award-winning mastery in sacred Devbhoomi ink, fine-line realism, and sterile clinical safety.',
       description: 'Book the best tattoo artist in Una, HP. Master Sunil at Land of God Tattoo Studio brings 10+ years of award-winning mastery in sacred Devbhoomi ink, fine-line realism, and sterile clinical safety.',
       badge: 'Award-Winning Artist • Friends Colony, Una',
+      keywords: 'Best Tattoo Artist in Una, Tattoo Artist Una, Top Tattooist Una Himachal, Master Sunil Tattoo, Friends Colony Una Tattoos, Realism Tattoo Una',
       canonical: 'https://land-of-god-nine.vercel.app/best-tattoo-artist-in-una/',
+      whyHeading: 'The Undisputed #1 Tattoo Artist in Una',
+      whySub: 'Award-Winning Skill & Hygiene',
+      whyDesc: 'Located in the heart of Una in Friends Colony, our atelier is where discerning tattoo enthusiasts go when they want perfection, sterility, and original art.',
+      regionalPillars: [
+        {
+          title: 'Hand-Drawn Custom Stencils',
+          desc: 'Every client receives a dedicated design session. We craft custom artwork that tells your unique story with timeless elegance.'
+        },
+        {
+          title: 'Hospital-Grade Clinical Protocols',
+          desc: 'Single-use sealed needles opened right before your eyes, hospital autoclaves, and skin-friendly vegan inks.'
+        },
+        {
+          title: '3D Placement Visualizer',
+          desc: 'Preview your tattoo in 360 degrees on our interactive 3D digital model before committing to ink.'
+        }
+      ]
     };
   } else if (rawPath === '/tattoo-artist-in-una') {
     pageMeta = {
       title: 'Tattoo Artist in Una — Certified Sterile Custom Artistry | Land of God',
       h1Main: 'Tattoo Artist in Una',
       h1Accent: '& Sacred Devbhoomi Body Atelier.',
+      leadText: 'Looking for a certified professional tattoo artist in Una? Visit Land of God Tattoo Studio in Friends Colony for custom fine line tattoos, sacred Mahadev calligraphy, and single-use sterile safety.',
       description: 'Looking for a certified professional tattoo artist in Una? Visit Land of God Tattoo Studio for custom fine line tattoos, sacred Mahadev calligraphy, and single-use sterile safety.',
       badge: 'Certified Professional • Friends Colony, Una',
+      keywords: 'Tattoo Artist in Una, Una Tattoo Studio, Professional Tattoo Artist Una Himachal Pradesh, Tattoo Shop Friends Colony Una, Custom Tattoo Una',
       canonical: 'https://land-of-god-nine.vercel.app/tattoo-artist-in-una/',
+      whyHeading: 'Professional Tattooing Standards in Una',
+      whySub: 'Certified Studio Excellence',
+      whyDesc: 'Don\'t compromise on skin health or artistic detail. Discover why clients trust our certified tattoo artists in Una for life-changing body art.',
+      regionalPillars: [
+        {
+          title: 'Certified Tattoo Specialists',
+          desc: 'Fully trained in bloodborne pathogen safety, cross-contamination prevention, and advanced needle depth control.'
+        },
+        {
+          title: 'Pure Vegan & Hypoallergenic Inks',
+          desc: 'We only use top-tier organic pigments that heal crisply without fading into greenish or blurry discoloration.'
+        },
+        {
+          title: 'Comprehensive Aftercare Guidance',
+          desc: 'Detailed step-by-step healing routines, second-skin waterproof bandages, and 24/7 post-tattoo support.'
+        }
+      ]
     };
   } else if (rawPath === '/tattoo-designer-in-una') {
     pageMeta = {
       title: 'Tattoo Designer in Una — 100% Bespoke Stencils & 3D Fitting Lab',
       h1Main: 'Tattoo Designer in Una',
       h1Accent: '& Custom Stencil Artwork Specialist.',
+      leadText: 'Get your original custom tattoo designed in Una, Himachal Pradesh. Land of God Tattoo Studio crafts hand-drawn bespoke stencils mapped to your anatomy with our 3D visualizer.',
       description: 'Get your original custom tattoo designed in Una, Himachal Pradesh. Land of God Tattoo Studio crafts hand-drawn bespoke stencils mapped to your anatomy with our 3D visualizer.',
       badge: 'Bespoke Stencil Design • Friends Colony, Una',
+      keywords: 'Tattoo Designer in Una, Custom Tattoo Design Una HP, 3D Tattoo Visualizer Una, Stencil Design Una Himachal Pradesh, Best Tattoo Designer Una',
       canonical: 'https://land-of-god-nine.vercel.app/tattoo-designer-in-una/',
+      whyHeading: 'Why Choose Our Custom Tattoo Designer in Una',
+      whySub: 'Bespoke Stencil Artistry',
+      whyDesc: 'Never settle for a generic tattoo found on Google. We sit down with you, sketch your concept from scratch, and simulate placement on our 3D anatomy engine.',
+      regionalPillars: [
+        {
+          title: 'Interactive 3D Anatomical Fitting',
+          desc: 'Test your artwork on forearm, spine, chest, or neck using our virtual 3D human model to ensure the perfect scale and angle.'
+        },
+        {
+          title: '100% Original Hand-Drawn Concepts',
+          desc: 'Combining calligraphy, sacred geometry, shading gradients, and personal symbolism into an exclusive artwork made just for you.'
+        },
+        {
+          title: 'Expert Cover-Up Consultation',
+          desc: 'Specialized design restructuring to seamlessly mask unwanted or faded older tattoos with brilliant new motifs.'
+        }
+      ]
     };
   }
 
@@ -117,7 +288,7 @@ export const UnaTattooArtistPage = () => {
   const phone = settings?.phone || '+91 78079 66080';
   const whatsapp = settings?.whatsapp || '+917807966080';
 
-  const handleWhatsApp = (topic = 'General Tattoo Consultation in Una') => {
+  const handleWhatsApp = (topic = `Consultation for ${pageMeta.h1Main}`) => {
     const waUrl = createArtworkInquiryUrl(topic, 'Master Sunil', 'Una Studio');
     window.open(waUrl, '_blank');
   };
@@ -126,8 +297,8 @@ export const UnaTattooArtistPage = () => {
     '@context': 'https://schema.org',
     '@type': 'TattooParlor',
     name: 'Land of God Tattoo Studio',
-    alternateName: 'Best Tattoo Artist & Tattoo Designer in Una',
-    image: 'https://tattoo-studio-nine.vercel.app/images/tattoo_studio_hero.jpg',
+    alternateName: `${pageMeta.h1Main} - Land of God`,
+    image: 'https://land-of-god-nine.vercel.app/images/tattoo_studio_hero.jpg',
     url: pageMeta.canonical,
     telephone: phone,
     priceRange: '₹₹',
@@ -173,16 +344,26 @@ export const UnaTattooArtistPage = () => {
 
   const faqs = [
     {
-      q: 'Who is the best tattoo artist in Una, Himachal Pradesh?',
-      a: 'Master Sunil at Land of God Tattoo Studio in Friends Colony, Una is widely rated the best tattoo artist in Una, specializing in sacred Mahadev calligraphy, fine-line realism, geometric mandalas, and custom cover-up tattoos with over 10 years of master experience.'
+      q: `Who is the best tattoo artist in ${rawPath.includes('amb') ? 'Amb & Una' : rawPath.includes('nangal') ? 'Nangal & Una' : rawPath.includes('chintpurni') ? 'Chintpurni & Una' : 'Una, Himachal Pradesh'}?`,
+      a: `Master Sunil at Land of God Tattoo Studio in Friends Colony, Una is widely rated the top tattoo artist in the region, specializing in sacred Mahadev calligraphy, fine-line realism, geometric mandalas, and custom cover-up tattoos with over 10 years of master experience.`
     },
     {
-      q: 'How can I get a custom tattoo designed in Una?',
-      a: 'You can book a private consultation at Land of God Tattoo Studio in Friends Colony, Una, or chat directly via WhatsApp. Our master artists create 100% custom, hand-crafted stencils scaled to your unique anatomy, backed by our 3D anatomical placement visualizer.'
+      q: `How far is Land of God Tattoo Studio from ${rawPath.includes('amb') ? 'Amb' : rawPath.includes('nangal') ? 'Nangal Dam' : rawPath.includes('chintpurni') ? 'Chintpurni Dham' : 'nearby cities'}?`,
+      a: rawPath.includes('amb')
+        ? 'Our studio in Friends Colony, Una is located just 25 minutes (approx. 22 km) from Amb via NH503, making it an easy and direct commute.'
+        : rawPath.includes('nangal')
+        ? 'Our studio is located only 15 minutes (approx. 14 km) from Nangal Dam and Punjab border, right in Friends Colony, Una.'
+        : rawPath.includes('chintpurni')
+        ? 'We are located on the main highway route in Friends Colony, Una, approximately 45 minutes from sacred Chintpurni temple.'
+        : 'Our studio is centrally located in Friends Colony, Una (174303), within 15–30 minutes from Nangal, Amb, Mehatpur, and Santokhgarh.'
+    },
+    {
+      q: 'How can I get a custom tattoo designed before tattooing?',
+      a: 'You can book a private consultation at Land of God Tattoo Studio in Friends Colony, Una, or chat directly via WhatsApp. Our master artists create 100% custom, hand-crafted stencils scaled to your unique anatomy, backed by our interactive 3D anatomical placement visualizer.'
     },
     {
       q: 'Is tattooing safe and sterile at Land of God Tattoo Studio in Una?',
-      a: 'Yes, absolutely. We maintain hospital-grade clinical hygiene with 100% single-use membrane cartridge needles, medical autoclave sterilization, certified hypoallergenic organic vegan inks, and strict sterile workstation prep.'
+      a: 'Yes, absolutely. We maintain hospital-grade clinical hygiene with 100% single-use membrane cartridge needles opened in front of you, medical autoclave sterilization, certified hypoallergenic organic vegan inks, and sterile workstation wrap.'
     },
     {
       q: 'What tattoo styles are available at Land of God in Una?',
@@ -190,7 +371,7 @@ export const UnaTattooArtistPage = () => {
     },
     {
       q: 'Where is Land of God Tattoo Studio located in Una?',
-      a: 'Our studio is located in Friends Colony, Una, Himachal Pradesh (PIN: 174303). We welcome clients from across Una, Nangal, Hoshiarpur, Kangra, Hamirpur, and all over Himachal Pradesh and Punjab.'
+      a: 'Our studio is located in Friends Colony, Una, Himachal Pradesh (PIN: 174303). We welcome clients from across Una, Nangal, Amb, Chintpurni, Hoshiarpur, Kangra, Hamirpur, and all over Himachal Pradesh and Punjab.'
     }
   ];
 
@@ -199,10 +380,7 @@ export const UnaTattooArtistPage = () => {
       <Helmet>
         <title>{pageMeta.title}</title>
         <meta name="description" content={pageMeta.description} />
-        <meta
-          name="keywords"
-          content="Best Tattoo Artist in Una, Tattoo Designer in Una, Tattoo Artist in Una, Land of God Tattoo Studio, Tattoo Shop in Una Himachal Pradesh, Master Sunil Tattoo Artist, Friends Colony Una Tattoos, Mahadev Trishul Tattoo Una, Sacred Devbhoomi Tattoos"
-        />
+        <meta name="keywords" content={pageMeta.keywords} />
         <link rel="canonical" href={pageMeta.canonical} />
         <meta property="og:title" content={pageMeta.title} />
         <meta property="og:description" content={pageMeta.description} />
@@ -247,7 +425,7 @@ export const UnaTattooArtistPage = () => {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto font-light leading-relaxed">
-            Welcome to <strong className="text-white font-semibold">Land of God Tattoo Studio</strong> — the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh. Led by certified Master Artist Sunil with hospital-grade European hygiene standards.
+            {pageMeta.leadText}
           </p>
 
           {/* CTAs */}
@@ -257,12 +435,12 @@ export const UnaTattooArtistPage = () => {
               className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:brightness-110 text-black font-bold py-4 px-8 text-xs sm:text-sm uppercase tracking-[0.16em] rounded-2xl shadow-[0_12px_30px_rgba(251,191,36,0.35)] flex items-center space-x-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Calendar className="w-4 h-4 stroke-[2.5]" />
-              <span>Book Appointment in Una</span>
+              <span>Book Appointment</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
 
             <button
-              onClick={() => handleWhatsApp('Consultation for Custom Tattoo in Una')}
+              onClick={() => handleWhatsApp(`Inquiry for ${pageMeta.h1Main}`)}
               className="bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md hover:border-emerald-500/40"
             >
               <MessageSquare className="w-4 h-4 text-emerald-400" />
@@ -313,51 +491,33 @@ export const UnaTattooArtistPage = () => {
         </div>
       </section>
 
-      {/* SECTION: WHY WE ARE THE #1 TATTOO DESIGNER IN UNA */}
+      {/* SECTION: WHY WE ARE THE #1 TATTOO DESIGNER IN UNA / REGION */}
       <section className="py-20 bg-zinc-950/60 border-t border-b border-white/5 relative">
         <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-              Why Choose Us in Una
+              {pageMeta.whySub}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase">
-              The Gold Standard of Tattooing in Una, Himachal Pradesh
+              {pageMeta.whyHeading}
             </h2>
             <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-              When choosing a tattoo artist in Una, precision, artistic depth, and sterile safety are paramount. At Land of God Tattoo Studio, every piece is treated as a lifelong masterpiece.
+              {pageMeta.whyDesc}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                <Sparkles className="w-6 h-6" />
+            {pageMeta.regionalPillars.map((pillar, pIdx) => (
+              <div key={pIdx} className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-amber-400/40 transition-all space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
+                  {pIdx === 0 ? <Sparkles className="w-6 h-6" /> : pIdx === 1 ? <ShieldCheck className="w-6 h-6" /> : <Award className="w-6 h-6" />}
+                </div>
+                <h3 className="text-lg font-bold text-white">{pillar.title}</h3>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                  {pillar.desc}
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white">Custom Anatomical Tattoo Design</h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                As Una's leading custom tattoo designer, Master Sunil does not use generic internet stencils. Every design is hand-drawn, tailored to your story, and aligned to your exact muscle structure using our exclusive 3D placement studio.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Hospital-Grade Sterilization</h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Your safety is non-negotiable. We operate under rigorous clinical hygiene protocols: 100% single-use membrane cartridge needles, medical-grade surface disinfection, autoclave sterilization, and premium European vegan pigments.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 hover:border-amber-400/40 transition-all space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400">
-                <Award className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Sacred Devbhoomi Heritage</h3>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                Rooted in the spiritual soil of Devbhoomi Himachal, we specialize in authentic Mahadev Trishul iconography, sacred Sanskrit mantras, ancient script calligraphy, and meditative geometric mandalas.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -480,13 +640,13 @@ export const UnaTattooArtistPage = () => {
             
             <div className="lg:col-span-6 space-y-6 text-left">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-                Visit Our Una Atelier
+                Visit Our Atelier in Friends Colony
               </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase leading-tight">
-                Get Inked by the Best Tattoo Artist in Una
+                Get Inked by {pageMeta.h1Main}
               </h2>
               <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
-                Ready to bring your tattoo vision to life? Visit our state-of-the-art studio in Friends Colony, Una, or schedule your private consultation with Master Sunil.
+                Ready to bring your tattoo vision to life? Visit our state-of-the-art studio in Friends Colony, Una, or schedule your private consultation with Master Sunil. Easy transit access from Amb, Nangal, Chintpurni, and across Himachal Pradesh.
               </p>
 
               <div className="space-y-3 pt-2">

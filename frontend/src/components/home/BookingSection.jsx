@@ -159,13 +159,13 @@ export const BookingSection = () => {
         {/* Header */}
         <div className="mb-10 border-b border-white/10 pb-4 text-left">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-            Online Scheduling
+            Consultation &amp; Inking Appointments
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-            Book an Appointment
+            Book Best Tattoo Artist in Una, Himachal Pradesh
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm mt-1">
-            Reserve your session with Master Sunil &amp; resident artists in Friends Colony, Una
+            Reserve your private consultation with Master Sunil &amp; resident artists at Friends Colony, Una (HP). Welcoming clients from Una, Nangal, Amb, and Chintpurni.
           </p>
         </div>
 

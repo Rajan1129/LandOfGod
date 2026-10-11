@@ -21,13 +21,13 @@ export const AboutSection = () => {
           <div className="lg:col-span-6 space-y-6 text-left">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                About Our Studio
+                #1 Tattoo Studio in Una, Himachal Pradesh
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-                Precision Tattooing with Medical-Grade Hygiene
+                Best Tattoo Artist in Una — Master Sunil
               </h2>
               <p className="text-zinc-400 text-sm mt-2">
-                {studioName} • {street}, {city}, {state}
+                {studioName} • {street}, {city}, {state} (Serving Una, Nangal, Amb &amp; Chintpurni)
               </p>
             </div>
 

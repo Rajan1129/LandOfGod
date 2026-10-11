@@ -157,13 +157,16 @@ export const Interactive3DPage = () => {
           <div className="space-y-1">
             <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold uppercase tracking-widest">
               <Sparkles className="w-3 h-3" />
-              <span>3D Anatomical Studio</span>
+              <span>3D Anatomical Studio • Friends Colony, Una (HP)</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              3D Tattoo Placement Simulator
+              3D Tattoo Placement Simulator — Best Tattoo Designer in Una
             </h1>
+            <h2 className="text-xs sm:text-sm text-zinc-300">
+              Interactive 360° Anatomical Fitting Lab by Land of God Tattoo Studio, Himachal Pradesh
+            </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
-              Select your design, then touch any body part to test how it looks across the 360° human anatomy.
+              Select your design, then touch any body part to test exact anatomical scale, rotation, and flow before getting inked in Una.
             </p>
           </div>
 

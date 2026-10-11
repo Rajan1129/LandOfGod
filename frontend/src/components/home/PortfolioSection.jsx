@@ -236,13 +236,13 @@ export const PortfolioSection = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-white/10 pb-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-              Curated Works
+              Masterpiece Gallery • Una Himachal Pradesh
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-              Featured Portfolio
+              Custom Tattoo Gallery — Best Tattoo Designer in Una
             </h2>
             <p className="text-zinc-400 text-xs sm:text-sm mt-1">
-              Explore bespoke tattoos crafted by Master Sunil &amp; resident artists
+              Explore bespoke tattoos crafted by Master Sunil &amp; resident artists at Land of God Tattoo Studio in Friends Colony, Una (HP)
             </p>
           </div>
 

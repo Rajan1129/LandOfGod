@@ -154,13 +154,16 @@ export const ReviewsPage = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
           <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif">
-            🔱 VERIFIED GOOGLE &amp; STUDIO TESTIMONIALS 🔱
+            🔱 5.0★ VERIFIED CLIENT EXPERIENCES 🔱
           </span>
-          <h1 className="ancient-carved-heading text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            ॥ CLIENT REVIEWS &amp; REPUTATION ॥
+          <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
+            Reviews for Best Tattoo Artist in Una, Himachal Pradesh
           </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted font-serif">
-            Discover why collectors across Himachal Pradesh, Punjab, and Chandigarh rate Land of God Tattoo Studio 5.0★ on Google.
+          <h2 className="text-sm sm:text-base text-studio-gold font-serif">
+            Land of God Tattoo Studio — Client Testimonials from Una, Nangal, Amb &amp; Chintpurni
+          </h2>
+          <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
+            Discover why tattoo collectors across Himachal Pradesh and Punjab rate Master Sunil 5.0★ on Google for sterile safety, custom Devbhoomi designs, and hyper-realistic body art.
           </p>
 
           {/* Action Buttons */}
