@@ -163,7 +163,7 @@ export const Footer = () => {
         {/* Bottom copyright & Sub-navigation */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-500 gap-4 text-center md:text-left">
           <p className="max-w-xl">
-            © {new Date().getFullYear()} LAND OF GOD TATTOO STUDIO (Friends Colony, Una, HP). All rights reserved.
+            © {new Date().getFullYear()} LAND OF GOD TATTOO STUDIO (Friends Colony, Una, HP). Owner: Rahul Choudhary. All rights reserved.
           </p>
           
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 pr-0 sm:pr-24">

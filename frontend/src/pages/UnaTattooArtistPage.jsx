@@ -31,7 +31,7 @@ export const UnaTattooArtistPage = () => {
     title: 'Land of God — Best Tattoo Artist in Una | #1 Tattoo Designer in Una, HP',
     h1Main: 'Best Tattoo Artist in Una',
     h1Accent: '& Premier Tattoo Designer.',
-    leadText: 'Welcome to Land of God Tattoo Studio — the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh. Led by certified Master Artist Sunil with hospital-grade European hygiene standards.',
+    leadText: 'Welcome to Land of God Tattoo Studio in Friends Colony, Una, owned and founded by Rahul Choudhary. We are the premier destination for sacred Devbhoomi iconography, realistic portraiture, geometric mandalas, and custom fine-line tattooing in Una, Himachal Pradesh, led by certified Master Artist Sunil Kumar with hospital-grade European hygiene standards.',
     description: 'Looking for the best tattoo artist in Una? Land of God Tattoo Studio is the #1 rated tattoo designer in Una, Himachal Pradesh. Master Sunil specializes in sacred Devbhoomi Mahadev tattoos, fine-line realism, portraits, and 100% sterile hygiene. Book consultation today!',
     badge: '#1 Rated in Una, Himachal Pradesh',
     keywords: 'Best Tattoo Artist in Una, Tattoo Designer in Una, Tattoo Artist in Una, Land of God Tattoo Studio, Tattoo Shop in Una Himachal Pradesh, Master Sunil Tattoo Artist, Friends Colony Una Tattoos, Mahadev Trishul Tattoo Una, Sacred Devbhoomi Tattoos',
@@ -444,7 +444,7 @@ export const UnaTattooArtistPage = () => {
               className="bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md hover:border-emerald-500/40"
             >
               <MessageSquare className="w-4 h-4 text-emerald-400" />
-              <span>WhatsApp Master Sunil</span>
+              <span>WhatsApp Studio Team</span>
             </button>
 
             <Link

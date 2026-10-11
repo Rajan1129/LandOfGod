@@ -9,7 +9,7 @@ export const getStudioWhatsAppUrl = (customText = '') => {
   const base = `https://wa.me/${STUDIO_WHATSAPP_NUMBER}`;
   if (!customText) {
     const defaultMsg = encodeURIComponent(
-      `🔱 *LAND OF GOD TATTOO STUDIO (UNA)*\n\nHello Master Sunil! I would like to consult about getting a custom tattoo at your Friends Colony studio.`
+      `🔱 *LAND OF GOD TATTOO STUDIO (UNA)*\n\nHello Rahul Choudhary! I would like to consult about getting a custom tattoo at your Friends Colony, Una studio.`
     );
     return `${base}?text=${defaultMsg}`;
   }
@@ -19,7 +19,7 @@ export const getStudioWhatsAppUrl = (customText = '') => {
 export const createBookingWhatsAppUrl = ({
   name = '',
   phone = '',
-  artist = 'Master Sunil',
+  artist = 'Sunil Kumar',
   style = 'Custom',
   design = 'Custom Concept',
   placement = 'Forearm',
@@ -48,7 +48,7 @@ Please let me know consultation details and availability. Thank you!`;
 export const createArtworkInquiryUrl = (artworkName, artistName = 'Land of God Studio', placement = '') => {
   const message = `🔱 *LAND OF GOD TATTOO STUDIO (UNA) — ARTWORK INQUIRY*
 ━━━━━━━━━━━━━━━━━━━━
-Hello Master Sunil! I am interested in knowing details and getting the "${artworkName}" tattoo${placement ? ` placed on the ${placement}` : ''}.
+Hello Rahul Choudhary / Land of God Team! I am interested in knowing details and getting the "${artworkName}" tattoo${placement ? ` placed on the ${placement}` : ''}.
 
 Please share session time, details, and booking slot availability at your Friends Colony, Una atelier. Thank you!`;
 
@@ -58,7 +58,7 @@ Please share session time, details, and booking slot availability at your Friend
 export const createPortfolioInquiryUrl = (title, style = 'Custom', placement = 'General') => {
   const message = `🔱 *LAND OF GOD TATTOO STUDIO (UNA) — PORTFOLIO PIECE INQUIRY*
 ━━━━━━━━━━━━━━━━━━━━
-Hello Master Sunil! I loved this masterpiece from your gallery:
+Hello Rahul Choudhary / Land of God Team! I loved this masterpiece from your gallery:
 🎨 *Tattoo Title:* ${title}
 🔱 *Style:* ${style}
 📍 *Placement:* ${placement}

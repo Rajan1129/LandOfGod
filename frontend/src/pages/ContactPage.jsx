@@ -24,10 +24,10 @@ export const ContactPage = () => {
             Contact Best Tattoo Studio in Una, Himachal Pradesh
           </h1>
           <h2 className="text-sm sm:text-base text-studio-gold font-serif">
-            Land of God Tattoo Studio — Friends Colony, Una, HP (174303)
+            Land of God Tattoo Studio — Owner: Rahul Choudhary • Friends Colony, Una, HP (174303)
           </h2>
           <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
-            Directly accessible for clients across Una, Nangal (15 mins), Amb (25 mins via NH503), Chintpurni, and Anandpur Sahib. Connect directly with Master Sunil on WhatsApp at <strong className="text-studio-gold">+91 78079 66080</strong> for custom stencil consultations and appointments.
+            Directly accessible for clients across Una, Nangal (15 mins), Amb (25 mins via NH503), Chintpurni, and Anandpur Sahib. Connect directly with Owner Rahul Choudhary and Master Artists on WhatsApp at <strong className="text-studio-gold">+91 78079 66080</strong> for custom stencil consultations and appointments.
           </p>
         </div>
 
