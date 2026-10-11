@@ -61,6 +61,8 @@ export const App = () => {
           <Route path="/blogs" element={<BlogPage />} />
           <Route path="/journal" element={<BlogPage />} />
           <Route path="/blog/:slugOrId" element={<BlogDetailPage />} />
+          <Route path="/blogs/:slugOrId" element={<BlogDetailPage />} />
+          <Route path="/journal/:slugOrId" element={<BlogDetailPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
