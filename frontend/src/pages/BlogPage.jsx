@@ -183,12 +183,15 @@ export const BlogPage = () => {
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div>
                     <div className="flex items-center space-x-3 text-xs text-studio-textMuted mb-2">
+                      <span className="flex items-center space-x-1.5 text-amber-300 font-semibold bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-md">
+                        <User className="w-3.5 h-3.5 text-amber-400" />
+                        <span>{blog.author || 'Sunil Kumar'}</span>
+                      </span>
+                      <span>•</span>
                       <span className="flex items-center space-x-1">
                         <Clock className="w-3.5 h-3.5 text-studio-bronze" />
                         <span>{blog.readTimeMinutes || 4} min read</span>
                       </span>
-                      <span>•</span>
-                      <span className="truncate">{blog.author}</span>
                     </div>
 
                     <h2 className="font-display font-bold text-lg text-studio-textMain uppercase line-clamp-2 group-hover:text-studio-bronzeLight transition-colors">
