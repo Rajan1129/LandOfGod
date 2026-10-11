@@ -273,7 +273,7 @@ const getAuthenticImageForTitle = (title, currentImage) => {
       {/* Lightbox Modal */}
       {lightbox && (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative max-w-4xl w-full bg-studio-card border border-studio-border rounded-xl overflow-hidden shadow-2xl">
+          <div className="relative max-w-4xl w-full max-h-[92vh] overflow-y-auto bg-studio-card border border-studio-border rounded-xl shadow-2xl">
             <button
               onClick={() => setLightbox(null)}
               className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 text-white hover:bg-black/90"
@@ -281,7 +281,7 @@ const getAuthenticImageForTitle = (title, currentImage) => {
               <X className="w-5 h-5" />
             </button>
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="h-[480px] bg-black flex items-center justify-center p-2">
+              <div className="h-64 sm:h-80 md:h-[480px] bg-black flex items-center justify-center p-2">
                 <img
                   src={getFullImageUrl(lightbox.coverImage || lightbox.images?.[0])}
                   alt={lightbox.title}

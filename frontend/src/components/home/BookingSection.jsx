@@ -256,7 +256,7 @@ export const BookingSection = () => {
                 <span className="text-[11px] font-bold uppercase tracking-wider text-studio-textMuted block mb-2">
                   Available Daily Time Slots ({selectedDate}):
                 </span>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {availableSlots.map((slot) => (
                     <button
                       key={slot.time}

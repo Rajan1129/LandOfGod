@@ -49,10 +49,10 @@ export const FloatingWhatsAppButton = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 select-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 select-none max-w-[calc(100vw-2rem)]">
       {/* Quick Chat Popup Card */}
       {isOpen && (
-        <div className="mb-3 w-[340px] sm:w-[380px] ancient-stone-card ancient-ornate-corner rounded-2xl shadow-2xl border border-amber-400/50 overflow-hidden animate-in slide-in-from-bottom duration-300">
+        <div className="mb-3 w-[calc(100vw-2rem)] max-w-[360px] sm:w-[380px] ancient-stone-card ancient-ornate-corner rounded-2xl shadow-2xl border border-amber-400/50 overflow-hidden animate-in slide-in-from-bottom duration-300">
           {/* Header */}
           <div className="bg-gradient-to-r from-emerald-900 via-emerald-950 to-black p-4 flex items-center justify-between border-b border-emerald-500/30">
             <div className="flex items-center space-x-3">

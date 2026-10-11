@@ -613,7 +613,7 @@ export const Interactive3DStudio = ({
 
       {/* 2. CENTER: 3D MANNEQUIN TURNTABLE CANVAS */}
       <div
-        className={`relative w-full ${compact ? 'h-[480px] sm:h-[540px]' : 'h-[560px] sm:h-[620px] md:h-[680px]'} flex items-center justify-center bg-gradient-to-b from-zinc-950 via-zinc-900/70 to-zinc-950 rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing`}
+        className={`relative w-full ${compact ? 'h-[400px] sm:h-[500px]' : 'h-[440px] sm:h-[540px] md:h-[640px] lg:h-[680px]'} flex items-center justify-center bg-gradient-to-b from-zinc-950 via-zinc-900/70 to-zinc-950 rounded-2xl sm:rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -787,10 +787,10 @@ export const Interactive3DStudio = ({
         </div>
 
         {/* Drag Guidance Badge */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-20">
-          <div className="flex items-center space-x-2 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-[10px] text-zinc-300 shadow-xl">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span>Drag horizontally to rotate 360° • Click body region to fit stencil</span>
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-20 w-full px-4 flex justify-center">
+          <div className="flex items-center space-x-2 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/10 text-[9px] sm:text-[10px] text-zinc-300 shadow-xl max-w-full text-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <span className="truncate sm:whitespace-normal">Drag horizontally to rotate 360° • Tap body to fit</span>
           </div>
         </div>
 

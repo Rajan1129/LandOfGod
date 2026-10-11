@@ -83,15 +83,15 @@ export const ContactSection = () => {
             />
             
             {/* Overlay Tag */}
-            <div className="absolute top-4 left-4 bg-zinc-900/95 backdrop-blur-md p-3.5 rounded-xl shadow-2xl text-left flex items-center space-x-3 border border-white/10">
-              <div className="w-10 h-10 rounded-full bg-black p-1 border border-amber-400/40 shrink-0 flex items-center justify-center">
+            <div className="absolute top-4 left-4 right-4 sm:right-auto max-w-[calc(100%-2rem)] sm:max-w-xs bg-zinc-900/95 backdrop-blur-md p-3 sm:p-3.5 rounded-xl shadow-2xl text-left flex items-center space-x-3 border border-white/10">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black p-1 border border-amber-400/40 shrink-0 flex items-center justify-center">
                 <img src="/logo.png" alt={`${studioName} Logo`} className="w-full h-full object-contain rounded-full" />
               </div>
-              <div>
-                <div className="text-xs font-bold text-white uppercase tracking-wider">
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-bold text-white uppercase tracking-wider truncate">
                   {studioName}
                 </div>
-                <p className="text-[11px] text-zinc-400 mt-0.5">
+                <p className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 truncate">
                   {street}, {city}, {state} {zip}
                 </p>
               </div>

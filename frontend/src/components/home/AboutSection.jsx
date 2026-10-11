@@ -41,7 +41,7 @@ export const AboutSection = () => {
             </div>
 
             {/* Highlights */}
-            <div className="grid grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2">
               <div className="bg-zinc-900/80 border border-white/10 p-4 rounded-xl flex items-start space-x-3">
                 <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                 <div>

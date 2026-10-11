@@ -429,10 +429,10 @@ export const UnaTattooArtistPage = () => {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 pt-4 w-full">
             <button
               onClick={() => navigate('/booking')}
-              className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:brightness-110 text-black font-bold py-4 px-8 text-xs sm:text-sm uppercase tracking-[0.16em] rounded-2xl shadow-[0_12px_30px_rgba(251,191,36,0.35)] flex items-center space-x-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full sm:w-auto bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:brightness-110 text-black font-bold py-3.5 sm:py-4 px-6 sm:px-8 text-xs sm:text-sm uppercase tracking-[0.16em] rounded-2xl shadow-[0_12px_30px_rgba(251,191,36,0.35)] flex items-center justify-center space-x-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Calendar className="w-4 h-4 stroke-[2.5]" />
               <span>Book Appointment</span>
@@ -441,7 +441,7 @@ export const UnaTattooArtistPage = () => {
 
             <button
               onClick={() => handleWhatsApp(`Inquiry for ${pageMeta.h1Main}`)}
-              className="bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md hover:border-emerald-500/40"
+              className="w-full sm:w-auto bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white font-medium py-3.5 sm:py-4 px-6 sm:px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center justify-center space-x-2 backdrop-blur-md hover:border-emerald-500/40"
             >
               <MessageSquare className="w-4 h-4 text-emerald-400" />
               <span>WhatsApp Studio Team</span>
@@ -449,7 +449,7 @@ export const UnaTattooArtistPage = () => {
 
             <Link
               to="/interactive-3d"
-              className="bg-zinc-900/80 hover:bg-zinc-800 border border-amber-400/30 text-amber-300 hover:text-amber-200 font-medium py-4 px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center space-x-2 backdrop-blur-md"
+              className="w-full sm:w-auto bg-zinc-900/80 hover:bg-zinc-800 border border-amber-400/30 text-amber-300 hover:text-amber-200 font-medium py-3.5 sm:py-4 px-6 sm:px-7 text-xs sm:text-sm rounded-2xl transition-all flex items-center justify-center space-x-2 backdrop-blur-md"
             >
               <Compass className="w-4 h-4 text-amber-400" />
               <span>3D Body Visualizer</span>
@@ -457,7 +457,7 @@ export const UnaTattooArtistPage = () => {
           </div>
 
           {/* Trust points */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 max-w-4xl mx-auto border-t border-white/10 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-8 max-w-4xl mx-auto border-t border-white/10 text-left">
             <div className="p-3.5 rounded-2xl bg-black/55 border border-white/10 backdrop-blur-md flex items-center space-x-3">
               <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
               <div>

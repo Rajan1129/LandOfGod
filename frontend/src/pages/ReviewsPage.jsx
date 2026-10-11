@@ -274,7 +274,7 @@ export const ReviewsPage = () => {
       {/* Review Submission Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="max-w-md w-full glass-panel-dark p-6 rounded-2xl border border-studio-gold/60 shadow-2xl space-y-4">
+          <div className="max-w-md w-full glass-panel-dark p-5 sm:p-6 rounded-2xl border border-studio-gold/60 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
             <h3 className="font-display font-black text-xl text-studio-textMain uppercase tracking-wider text-center">
               Share Your Studio Experience
             </h3>

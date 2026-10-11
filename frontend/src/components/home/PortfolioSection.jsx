@@ -365,7 +365,7 @@ export const PortfolioSection = () => {
           onClick={() => setSelectedLightbox(null)}
         >
           <div
-            className="relative max-w-4xl w-full bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+            className="relative max-w-4xl w-full max-h-[92vh] overflow-y-auto bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -376,7 +376,7 @@ export const PortfolioSection = () => {
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="h-96 md:h-[500px] bg-black">
+              <div className="h-64 sm:h-80 md:h-[500px] bg-black flex items-center justify-center">
                 <img
                   src={getFullImageUrl(selectedLightbox.coverImage || selectedLightbox.images?.[0])}
                   alt={selectedLightbox.title}

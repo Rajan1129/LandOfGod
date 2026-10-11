@@ -14,7 +14,7 @@ export const PageHero = ({
   return (
     <section
       aria-label={typeof title === 'string' ? title : 'Page Header'}
-      className={`relative pt-32 ${compact ? 'pb-14' : 'pb-20'} overflow-hidden text-center ${className}`}
+      className={`relative pt-28 sm:pt-32 ${compact ? 'pb-10 sm:pb-14' : 'pb-14 sm:pb-20'} overflow-hidden text-center ${className}`}
     >
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">
@@ -32,23 +32,23 @@ export const PageHero = ({
 
       {/* Hero Content */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
           {badge && (
             <div>
-              <span className="text-[11px] sm:text-xs uppercase tracking-[0.25em] font-bold text-studio-gold font-serif inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-black/65 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/50">
+              <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold text-studio-gold font-serif inline-flex items-center space-x-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-black/65 border border-amber-400/30 backdrop-blur-md shadow-lg shadow-black/50 max-w-full truncate">
                 <span>{badge}</span>
               </span>
             </div>
           )}
 
           {title && (
-            <h1 className="ancient-carved-heading text-3xl sm:text-5xl uppercase tracking-tight text-white leading-tight">
+            <h1 className="ancient-carved-heading text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight break-words">
               {title}
             </h1>
           )}
 
           {subtitle && (
-            <h2 className="text-sm sm:text-base text-studio-gold font-serif">
+            <h2 className="text-xs sm:text-sm md:text-base text-studio-gold font-serif leading-snug">
               {subtitle}
             </h2>
           )}

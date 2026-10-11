@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { artistsAPI } from '../services/api';
 import { Star, Calendar, ArrowRight, Instagram, Sparkles, CheckCircle2 } from 'lucide-react';
 
+import { PageHero } from '../components/common/PageHero';
+
 export const ArtistsPage = () => {
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,29 +26,27 @@ export const ArtistsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-studio-bg">
+    <div className="min-h-screen pb-20 bg-studio-bg">
       <Helmet>
-        <title>Resident Master Tattoo Artists — INK CARVERS</title>
+        <title>Resident Master Tattoo Artists — LAND OF GOD TATTOO STUDIO (Una, HP)</title>
         <meta
           name="description"
-          content="Meet our international award-winning master tattoo artists specializing in Realism, Fine Line, Sacred Geometry, Blackwork, and Watercolor."
+          content="Meet our master tattoo artists led by Rahul Choudhary in Friends Colony, Una (HP). Specializing in Realism, Fine Line, Sacred Devbhoomi Geometry, Blackwork, and Custom Stencils."
         />
+        <meta name="keywords" content="Tattoo Artists Una, Rahul Choudhary Tattoo Artist, Best Tattooist Una Himachal Pradesh, Land of God Tattoo Masters" />
       </Helmet>
 
+      {/* Hero Section with High-Resolution Studio Background Image */}
+      <PageHero
+        badge="॥ MASTER TATTOOISTS & INK ARTISANS ॥"
+        title="Resident Tattoo Masters"
+        subtitle="Led by Rahul Choudhary • Friends Colony, Una, Himachal Pradesh"
+        description="Each resident artist brings decades of dedicated discipline, refined needle weight precision, and distinct signature aesthetics."
+        bgImage="/images/tattoo_studio_interior_lux.jpg"
+        bgAlt="Land of God Tattoo Studio Master Tattooists"
+      />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <span className="text-xs uppercase tracking-[0.25em] font-bold text-studio-bronzeLight">
-            Master Craftsmanship
-          </span>
-          <h1 className="font-condensed font-black text-4xl sm:text-5xl uppercase tracking-tight text-studio-textMain">
-            Resident Tattoo Masters
-          </h1>
-          <p className="text-xs sm:text-sm text-studio-textMuted">
-            Each resident artist brings decades of dedicated discipline, refined needle weight precision, and distinct signature aesthetics.
-          </p>
-        </div>
 
         {/* Artists Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
