@@ -12,6 +12,7 @@ import { getFullImageUrl } from '../utils/imageHelper';
 
 export const Interactive3DPage = () => {
   const [selectedBodyArea, setSelectedBodyArea] = useState('Forearm');
+  const [avatarGender, setAvatarGender] = useState('female');
   const [selectedStyle, setSelectedStyle] = useState('All');
   const [designs, setDesigns] = useState(TATTOO_ARTWORKS_CATALOG);
   const [selectedDesign, setSelectedDesign] = useState(TATTOO_ARTWORKS_CATALOG[0]);
@@ -193,6 +194,44 @@ export const Interactive3DPage = () => {
           </div>
         </div>
 
+        {/* Model Avatar Selection & Target Muscle Filters */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4">
+          {/* Avatar Model Toggle Pills */}
+          <div className="flex items-center gap-1.5 p-1 bg-zinc-900/90 rounded-2xl border border-white/10 w-fit shrink-0 shadow-sm">
+            <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider px-2">
+              Model:
+            </span>
+            <button
+              type="button"
+              onClick={() => setAvatarGender('female')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                avatarGender === 'female'
+                  ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold shadow-md shadow-amber-400/25'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="text-xs">♀</span>
+              <span>Female Avatar</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setAvatarGender('male')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                avatarGender === 'male'
+                  ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold shadow-md shadow-amber-400/25'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="text-xs">♂</span>
+              <span>Male Avatar</span>
+            </button>
+          </div>
+
+          <div className="text-[11px] text-zinc-400 hidden md:block">
+            Drag to rotate 360° • Zoom • Select placement
+          </div>
+        </div>
+
         {/* Anatomical Zone Filter Pills */}
         <div className="flex items-center flex-wrap gap-1.5 mb-4 bg-zinc-900/60 p-2 rounded-2xl border border-white/5">
           <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider px-2">
@@ -224,6 +263,8 @@ export const Interactive3DPage = () => {
             selectedDesign={selectedDesign}
             onSelectDesign={setSelectedDesign}
             designs={designs}
+            avatarGender={avatarGender}
+            onAvatarGenderChange={setAvatarGender}
           />
         </div>
 

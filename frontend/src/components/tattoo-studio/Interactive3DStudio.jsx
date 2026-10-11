@@ -16,7 +16,7 @@ import {
 import { getFullImageUrl } from '../../utils/imageHelper';
 
 // 8 High-Resolution Real Human Male Perspectives for 360° Studio Exploration
-const ANATOMY_360_FRAMES = [
+const MASCULINE_360_FRAMES = [
   { angle: 0, label: '0° Front', src: '/images/masculine_front.jpg', flip: false },
   { angle: 45, label: '45° Front-Right', src: '/images/masculine_front_right.jpg', flip: false },
   { angle: 90, label: '90° Right', src: '/images/masculine_right.jpg', flip: false },
@@ -26,6 +26,20 @@ const ANATOMY_360_FRAMES = [
   { angle: 270, label: '270° Left', src: '/images/masculine_right.jpg', flip: true },
   { angle: 315, label: '315° Front-Left', src: '/images/masculine_front_right.jpg', flip: true },
 ];
+
+// 8 High-Resolution Real Human Female Perspectives for 360° Studio Exploration
+const FEMININE_360_FRAMES = [
+  { angle: 0, label: '0° Front', src: '/images/female_front.jpg', flip: false },
+  { angle: 45, label: '45° Front-Right', src: '/images/female_front_right.jpg', flip: false },
+  { angle: 90, label: '90° Right', src: '/images/female_right.jpg', flip: false },
+  { angle: 135, label: '135° Back-Right', src: '/images/female_back_right.jpg', flip: false },
+  { angle: 180, label: '180° Back', src: '/images/female_back.jpg', flip: false },
+  { angle: 225, label: '225° Back-Left', src: '/images/female_back_right.jpg', flip: true },
+  { angle: 270, label: '270° Left', src: '/images/female_right.jpg', flip: true },
+  { angle: 315, label: '315° Front-Left', src: '/images/female_front_right.jpg', flip: true },
+];
+
+const ANATOMY_360_FRAMES = MASCULINE_360_FRAMES;
 
 // Clean anatomical coordinates on the real human body across all 360° frames
 const ANATOMICAL_PLACEMENTS = {
@@ -281,7 +295,19 @@ export const Interactive3DStudio = ({
   selectedDesign,
   placedTattoos = [],
   compact = false,
+  avatarGender: controlledGender,
+  onAvatarGenderChange,
 }) => {
+  // Model Avatar Gender State (Female / Male)
+  const [internalGender, setInternalGender] = useState('female');
+  const avatarGender = controlledGender !== undefined ? controlledGender : internalGender;
+  const setAvatarGender = (g) => {
+    setInternalGender(g);
+    if (onAvatarGenderChange) onAvatarGenderChange(g);
+  };
+
+  const activeFrames = avatarGender === 'female' ? FEMININE_360_FRAMES : MASCULINE_360_FRAMES;
+
   // Continuous fluid angle physics refs
   const targetAngleRef = useRef(0);
   const currentAngleRef = useRef(0);
@@ -311,9 +337,9 @@ export const Interactive3DStudio = ({
     setUserRotate(0);
   }, [selectedBodyArea, selectedDesign?.id, selectedDesign?._id, selectedDesign?.name]);
 
-  // Preload all real human 360 frame images into cache
+  // Preload all real human 360 frame images for both female and male into browser cache
   useEffect(() => {
-    ANATOMY_360_FRAMES.forEach((frame) => {
+    [...FEMININE_360_FRAMES, ...MASCULINE_360_FRAMES].forEach((frame) => {
       const img = new Image();
       img.src = frame.src;
     });
@@ -505,7 +531,37 @@ export const Interactive3DStudio = ({
           </div>
         </div>
 
-        {/* Center: Angle Quick Presets */}
+        {/* Center: Model Avatar Gender Switcher (Female / Male) */}
+        <div className="flex items-center p-1 bg-black/70 rounded-xl border border-white/10 shrink-0 shadow-inner">
+          <button
+            type="button"
+            onClick={() => setAvatarGender('female')}
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+              avatarGender === 'female'
+                ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold shadow-md shadow-amber-400/20'
+                : 'text-zinc-400 hover:text-white hover:bg-white/5'
+            }`}
+            title="Switch to Female Anatomical Model"
+          >
+            <span className="text-xs">♀</span>
+            <span>Female Model</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setAvatarGender('male')}
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+              avatarGender === 'male'
+                ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold shadow-md shadow-amber-400/20'
+                : 'text-zinc-400 hover:text-white hover:bg-white/5'
+            }`}
+            title="Switch to Male Anatomical Model"
+          >
+            <span className="text-xs">♂</span>
+            <span>Male Model</span>
+          </button>
+        </div>
+
+        {/* Center-Right: Angle Quick Presets */}
         <div className="hidden lg:flex items-center space-x-1 bg-black/60 p-1 rounded-xl border border-white/10">
           {anglePresets.map((preset) => {
             const isNear = Math.abs(normalizedTheta - preset.angle) < 22.5 ||
@@ -621,6 +677,36 @@ export const Interactive3DStudio = ({
         onPointerLeave={handlePointerLeave}
         style={{ touchAction: 'none' }}
       >
+        {/* Floating Avatar Model Selector Badge inside 3D Viewport */}
+        <div className="absolute top-3 left-3 z-30 flex items-center p-1 bg-black/85 backdrop-blur-md rounded-2xl border border-amber-400/40 shadow-2xl">
+          <button
+            type="button"
+            onClick={() => setAvatarGender('female')}
+            className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+              avatarGender === 'female'
+                ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black shadow-md shadow-amber-400/30 font-extrabold'
+                : 'text-zinc-300 hover:text-white hover:bg-white/10 font-bold'
+            }`}
+            title="Switch to Female Avatar"
+          >
+            <span className="text-xs sm:text-sm font-bold">♀</span>
+            <span>Female</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setAvatarGender('male')}
+            className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+              avatarGender === 'male'
+                ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black shadow-md shadow-amber-400/30 font-extrabold'
+                : 'text-zinc-300 hover:text-white hover:bg-white/10 font-bold'
+            }`}
+            title="Switch to Male Avatar"
+          >
+            <span className="text-xs sm:text-sm font-bold">♂</span>
+            <span>Male</span>
+          </button>
+        </div>
+
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-amber-500/[0.04] rounded-full blur-[130px]" />
@@ -636,7 +722,7 @@ export const Interactive3DStudio = ({
         >
           {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (SEAMLESS 60FPS CROSSFADE) */}
           <div className="relative w-full h-full">
-            {ANATOMY_360_FRAMES.map((f, i) => {
+            {activeFrames.map((f, i) => {
               let frameOpacity = 0;
               if (i === frameIdx) {
                 frameOpacity = 1 - easeT;
@@ -646,9 +732,9 @@ export const Interactive3DStudio = ({
 
               return (
                 <img
-                  key={`${f.src}-${f.flip ? 'flip' : 'normal'}`}
+                  key={`${avatarGender}-${f.src}-${f.flip ? 'flip' : 'normal'}`}
                   src={f.src}
-                  alt={f.label}
+                  alt={`${avatarGender} ${f.label}`}
                   draggable={false}
                   className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none filter contrast-105 brightness-105 drop-shadow-[0_20px_40px_rgba(0,0,0,0.85)] transform-gpu will-change-transform"
                   style={{
