@@ -25,10 +25,10 @@ export const AboutPage = () => {
             Best Tattoo Artist in Una, Himachal Pradesh
           </h1>
           <h2 className="text-sm sm:text-base text-studio-gold font-serif">
-            Land of God Tattoo Studio — Founded &amp; Owned by Rahul Choudhary • Friends Colony, Una (HP)
+            Land of God Tattoo Studio — Owned &amp; Led by Rahul Choudhary • Friends Colony, Una (HP)
           </h2>
           <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
-            Welcome to Land of God Tattoo Studio in Friends Colony, Una (HP), founded and owned by <strong className="text-white font-semibold">Rahul Choudhary</strong> and led by master tattooist <strong className="text-white font-semibold">Sunil Kumar</strong> alongside senior artist <strong className="text-white font-semibold">Aman Verma</strong>. Our atelier brings world-class custom stenciling, hyper-realistic portraits, sacred Mahadev calligraphy, and single-use cartridge safety to tattoo lovers across Himachal Pradesh and Punjab.
+            Welcome to Land of God Tattoo Studio in Friends Colony, Una (HP), founded, owned, and led by Master Tattoo Artist <strong className="text-white font-semibold">Rahul Choudhary</strong> alongside resident artist <strong className="text-white font-semibold">Aman Verma</strong>. Our atelier brings world-class custom stenciling, hyper-realistic portraits, sacred Mahadev calligraphy, and single-use cartridge safety to tattoo lovers across Himachal Pradesh and Punjab.
           </p>
         </div>
 

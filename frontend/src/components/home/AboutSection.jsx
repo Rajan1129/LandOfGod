@@ -9,7 +9,7 @@ export const AboutSection = () => {
   const street = settings?.address?.street || 'Friends Colony';
   const city = settings?.address?.city || 'Una';
   const state = settings?.address?.state || 'Himachal Pradesh';
-  const mainStory = settings?.aboutContent?.mainStory || `${studioName} is Northern India's premier bespoke tattoo atelier, owned and founded by Rahul Choudhary and led by master tattooist Sunil Kumar alongside senior artist Aman Verma. Located in ${street}, ${city}, we specialize in hyper-realistic portraits, sacred geometry, fine-line mantras, and custom body art.`;
+  const mainStory = settings?.aboutContent?.mainStory || `${studioName} is Northern India's premier bespoke tattoo atelier, owned and founded by Rahul Choudhary alongside resident artist Aman Verma. Located in ${street}, ${city}, we specialize in hyper-realistic portraits, sacred geometry, fine-line mantras, and custom body art.`;
   const mission = settings?.aboutContent?.mission || 'We prioritize client safety with hospital-grade sterilization, 100% single-use membrane needle cartridges, and premium vegan, hypoallergenic organic pigments.';
 
   return (
@@ -21,10 +21,10 @@ export const AboutSection = () => {
           <div className="lg:col-span-6 space-y-6 text-left">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                #1 Tattoo Studio in Una, Himachal Pradesh • Owner: Rahul Choudhary
+                #1 Tattoo Studio in Una, Himachal Pradesh
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-1">
-                Best Tattoo Artist in Una — Sunil Kumar
+                Best Tattoo Artist in Una — Rahul Choudhary
               </h2>
               <p className="text-zinc-400 text-sm mt-2">
                 {studioName} • {street}, {city}, {state} (Serving Una, Nangal, Amb &amp; Chintpurni)

@@ -32,7 +32,7 @@ export const Hero = () => {
 
   const handleWhatsApp = () => {
     const summary = 'Consultation Inquiry - Land of God Tattoo Studio';
-    const waUrl = createArtworkInquiryUrl(summary, 'Master Sunil', 'Custom');
+    const waUrl = createArtworkInquiryUrl(summary, 'Rahul Choudhary', 'Custom');
     window.open(waUrl, '_blank');
   };
 

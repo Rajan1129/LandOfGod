@@ -185,7 +185,7 @@ export const BlogPage = () => {
                     <div className="flex items-center space-x-3 text-xs text-studio-textMuted mb-2">
                       <span className="flex items-center space-x-1.5 text-amber-300 font-semibold bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-md">
                         <User className="w-3.5 h-3.5 text-amber-400" />
-                        <span>{blog.author || 'Sunil Kumar'}</span>
+                        <span>{blog.author || 'Rahul Choudhary'}</span>
                       </span>
                       <span>•</span>
                       <span className="flex items-center space-x-1">

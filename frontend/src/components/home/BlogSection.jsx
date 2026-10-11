@@ -46,7 +46,7 @@ const DEFAULT_BLOGS = [
     coverImage: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80',
     category: 'Tattoo Preparation',
     readTimeMinutes: 5,
-    author: 'Sunil Kumar',
+    author: 'Rahul Choudhary',
   },
   {
     _id: 'b2',
@@ -56,7 +56,7 @@ const DEFAULT_BLOGS = [
     coverImage: 'https://images.unsplash.com/photo-1611590027211-b954fd027b51?auto=format&fit=crop&w=1000&q=80',
     category: 'Sacred Devbhoomi',
     readTimeMinutes: 4,
-    author: 'Sunil Kumar',
+    author: 'Rahul Choudhary',
   },
   {
     _id: 'b3',

@@ -152,7 +152,7 @@ export const BlogDetailPage = () => {
             <div className="flex items-center space-x-4">
               <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-xs">
                 <User className="w-3.5 h-3.5 text-amber-400" />
-                <span>Written by: {blog.author || 'Sunil Kumar'}</span>
+                <span>Written by: {blog.author || 'Rahul Choudhary'}</span>
               </span>
               <span>•</span>
               <span className="flex items-center space-x-1">

@@ -5,9 +5,9 @@ import { Star, ArrowRight, Instagram, Calendar, Sparkles } from 'lucide-react';
 
 const DEFAULT_ARTISTS = [
   {
-    _id: 'sunil-default',
-    name: 'MASTER SUNIL (UNA)',
-    slug: 'master-sunil',
+    _id: 'rahul-default',
+    name: 'RAHUL CHOUDHARY',
+    slug: 'rahul-choudhary',
     title: 'Founder & Master Tattooist — Sacred Devbhoomi & Realism',
     bio: 'Over a decade of mastery in custom Mahadev sacred geometry, spiritual Trishul archetypes, hyper-realistic portraits, and intricate fine line needlework in Una, Himachal Pradesh.',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',

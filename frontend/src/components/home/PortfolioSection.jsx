@@ -242,7 +242,7 @@ export const PortfolioSection = () => {
               Custom Tattoo Gallery — Best Tattoo Designer in Una
             </h2>
             <p className="text-zinc-400 text-xs sm:text-sm mt-1">
-              Explore bespoke tattoos crafted by Master Sunil &amp; resident artists at Land of God Tattoo Studio in Friends Colony, Una (HP)
+              Explore bespoke tattoos crafted by Rahul Choudhary &amp; resident artists at Land of God Tattoo Studio in Friends Colony, Una (HP)
             </p>
           </div>
 

@@ -165,7 +165,7 @@ export const BookingSection = () => {
             Book Best Tattoo Artist in Una, Himachal Pradesh
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm mt-1">
-            Reserve your private consultation with Master Sunil &amp; resident artists at Friends Colony, Una (HP). Welcoming clients from Una, Nangal, Amb, and Chintpurni.
+            Reserve your private consultation with Rahul Choudhary &amp; resident artists at Friends Colony, Una (HP). Welcoming clients from Una, Nangal, Amb, and Chintpurni.
           </p>
         </div>
 

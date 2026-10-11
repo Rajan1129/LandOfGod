@@ -340,7 +340,7 @@ export const Interactive3DPage = () => {
                   <div className="text-[11px] text-zinc-400 pt-0.5 flex items-center gap-2 flex-wrap">
                     <span className="text-amber-400 font-semibold flex items-center gap-1">
                       <Sparkles className="w-3 h-3" />
-                      Artist: {selectedDesign.artist || 'Master Sunil'} ({selectedDesign.artistTitle || 'Certified Master Tattooist'})
+                      Artist: {selectedDesign.artist || 'Rahul Choudhary'} ({selectedDesign.artistTitle || 'Master Tattooist & Owner'})
                     </span>
                     <span className="text-zinc-600">•</span>
                     <span>Currently placed on <strong className="text-white bg-zinc-800/80 px-2 py-0.5 rounded border border-white/10">{selectedBodyArea}</strong></span>

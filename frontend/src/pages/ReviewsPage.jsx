@@ -163,7 +163,7 @@ export const ReviewsPage = () => {
             Land of God Tattoo Studio — Client Testimonials from Una, Nangal, Amb &amp; Chintpurni
           </h2>
           <p className="text-xs sm:text-sm text-studio-textMuted font-serif leading-relaxed">
-            Discover why tattoo collectors across Himachal Pradesh and Punjab rate Master Sunil 5.0★ on Google for sterile safety, custom Devbhoomi designs, and hyper-realistic body art.
+            Discover why tattoo collectors across Himachal Pradesh and Punjab rate Rahul Choudhary 5.0★ on Google for sterile safety, custom Devbhoomi designs, and hyper-realistic body art.
           </p>
 
           {/* Action Buttons */}
