@@ -5,7 +5,7 @@ import { blogsAPI } from '../services/api';
 import { Search, Clock, ArrowRight, User } from 'lucide-react';
 import { getFullImageUrl } from '../utils/imageHelper';
 
-export const getArticleCoverImage = (blog) => {
+const getArticleCoverImage = (blog) => {
   if (!blog) return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
 
   // 1. If admin uploaded or custom photo was provided (Data URL, /uploads/, Imgur, Drive, etc.)
@@ -38,42 +38,54 @@ export const getArticleCoverImage = (blog) => {
   return blog?.coverImage || 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
 };
 
+import { DEFAULT_BLOG_ARTICLES } from '../data/blogArticles';
+
 export const BlogPage = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(DEFAULT_BLOG_ARTICLES);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const categories = [
     'All',
+    'Tattoo Preparation',
+    'Sacred Devbhoomi',
+    'Tattoo Aftercare',
     'Tattoo Inspiration',
     'Tattoo Styles',
-    'Tattoo Preparation',
-    'Tattoo Aftercare',
     'Artist Stories',
-    'Studio News',
   ];
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      setLoading(true);
       try {
         const params = {};
         if (selectedCategory !== 'All') params.category = selectedCategory;
         if (search) params.search = search;
         const res = await blogsAPI.getAll(params);
-        if (res.success && res.blogs) {
+        if (res.success && res.blogs && res.blogs.length > 0) {
           const mapped = res.blogs.map(b => ({
             ...b,
             coverImage: getArticleCoverImage(b)
           }));
           setBlogs(mapped);
+          return;
         }
       } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+        console.warn('[BlogPage] API fetch error, using curated editorial fallback articles');
       }
+
+      // Filter local fallback articles
+      let list = [...DEFAULT_BLOG_ARTICLES];
+      if (selectedCategory !== 'All') {
+        list = list.filter(b => b.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+      }
+      if (search) {
+        const s = search.toLowerCase();
+        list = list.filter(b => b.title.toLowerCase().includes(s) || b.excerpt.toLowerCase().includes(s) || b.content.toLowerCase().includes(s));
+      }
+      setBlogs(list.map(b => ({ ...b, coverImage: getArticleCoverImage(b) })));
+      setLoading(false);
     };
     fetchBlogs();
   }, [selectedCategory, search]);

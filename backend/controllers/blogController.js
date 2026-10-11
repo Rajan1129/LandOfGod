@@ -37,9 +37,13 @@ export const getBlogs = async (req, res, next) => {
 
 export const getBlogBySlug = async (req, res, next) => {
   try {
-    const blog = await Blog.findOne({
-      $or: [{ slug: req.params.slugOrId }, { _id: req.params.slugOrId.match(/^[0-9a-fA-F]{24}$/) ? req.params.slugOrId : null }]
-    });
+    const target = req.params.slugOrId;
+    const isId = /^[0-9a-fA-F]{24}$/.test(target);
+    const query = isId
+      ? { $or: [{ _id: target }, { slug: target }] }
+      : { $or: [{ slug: target }, { slug: target.toLowerCase() }] };
+
+    const blog = await Blog.findOne(query);
 
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Article not found' });

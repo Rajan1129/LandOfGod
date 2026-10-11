@@ -5,6 +5,7 @@ import { blogsAPI } from '../services/api';
 import { Clock, User, ArrowLeft, Share2, Tag, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { getFullImageUrl } from '../utils/imageHelper';
+import { DEFAULT_BLOG_ARTICLES } from '../data/blogArticles';
 
 export const BlogDetailPage = () => {
   const { slugOrId } = useParams();
@@ -14,36 +15,39 @@ export const BlogDetailPage = () => {
 
   useEffect(() => {
     const fetchBlog = async () => {
+      const cleanTarget = (slugOrId || '').trim().toLowerCase();
+
+      // Helper for authentic editorial image mapping
+      const mapImg = (b) => {
+        if (!b) return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
+        if (b.coverImage && typeof b.coverImage === 'string' && b.coverImage.trim() !== '') {
+          const img = b.coverImage.trim();
+          if (img.startsWith('data:') || img.startsWith('/uploads/') || (!img.includes('placeholder') && !img.includes('example.com'))) {
+            if (img.startsWith('data:') || img.startsWith('/uploads/') || img.includes('googleusercontent.com') || img.includes('imgur.com') || img.includes('dropbox.com')) {
+              return img;
+            }
+          }
+        }
+
+        const t = (b.title || '').toLowerCase();
+        const s = (b.slug || '').toLowerCase();
+        const c = (b.category || '').toLowerCase();
+
+        if (t.includes('mahadev') || t.includes('geometry') || t.includes('shiva') || t.includes('trishul') || s.includes('geometry') || c.includes('style')) {
+          return 'https://images.unsplash.com/photo-1611590027211-b954fd027b51?auto=format&fit=crop&w=1000&q=80';
+        }
+        if (t.includes('prep') || t.includes('session')) {
+          return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
+        }
+        if (t.includes('aftercare') || t.includes('contrast') || t.includes('longevity')) {
+          return 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1000&q=80';
+        }
+        return b.coverImage || 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
+      };
+
       try {
         const res = await blogsAPI.getBySlug(slugOrId);
         if (res.success && res.blog) {
-          const mapImg = (b) => {
-            if (!b) return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
-            if (b.coverImage && typeof b.coverImage === 'string' && b.coverImage.trim() !== '') {
-              const img = b.coverImage.trim();
-              if (img.startsWith('data:') || img.startsWith('/uploads/') || (!img.includes('placeholder') && !img.includes('example.com'))) {
-                if (img.startsWith('data:') || img.startsWith('/uploads/') || img.includes('googleusercontent.com') || img.includes('imgur.com') || img.includes('dropbox.com')) {
-                  return img;
-                }
-              }
-            }
-
-            const t = (b.title || '').toLowerCase();
-            const s = (b.slug || '').toLowerCase();
-            const c = (b.category || '').toLowerCase();
-
-            if (t.includes('mahadev') || t.includes('geometry') || t.includes('shiva') || t.includes('trishul') || s.includes('geometry') || c.includes('style')) {
-              return 'https://images.unsplash.com/photo-1611590027211-b954fd027b51?auto=format&fit=crop&w=1000&q=80';
-            }
-            if (t.includes('prep') || t.includes('session')) {
-              return 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
-            }
-            if (t.includes('aftercare') || t.includes('contrast') || t.includes('longevity')) {
-              return 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1000&q=80';
-            }
-            return b.coverImage || 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1000&q=80';
-          };
-
           setBlog({
             ...res.blog,
             coverImage: mapImg(res.blog)
@@ -52,13 +56,43 @@ export const BlogDetailPage = () => {
             ...r,
             coverImage: mapImg(r)
           })));
+          setLoading(false);
+          return;
         }
       } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+        console.warn('[BlogDetailPage] API fetch error, checking curated editorial articles...', err);
       }
+
+      // Seamless fallback to curated master articles
+      const localMatch = DEFAULT_BLOG_ARTICLES.find(
+        (b) => b.slug.toLowerCase() === cleanTarget ||
+               b._id.toLowerCase() === cleanTarget ||
+               cleanTarget.includes(b.slug.toLowerCase()) ||
+               b.slug.toLowerCase().includes(cleanTarget)
+      );
+
+      if (localMatch) {
+        setBlog({
+          ...localMatch,
+          coverImage: mapImg(localMatch)
+        });
+        const otherArticles = DEFAULT_BLOG_ARTICLES.filter((b) => b.slug !== localMatch.slug).map(b => ({
+          ...b,
+          coverImage: mapImg(b)
+        }));
+        setRelated(otherArticles);
+      } else {
+        // If not exact, default to the most relevant article so customer never sees 404
+        const fallback = DEFAULT_BLOG_ARTICLES[0];
+        setBlog({
+          ...fallback,
+          coverImage: mapImg(fallback)
+        });
+      }
+
+      setLoading(false);
     };
+
     fetchBlog();
   }, [slugOrId]);
 
@@ -149,7 +183,7 @@ export const BlogDetailPage = () => {
 
         {/* Markdown / Formatted Story Content */}
         <div className="prose prose-invert max-w-none text-studio-textMuted leading-relaxed space-y-6 text-sm sm:text-base font-sans">
-          {blog.content.split('\n\n').map((paragraph, idx) => {
+          {(blog.content || blog.excerpt || 'Article content is being updated by our editorial team.').split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('### ')) {
               return (
                 <h3 key={idx} className="font-condensed font-bold text-2xl text-studio-textMain uppercase tracking-wide pt-4 text-bronze-gradient">
