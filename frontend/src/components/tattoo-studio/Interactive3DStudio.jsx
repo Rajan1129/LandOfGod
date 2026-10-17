@@ -435,14 +435,17 @@ export const Interactive3DStudio = ({
   const handlePointerMove = (e) => {
     if (!isDraggingRef.current) return;
 
-    const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
+    const clientX = e.clientX ?? 0;
     const deltaX = clientX - lastPointerXRef.current;
 
     dragDistanceRef.current += Math.abs(deltaX);
     lastPointerXRef.current = clientX;
 
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const speed = isMobile ? 1.15 : 0.75;
+
     // Instant 1:1 responsive rotation without lag
-    const nextAngle = ((targetAngleRef.current - deltaX * 0.65) % 360 + 360) % 360;
+    const nextAngle = ((targetAngleRef.current - deltaX * speed) % 360 + 360) % 360;
     targetAngleRef.current = nextAngle;
     currentAngleRef.current = nextAngle;
     setDisplayAngle(nextAngle);
@@ -461,6 +464,40 @@ export const Interactive3DStudio = ({
   };
 
   const handlePointerLeave = () => {
+    isDraggingRef.current = false;
+  };
+
+  // Dedicated touch gesture handlers for mobile devices
+  const handleTouchStart = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    isDraggingRef.current = true;
+    dragDistanceRef.current = 0;
+    velocityRef.current = 0;
+    if (isAutoSpinRef.current) {
+      isAutoSpinRef.current = false;
+      setIsAutoSpin(false);
+    }
+    lastPointerXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDraggingRef.current || !e.touches || e.touches.length === 0) return;
+    const clientX = e.touches[0].clientX;
+    const deltaX = clientX - lastPointerXRef.current;
+
+    dragDistanceRef.current += Math.abs(deltaX);
+    lastPointerXRef.current = clientX;
+
+    // Fluid mobile swipe speed
+    const nextAngle = ((targetAngleRef.current - deltaX * 1.15) % 360 + 360) % 360;
+    targetAngleRef.current = nextAngle;
+    currentAngleRef.current = nextAngle;
+    setDisplayAngle(nextAngle);
+
+    velocityRef.current = velocityRef.current * 0.4 + (deltaX * 0.35) * 0.6;
+  };
+
+  const handleTouchEnd = () => {
     isDraggingRef.current = false;
   };
 
@@ -504,6 +541,11 @@ export const Interactive3DStudio = ({
   const normalizedTheta = ((displayAngle % 360) + 360) % 360;
   // Nearest camera perspective frame (0 to 7) for solid, crisp, ghost-free human display
   const activeFrameIdx = Math.round(normalizedTheta / 45) % 8;
+  const targetFrameAngle = activeFrameIdx * 45;
+  let relativeAngle = normalizedTheta - targetFrameAngle;
+  while (relativeAngle < -180) relativeAngle += 360;
+  while (relativeAngle > 180) relativeAngle -= 360;
+
   const frameIdx = Math.floor(normalizedTheta / 45);
   const nextIdx = (frameIdx + 1) % 8;
   const t = (normalizedTheta - frameIdx * 45) / 45;
@@ -688,13 +730,17 @@ export const Interactive3DStudio = ({
 
       {/* 2. CENTER: 3D MANNEQUIN TURNTABLE CANVAS */}
       <div
-        className={`relative w-full ${compact ? 'h-[400px] sm:h-[500px]' : 'h-[440px] sm:h-[540px] md:h-[640px] lg:h-[680px]'} flex items-center justify-center bg-gradient-to-b from-zinc-950 via-zinc-900/70 to-zinc-950 rounded-2xl sm:rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing`}
+        className={`relative w-full ${compact ? 'h-[400px] sm:h-[500px]' : 'h-[440px] sm:h-[540px] md:h-[640px] lg:h-[680px]'} flex items-center justify-center bg-gradient-to-b from-zinc-950 via-zinc-900/70 to-zinc-950 rounded-2xl sm:rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing select-none`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         onPointerLeave={handlePointerLeave}
-        style={{ touchAction: 'none' }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        style={{ touchAction: 'none', userSelect: 'none' }}
       >
         {/* Floating Avatar Model Selector Badge inside 3D Viewport */}
         <div className="absolute top-3 left-3 z-30 flex items-center p-1 bg-black/85 backdrop-blur-md rounded-2xl border border-amber-400/40 shadow-2xl">
@@ -797,8 +843,15 @@ export const Interactive3DStudio = ({
             height: '100%',
           }}
         >
-          {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (CRISP, SOLID, GHOST-FREE PERSPECTIVES) */}
-          <div className="relative w-full h-full min-w-[260px] min-h-[380px] flex items-center justify-center">
+          {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (CRISP, SOLID, GHOST-FREE PERSPECTIVES WITH REAL 3D ROTATION) */}
+          <div
+            className="relative w-full h-full min-w-[260px] min-h-[380px] flex items-center justify-center transform-gpu will-change-transform"
+            style={{
+              transform: `perspective(1000px) rotateY(${ -relativeAngle * 0.72 }deg)`,
+              transformStyle: 'preserve-3d',
+              transition: isDraggingRef.current ? 'none' : 'transform 0.12s ease-out',
+            }}
+          >
             {activeFrames.map((f, i) => {
               const isCurrent = i === activeFrameIdx;
 
@@ -1039,6 +1092,22 @@ export const Interactive3DStudio = ({
               >
                 ▼ Down
               </button>
+              <button
+                type="button"
+                onClick={() => setUserOffsetX((x) => Math.max(-15, x - 2))}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-white/10"
+                title="Shift Stencil Left"
+              >
+                ◀ Left
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserOffsetX((x) => Math.min(15, x + 2))}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-zinc-300 hover:text-white hover:bg-white/10"
+                title="Shift Stencil Right"
+              >
+                ▶ Right
+              </button>
             </div>
 
             {/* Rotate Offset */}
@@ -1068,6 +1137,7 @@ export const Interactive3DStudio = ({
                 onClick={() => {
                   setUserScale(0.85);
                   setUserOffsetY(0);
+                  setUserOffsetX(0);
                   setUserRotate(0);
                 }}
                 className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
@@ -1081,10 +1151,11 @@ export const Interactive3DStudio = ({
                 onClick={() => {
                   setUserScale(1.0);
                   setUserOffsetY(0);
+                  setUserOffsetX(0);
                   setUserRotate(0);
                 }}
                 className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
-                  userScale === 1.0 && userOffsetY === 0 ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white'
+                  userScale === 1.0 && userOffsetY === 0 && userOffsetX === 0 ? 'bg-amber-400/20 text-amber-300 border-amber-400/40' : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white'
                 }`}
               >
                 Default
@@ -1094,6 +1165,7 @@ export const Interactive3DStudio = ({
                 onClick={() => {
                   setUserScale(1.25);
                   setUserOffsetY(0);
+                  setUserOffsetX(0);
                   setUserRotate(0);
                 }}
                 className={`px-2 py-1 rounded-lg text-[10px] font-semibold border ${
