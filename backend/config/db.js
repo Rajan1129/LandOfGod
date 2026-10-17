@@ -10,28 +10,43 @@ export const connectDB = async () => {
   
   try {
     const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 4000,
       maxPoolSize: 10,
     });
     console.log(`[Database] MongoDB Connected: ${conn.connection.host} (Persistent Cloud Atlas DB)`);
     mongoMemoryServer = null;
     return conn;
   } catch (error) {
-    console.warn(`[Database] Standard MongoDB Atlas connection failed (${error.message}). Initializing In-Memory MongoDB Server for fallback operation...`);
+    console.warn(`[Database] Standard MongoDB Atlas connection failed (${error.message}). Attempting local MongoDB connection...`);
     
     try {
-      mongoMemoryServer = await MongoMemoryServer.create({
-        instance: {
-          dbName: 'tattoo-studio'
-        }
+      const localUri = 'mongodb://127.0.0.1:27017/tattoo-studio';
+      const conn = await mongoose.connect(localUri, {
+        serverSelectionTimeoutMS: 3000,
       });
-      const memUri = mongoMemoryServer.getUri();
-      const conn = await mongoose.connect(memUri);
-      console.log(`[Database] In-Memory MongoDB Server active at: ${memUri} (WARNING: Temporary RAM storage)`);
+      console.log(`[Database] Connected to Local MongoDB: ${localUri}`);
+      mongoMemoryServer = null;
       return conn;
-    } catch (memError) {
-      console.error('[Database] Failed to initialize In-Memory MongoDB:', memError.message);
-      throw memError;
+    } catch (localError) {
+      console.warn(`[Database] Local MongoDB not available (${localError.message}). Initializing In-Memory MongoDB Server...`);
+      
+      try {
+        mongoMemoryServer = await MongoMemoryServer.create({
+          instance: {
+            dbName: 'tattoo-studio'
+          },
+          spawn: {
+            timeout: 60000
+          }
+        });
+        const memUri = mongoMemoryServer.getUri();
+        const conn = await mongoose.connect(memUri);
+        console.log(`[Database] In-Memory MongoDB Server active at: ${memUri} (WARNING: Temporary RAM storage)`);
+        return conn;
+      } catch (memError) {
+        console.error('[Database] Failed to initialize In-Memory MongoDB:', memError.message);
+        throw memError;
+      }
     }
   }
 };
