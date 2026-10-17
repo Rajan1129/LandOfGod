@@ -69,6 +69,8 @@ export const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
 
           {/* Una & Regional SEO Landing Pages */}
+          <Route path="/tattoo-artist-near-me" element={<UnaTattooArtistPage />} />
+          <Route path="/tattoo-artist-near-me/" element={<UnaTattooArtistPage />} />
           <Route path="/best-tattoo-artist-in-una" element={<UnaTattooArtistPage />} />
           <Route path="/best-tattoo-artist-in-una/" element={<UnaTattooArtistPage />} />
           <Route path="/tattoo-artist-in-una" element={<UnaTattooArtistPage />} />

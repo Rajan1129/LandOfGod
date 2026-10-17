@@ -55,7 +55,35 @@ export const UnaTattooArtistPage = () => {
     ]
   };
 
-  if (rawPath === '/amb-tattoo-studio') {
+  if (rawPath === '/tattoo-artist-near-me') {
+    pageMeta = {
+      title: 'Tattoo Artist Near Me — #1 Top Rated Tattoo Studio Near You | Land of God Una',
+      h1Main: 'Tattoo Artist Near Me',
+      h1Accent: '— Premier Master Tattoo Studio in Una & Nearby Regions.',
+      leadText: 'Searching for the best "tattoo artist near me"? Land of God Tattoo Studio in Friends Colony, Una, HP is the highest-rated custom tattoo atelier near you. Led by Master Artist Rahul Choudhary, we serve clients across Una, Nangal, Amb, Hoshiarpur, Hamirpur, Kangra, and Northern India with hospital-grade European sterilization, 3D body placement visualizer, and 10+ years of award-winning ink mastery.',
+      description: 'Looking for the best tattoo artist near me? Land of God Tattoo Studio in Friends Colony, Una, HP is the top-rated tattoo studio near you. 100% sterile single-use needles, 3D anatomical placement simulator, 10+ years experience, and 5-star verified customer reviews. Call or WhatsApp +91 78079 66080 now!',
+      badge: '⭐ #1 Top Rated Tattoo Studio Near You • Friends Colony, Una (HP)',
+      keywords: 'Tattoo Artist Near Me, Best Tattoo Artist Near Me, Tattoo Studio Near Me, Tattoo Shop Near Me, Tattoo Parlour Near Me, Tattoo Artist in Una, Tattoo Studio Una Himachal Pradesh, Rahul Choudhary Tattoo Artist, Tattoo Near Nangal, Tattoo Near Amb, Tattoo Near Hoshiarpur, Tattoo Shop Near Me Open Now',
+      canonical: 'https://land-of-god-nine.vercel.app/tattoo-artist-near-me/',
+      whyHeading: 'Why Land of God is the #1 Rated Tattoo Studio Near You',
+      whySub: 'Your Nearest Trusted Tattoo Atelier',
+      whyDesc: 'When you search for the best tattoo artist near you, you deserve an immaculate studio with verified hospital-grade hygiene, certified master craftsmanship, transparent pricing, and personalized 3D design fitting before ink touches your skin.',
+      regionalPillars: [
+        {
+          title: 'Prime Central Location in Friends Colony, Una',
+          desc: 'Conveniently located with dedicated private parking, easily accessible for clients searching from Una, Nangal (15 mins), Amb (25 mins), Tahliwal, Mehatpur, Hoshiarpur, and Anandpur Sahib.'
+        },
+        {
+          title: 'Hospital-Grade Sterilization & Single-Use Needles',
+          desc: 'Zero risk of infection. We exclusively use sealed medical-grade membrane cartridges opened in front of you, autoclave sterilization, and hypoallergenic EU-certified organic pigments.'
+        },
+        {
+          title: 'Himachal\'s 1st 3D Body Placement Simulator',
+          desc: 'Experience our real-time 3D human body simulator that allows you to preview your tattoo on any muscle group with 360° rotation before getting inked.'
+        }
+      ]
+    };
+  } else if (rawPath === '/amb-tattoo-studio') {
     pageMeta = {
       title: 'Amb Tattoo Studio — Best Custom Tattoo Parlor near Amb, HP | Land of God',
       h1Main: 'Amb Tattoo Studio',

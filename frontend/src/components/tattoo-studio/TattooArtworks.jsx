@@ -1,9 +1,9 @@
 import React from 'react';
 
-// Authentic, High-End Studio Tattoo Designs - Strictly mapped to specific anatomical body parts
-// Using authentic studio designs with original transparent line art
+// Authentic, High-End Studio Tattoo Designs - Curated for anatomical body placement
+// With multiple tattoos available for every body part (Forearm, Upper Arm, Chest, Back, Shoulder, Neck, Wrist, Thigh, Calf, Ankle, Ribs, Spine)
 export const TATTOO_ARTWORKS_CATALOG = [
-  // 1. FOREARM ONLY
+  // 1. Sacred Mahadev Trishul & Damru
   {
     id: 'forearm-mahadev-trishul',
     _id: 'forearm-mahadev-trishul',
@@ -11,17 +11,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Sacred Devbhoomi',
-    description: 'Lord Shiva Trishul with Damru and sacred Devanagari calligraphy designed strictly for forearm vertical placement.',
+    description: 'Lord Shiva Trishul with Damru and sacred Devanagari calligraphy designed for vertical flow on forearm, upper arm, spine, and calf.',
     estTime: '3.5 hrs',
     difficulty: 'Masterpiece',
     previewImage: '/images/tattoos/mahadev_trishul.png',
     dataUri: '/images/tattoos/mahadev_trishul.png',
-    bodyAreas: ['Forearm'],
+    bodyAreas: ['Forearm', 'Upper Arm', 'Back', 'Calf', 'Spine', 'Chest'],
     customWidth: 100,
     customHeight: 100,
     customScale: 1.1,
     isDefaultReference: true,
   },
+
+  // 2. Himalayan Compass & Arrow Navigator
   {
     id: 'forearm-compass-navigator',
     _id: 'forearm-compass-navigator',
@@ -29,19 +31,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Geometric',
-    description: 'Intricate nautical compass rose with mountain ridges aligned along the inner forearm.',
+    description: 'Intricate nautical compass rose with mountain ridges aligned along the inner forearm, shoulder cap, or calf.',
     estTime: '3.0 hrs',
     difficulty: 'Intermediate',
     previewImage: '/images/tattoos/compass_navigation.png',
     dataUri: '/images/tattoos/compass_navigation.png',
-    bodyAreas: ['Forearm'],
+    bodyAreas: ['Forearm', 'Shoulder', 'Calf', 'Wrist', 'Upper Arm', 'Thigh'],
     customWidth: 95,
     customHeight: 95,
     customScale: 1.0,
     isDefaultReference: false,
   },
 
-  // 2. CHEST ONLY
+  // 3. Polygonal Geometric Lion Monarch
   {
     id: 'chest-geom-lion',
     _id: 'chest-geom-lion',
@@ -49,19 +51,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Geometric',
-    description: 'Powerful geometric royal lion head with sacred polygonal facets tailored specifically for the pectoral chest plate.',
+    description: 'Powerful geometric royal lion head with sacred polygonal facets tailored for the pectoral chest plate, thigh, or upper arm.',
     estTime: '4.5 hrs',
     difficulty: 'Masterpiece',
     previewImage: '/images/tattoos/geometric_lion.png',
     dataUri: '/images/tattoos/geometric_lion.png',
-    bodyAreas: ['Chest'],
+    bodyAreas: ['Chest', 'Upper Arm', 'Back', 'Shoulder', 'Thigh', 'Calf'],
     customWidth: 105,
     customHeight: 105,
     customScale: 1.35,
     isDefaultReference: true,
   },
 
-  // 3. SHOULDER ONLY
+  // 4. Devbhoomi Radial Sacred Mandala
   {
     id: 'shoulder-sacred-mandala',
     _id: 'shoulder-sacred-mandala',
@@ -69,19 +71,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Mandala',
-    description: 'Circular radial mandala with ornate stippled pointillism wrapping naturally over the shoulder deltoid cap.',
+    description: 'Circular radial mandala with ornate stippled pointillism wrapping naturally over the shoulder deltoid, chest, back, or thigh.',
     estTime: '3.5 hrs',
     difficulty: 'Intermediate',
     previewImage: '/images/tattoos/sacred_mandala.png',
     dataUri: '/images/tattoos/sacred_mandala.png',
-    bodyAreas: ['Shoulder'],
+    bodyAreas: ['Shoulder', 'Back', 'Chest', 'Thigh', 'Upper Arm', 'Ribs'],
     customWidth: 100,
     customHeight: 100,
     customScale: 1.1,
     isDefaultReference: true,
   },
 
-  // 4. UPPER ARM ONLY
+  // 5. Irezumi Dragon Koi Leaping Waves
   {
     id: 'upperarm-japanese-koi',
     _id: 'upperarm-japanese-koi',
@@ -89,19 +91,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Japanese',
-    description: 'Traditional Japanese ascending dragon koi fish with swirling water foam designed strictly for the bicep & upper arm.',
+    description: 'Traditional Japanese ascending dragon koi fish with swirling water foam designed for the bicep, upper arm, forearm, thigh, or back.',
     estTime: '4.5 hrs',
     difficulty: 'Complex',
     previewImage: '/images/tattoos/japanese_koi.png',
     dataUri: '/images/tattoos/japanese_koi.png',
-    bodyAreas: ['Upper Arm'],
+    bodyAreas: ['Upper Arm', 'Forearm', 'Thigh', 'Calf', 'Back', 'Shoulder'],
     customWidth: 100,
     customHeight: 100,
     customScale: 1.15,
     isDefaultReference: true,
   },
 
-  // 5. BACK ONLY
+  // 6. Phoenix Rising From Sacred Flames
   {
     id: 'back-phoenix-flame',
     _id: 'back-phoenix-flame',
@@ -109,19 +111,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Blackwork',
-    description: 'Grand mythical phoenix spreading majestic wings across both back shoulder blades emerging from eternal flame.',
+    description: 'Grand mythical phoenix spreading majestic wings across both back shoulder blades, chest plate, or thigh emerging from eternal flame.',
     estTime: '5.0 hrs',
     difficulty: 'Masterpiece',
     previewImage: '/images/tattoos/phoenix_flame.png',
     dataUri: '/images/tattoos/phoenix_flame.png',
-    bodyAreas: ['Back'],
+    bodyAreas: ['Back', 'Chest', 'Shoulder', 'Thigh', 'Ribs', 'Upper Arm'],
     customWidth: 110,
     customHeight: 110,
     customScale: 1.45,
     isDefaultReference: true,
   },
 
-  // 6. SPINE ONLY
+  // 7. Sacred Trishul Dagger Vertical Spine
   {
     id: 'spine-trishul-dagger',
     _id: 'spine-trishul-dagger',
@@ -129,19 +131,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Neo-Traditional',
-    description: 'Elongated sacred vertical dagger and trishul axis sculpted strictly to follow the spinal column.',
+    description: 'Elongated sacred vertical dagger and trishul axis sculpted to follow the spinal column, inner forearm, or calf muscle.',
     estTime: '4.0 hrs',
     difficulty: 'Masterpiece',
     previewImage: '/images/tattoos/trishul_dagger.png',
     dataUri: '/images/tattoos/trishul_dagger.png',
-    bodyAreas: ['Spine'],
+    bodyAreas: ['Spine', 'Forearm', 'Calf', 'Ribs', 'Upper Arm', 'Neck'],
     customWidth: 90,
     customHeight: 120,
     customScale: 1.15,
     isDefaultReference: true,
   },
 
-  // 7. RIBS ONLY
+  // 8. Fine Line Serpent & Blooming Peony
   {
     id: 'ribs-serpent-peony',
     _id: 'ribs-serpent-peony',
@@ -149,19 +151,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Fine Line',
-    description: 'Coiled serpent snake winding gracefully around botanical peonies along the ribcage contour.',
+    description: 'Coiled serpent snake winding gracefully around botanical peonies along the ribcage contour, thigh, or forearm.',
     estTime: '3.5 hrs',
     difficulty: 'Intermediate',
     previewImage: '/images/tattoos/serpent_peony.png',
     dataUri: '/images/tattoos/serpent_peony.png',
-    bodyAreas: ['Ribs'],
+    bodyAreas: ['Ribs', 'Thigh', 'Forearm', 'Upper Arm', 'Spine', 'Calf'],
     customWidth: 100,
     customHeight: 100,
     customScale: 1.1,
     isDefaultReference: true,
   },
 
-  // 8. THIGH ONLY
+  // 9. Nordic Howling Wolf & Forest Moon
   {
     id: 'thigh-celtic-wolf',
     _id: 'thigh-celtic-wolf',
@@ -169,19 +171,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Geometric',
-    description: 'Intricate Nordic knotwork howling wolf with celestial crescent moon scaled for quadriceps thigh placement.',
+    description: 'Intricate Nordic knotwork howling wolf with celestial crescent moon scaled for quadriceps thigh, upper arm, or calf placement.',
     estTime: '4.0 hrs',
     difficulty: 'Intermediate',
     previewImage: '/images/tattoos/celtic_wolf.png',
     dataUri: '/images/tattoos/celtic_wolf.png',
-    bodyAreas: ['Thigh'],
+    bodyAreas: ['Thigh', 'Calf', 'Upper Arm', 'Forearm', 'Back', 'Shoulder'],
     customWidth: 100,
     customHeight: 100,
     customScale: 1.35,
     isDefaultReference: true,
   },
 
-  // 9. CALF ONLY
+  // 10. Baroque Filigree Obsidian Skull
   {
     id: 'calf-gothic-skull',
     _id: 'calf-gothic-skull',
@@ -189,19 +191,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Blackwork',
-    description: 'Deep blackwork human skull ornamented with baroque scrollwork fitted specifically for the gastrocnemius calf muscle.',
+    description: 'Deep blackwork human skull ornamented with baroque scrollwork fitted for gastrocnemius calf muscle, thigh, chest, or upper arm.',
     estTime: '3.5 hrs',
     difficulty: 'Complex',
     previewImage: '/images/tattoos/gothic_skull.png',
     dataUri: '/images/tattoos/gothic_skull.png',
-    bodyAreas: ['Calf'],
+    bodyAreas: ['Calf', 'Upper Arm', 'Chest', 'Back', 'Thigh', 'Forearm'],
     customWidth: 95,
     customHeight: 100,
     customScale: 1.15,
     isDefaultReference: true,
   },
 
-  // 10. WRIST ONLY
+  // 11. Fine Line Butterfly & Botanical Lavender
   {
     id: 'wrist-butterfly-botanical',
     _id: 'wrist-butterfly-botanical',
@@ -209,19 +211,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Fine Line',
-    description: 'Delicate miniature half-butterfly morphing into wild lavender sprigs designed strictly for the wrist joint.',
+    description: 'Delicate miniature half-butterfly morphing into wild lavender sprigs designed for wrist joint, ankle, neck, or shoulder.',
     estTime: '2.0 hrs',
     difficulty: 'Delicate',
     previewImage: '/images/tattoos/butterfly_botanical.png',
     dataUri: '/images/tattoos/butterfly_botanical.png',
-    bodyAreas: ['Wrist'],
+    bodyAreas: ['Wrist', 'Ankle', 'Neck', 'Forearm', 'Shoulder', 'Ribs'],
     customWidth: 85,
     customHeight: 85,
     customScale: 0.85,
     isDefaultReference: true,
   },
 
-  // 11. NECK ONLY
+  // 12. Om Namah Shivaya Sanskrit Mantra
   {
     id: 'neck-om-shiva-calligraphy',
     _id: 'neck-om-shiva-calligraphy',
@@ -229,19 +231,19 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Sacred Devbhoomi',
-    description: 'Sacred Trishul with Sanskrit calligraphy and radiant sunburst tailored for the nape & neck.',
+    description: 'Sacred Trishul with Sanskrit calligraphy and radiant sunburst tailored for nape, neck, spine, forearm, or chest.',
     estTime: '2.5 hrs',
     difficulty: 'Delicate',
     previewImage: '/images/tattoos/om_shiva_calligraphy.png',
     dataUri: '/images/tattoos/om_shiva_calligraphy.png',
-    bodyAreas: ['Neck'],
+    bodyAreas: ['Neck', 'Spine', 'Forearm', 'Chest', 'Wrist', 'Upper Arm'],
     customWidth: 85,
     customHeight: 85,
     customScale: 0.85,
     isDefaultReference: true,
   },
 
-  // 12. ANKLE ONLY
+  // 13. Devbhoomi Sacred Lotus Unalome
   {
     id: 'ankle-sacred-lotus',
     _id: 'ankle-sacred-lotus',
@@ -249,15 +251,55 @@ export const TATTOO_ARTWORKS_CATALOG = [
     artist: 'Rahul Choudhary',
     artistTitle: 'Certified Master Tattooist',
     style: 'Sacred Devbhoomi',
-    description: 'Delicate unalome spiral with blooming sacred lotus bloom designed strictly for the ankle & malleolus bone.',
+    description: 'Delicate unalome spiral with blooming sacred lotus bloom designed for ankle, wrist, neck, spine, or ribs.',
     estTime: '2.0 hrs',
     difficulty: 'Delicate',
     previewImage: '/images/tattoos/sacred_lotus.png',
     dataUri: '/images/tattoos/sacred_lotus.png',
-    bodyAreas: ['Ankle'],
+    bodyAreas: ['Ankle', 'Wrist', 'Neck', 'Spine', 'Upper Arm', 'Ribs'],
     customWidth: 80,
     customHeight: 80,
     customScale: 0.8,
     isDefaultReference: true,
+  },
+
+  // 14. Minimalist Moon & Wild Flora
+  {
+    id: 'moon-flora-minimalist',
+    _id: 'moon-flora-minimalist',
+    name: 'Minimalist Moon & Wild Flora',
+    artist: 'Aman Verma',
+    artistTitle: 'Resident Fine Line Artist',
+    style: 'Fine Line',
+    description: 'Delicate crescent moon entwined with wild botanical blossoms, starry dust, and fine-line foliage.',
+    estTime: '2.0 hrs',
+    difficulty: 'Delicate',
+    previewImage: '/images/tattoos/moon_flora.png',
+    dataUri: '/images/tattoos/moon_flora.png',
+    bodyAreas: ['Wrist', 'Ankle', 'Neck', 'Forearm', 'Ribs', 'Shoulder'],
+    customWidth: 85,
+    customHeight: 85,
+    customScale: 0.9,
+    isDefaultReference: false,
+  },
+
+  // 15. Himalayan Sacred Botanical Rose
+  {
+    id: 'sacred-rose-botanical',
+    _id: 'sacred-rose-botanical',
+    name: 'Himalayan Sacred Botanical Rose',
+    artist: 'Eliza',
+    artistTitle: 'Specialist Color & Botanical Artist',
+    style: 'Traditional',
+    description: 'Lush classical blooming rose with thorns, detailed botanical petals, and sharp stippled shading.',
+    estTime: '2.5 hrs',
+    difficulty: 'Intermediate',
+    previewImage: '/images/tattoos/sacred_rose.png',
+    dataUri: '/images/tattoos/sacred_rose.png',
+    bodyAreas: ['Forearm', 'Shoulder', 'Wrist', 'Ankle', 'Ribs', 'Chest', 'Thigh'],
+    customWidth: 90,
+    customHeight: 90,
+    customScale: 1.0,
+    isDefaultReference: false,
   },
 ];

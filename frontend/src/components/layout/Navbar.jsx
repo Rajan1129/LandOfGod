@@ -17,6 +17,11 @@ export const Navbar = () => {
 
   const unaMenuItems = [
     {
+      name: 'Tattoo Artist Near Me',
+      path: '/tattoo-artist-near-me',
+      desc: '#1 Top-rated studio near you in Una & HP',
+    },
+    {
       name: 'Best Tattoo Artist in Una (HP)',
       path: '/best-tattoo-artist-in-una',
       desc: 'Top-rated master artistry & awards',

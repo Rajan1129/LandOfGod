@@ -293,6 +293,8 @@ export const Interactive3DStudio = ({
   selectedBodyArea = 'Forearm',
   onSelectBodyArea,
   selectedDesign,
+  onSelectDesign,
+  designs = [],
   placedTattoos = [],
   compact = false,
   avatarGender: controlledGender,
@@ -343,6 +345,16 @@ export const Interactive3DStudio = ({
       const img = new Image();
       img.src = frame.src;
     });
+
+    const handleGlobalRelease = () => {
+      isDraggingRef.current = false;
+    };
+    window.addEventListener('pointerup', handleGlobalRelease);
+    window.addEventListener('pointercancel', handleGlobalRelease);
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalRelease);
+      window.removeEventListener('pointercancel', handleGlobalRelease);
+    };
   }, []);
 
   // Frame-rate independent physics damping loop with ultra-smooth 60fps interpolation
@@ -429,17 +441,22 @@ export const Interactive3DStudio = ({
     dragDistanceRef.current += Math.abs(deltaX);
     lastPointerXRef.current = clientX;
 
-    // Smooth linear response: 0.55 degrees per pixel
-    targetAngleRef.current = ((targetAngleRef.current - deltaX * 0.55) % 360 + 360) % 360;
+    // Instant 1:1 responsive rotation without lag
+    const nextAngle = ((targetAngleRef.current - deltaX * 0.65) % 360 + 360) % 360;
+    targetAngleRef.current = nextAngle;
+    currentAngleRef.current = nextAngle;
+    setDisplayAngle(nextAngle);
 
-    // Smooth filtered velocity calculation
-    velocityRef.current = velocityRef.current * 0.4 + (deltaX * 0.3) * 0.6;
+    // Smooth filtered velocity calculation for momentum throw upon release
+    velocityRef.current = velocityRef.current * 0.4 + (deltaX * 0.35) * 0.6;
   };
 
   const handlePointerUp = (e) => {
     isDraggingRef.current = false;
     try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
+      if (e?.currentTarget?.hasPointerCapture?.(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      }
     } catch (_) {}
   };
 
@@ -483,8 +500,10 @@ export const Interactive3DStudio = ({
     targetAngleRef.current = 0;
   };
 
-  // Continuous frame crossfade math
+  // Perspective calculations
   const normalizedTheta = ((displayAngle % 360) + 360) % 360;
+  // Nearest camera perspective frame (0 to 7) for solid, crisp, ghost-free human display
+  const activeFrameIdx = Math.round(normalizedTheta / 45) % 8;
   const frameIdx = Math.floor(normalizedTheta / 45);
   const nextIdx = (frameIdx + 1) % 8;
   const t = (normalizedTheta - frameIdx * 45) / 45;
@@ -707,6 +726,62 @@ export const Interactive3DStudio = ({
           </button>
         </div>
 
+        {/* Floating Quick Multiple Tattoo Selector for Active Body Part */}
+        {onSelectDesign && designs && designs.length > 0 && (() => {
+          const areaDesigns = designs.filter((d) =>
+            (d.bodyAreas || []).some((a) => a.toLowerCase() === selectedBodyArea.toLowerCase() || selectedBodyArea.toLowerCase().includes(a.toLowerCase()))
+          );
+          if (areaDesigns.length === 0) return null;
+
+          return (
+            <div
+              className="absolute top-3 right-3 z-30 max-w-[55%] sm:max-w-[65%] flex items-center gap-1.5 p-1.5 bg-black/85 backdrop-blur-md rounded-2xl border border-amber-500/30 shadow-2xl overflow-x-auto no-scrollbar pointer-events-auto"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wider pl-1.5 shrink-0 hidden sm:inline">
+                {selectedBodyArea} ({areaDesigns.length}):
+              </span>
+              <div className="flex items-center gap-1.5 shrink-0">
+                {areaDesigns.map((d) => {
+                  const isCurrent = selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
+                  const rawImg = d.previewImage || d.dataUri || '';
+                  const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
+
+                  return (
+                    <button
+                      key={d.id || d._id || d.name}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectDesign(d);
+                      }}
+                      className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl p-0.5 flex items-center justify-center transition-all shrink-0 border ${
+                        isCurrent
+                          ? 'bg-amber-400/20 border-amber-400 ring-2 ring-amber-400/40 shadow-md shadow-amber-400/20 scale-105'
+                          : 'bg-zinc-900 border-white/10 hover:border-amber-400/40 hover:bg-zinc-800'
+                      }`}
+                      title={`${d.name} (${d.style || 'Custom'})`}
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={d.name}
+                        className="w-full h-full object-contain filter drop-shadow"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/tattoos/mahadev_trishul.png';
+                        }}
+                      />
+                      {isCurrent && (
+                        <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-amber-500/[0.04] rounded-full blur-[130px]" />
@@ -722,15 +797,10 @@ export const Interactive3DStudio = ({
             height: '100%',
           }}
         >
-          {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (SEAMLESS 60FPS CROSSFADE) */}
+          {/* ALL 8 PHOTOREALISTIC HUMAN FRAMES (CRISP, SOLID, GHOST-FREE PERSPECTIVES) */}
           <div className="relative w-full h-full min-w-[260px] min-h-[380px] flex items-center justify-center">
             {activeFrames.map((f, i) => {
-              let frameOpacity = 0;
-              if (i === frameIdx) {
-                frameOpacity = 1 - easeT;
-              } else if (i === nextIdx) {
-                frameOpacity = easeT;
-              }
+              const isCurrent = i === activeFrameIdx;
 
               return (
                 <img
@@ -741,8 +811,8 @@ export const Interactive3DStudio = ({
                   className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none filter contrast-105 brightness-105 drop-shadow-[0_20px_40px_rgba(0,0,0,0.85)] transform-gpu will-change-transform"
                   style={{
                     transform: f.flip ? 'scaleX(-1)' : 'none',
-                    opacity: frameOpacity,
-                    visibility: frameOpacity > 0.01 ? 'visible' : 'hidden',
+                    opacity: isCurrent ? 1 : 0,
+                    visibility: isCurrent ? 'visible' : 'hidden',
                   }}
                   onError={(e) => {
                     if (avatarGender === 'female' && !e.target.src.includes('female_front')) {
@@ -874,11 +944,12 @@ export const Interactive3DStudio = ({
               return (
                 <div
                   key={key}
-                  onPointerDown={(e) => {
-                    e.stopPropagation();
-                  }}
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (dragDistanceRef.current > 8) {
+                      // Dragging rotation in progress! Do not trigger body area selection
+                      return;
+                    }
                     if (onSelectBodyArea) onSelectBodyArea(key);
                   }}
                   onMouseEnter={() => setHoveredPart(key)}
@@ -1052,7 +1123,10 @@ export const Interactive3DStudio = ({
             setIsAutoSpin(false);
             isAutoSpinRef.current = false;
             velocityRef.current = 0;
-            targetAngleRef.current = Number(e.target.value);
+            const val = Number(e.target.value);
+            targetAngleRef.current = val;
+            currentAngleRef.current = val;
+            setDisplayAngle(val);
           }}
           className="w-full accent-amber-400 bg-zinc-800 h-1.5 rounded-lg cursor-pointer"
         />

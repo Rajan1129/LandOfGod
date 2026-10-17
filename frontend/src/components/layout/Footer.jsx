@@ -109,7 +109,8 @@ export const Footer = () => {
               <li><Link to="/blog" className="hover:text-amber-300 transition-colors">Sacred Ink Journal &amp; Blogs</Link></li>
               <li><Link to="/calendar" className="hover:text-amber-300 transition-colors">Studio Calendar &amp; Slots</Link></li>
               <li><Link to="/booking" className="hover:text-amber-300 transition-colors">Book Custom Session</Link></li>
-              <li><Link to="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/" className="text-amber-400/90 font-medium hover:text-amber-300 transition-colors">Best Tattoo Artist in Una (HP)</Link></li>
+              <li><Link to="/tattoo-artist-near-me" className="text-amber-400 font-semibold hover:text-amber-300 transition-colors">Tattoo Artist Near Me (Una &amp; HP)</Link></li>
+              <li><Link to="/landofgod-best-tattoo-artist-in-una-tattoo-designer-in-una/" className="text-zinc-400 hover:text-amber-300 transition-colors">Best Tattoo Artist in Una (HP)</Link></li>
             </ul>
           </div>
 
