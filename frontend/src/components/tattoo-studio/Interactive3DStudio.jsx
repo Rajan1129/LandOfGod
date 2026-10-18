@@ -1102,7 +1102,7 @@ export const Interactive3DStudio = ({
             style={{
               transform: `perspective(1100px) rotateY(${-relativeAngle * 0.7}deg)`,
               transformStyle: 'preserve-3d',
-              transition: isDraggingRef.current ? 'none' : 'transform 0.12s ease-out',
+              transition: 'transform 0.12s ease-out',
             }}
           >
             {/* 360 FRAME IMAGES */}

@@ -77,7 +77,7 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/', hash: '#top' },
-    { name: '3D Studio', path: '/interactive-3d', hash: '#interactive-3d' },
+    { name: '3D Studio', path: '/interactive-3d' },
     { name: 'Blogs', path: '/blog', hash: '#blog' },
     { name: 'Calendar', path: '/calendar', hash: '#booking' },
     { name: 'About', path: '/about', hash: '#about' },
