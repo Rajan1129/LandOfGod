@@ -4,8 +4,19 @@ Disallow: /admin
 Disallow: /admin/*
 Disallow: /api/*
 
+# AI Crawlers for Generative Engine Optimization (GEO)
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
 # Host
 Host: https://www.landofgod.in
 
-# Sitemaps
+# Sitemaps & LLM Context
 Sitemap: https://www.landofgod.in/sitemap.xml
+# LLMs: https://www.landofgod.in/llms.txt
