@@ -20,14 +20,14 @@ export const HomePage = () => {
         />
         <meta property="og:title" content="LAND OF GOD TATTOO STUDIO — Premier Custom Tattoo Atelier | Una, HP" />
         <meta property="og:description" content="Custom Tattoos, Sacred Devbhoomi Artistry & Fine-Line Realism in Una, Himachal Pradesh. 100% Sterile Hygiene & Certified Master Artists." />
-        <meta property="og:image" content="https://land-of-god-nine.vercel.app/logo.png" />
-        <meta property="og:image:secure_url" content="https://land-of-god-nine.vercel.app/logo.png" />
+        <meta property="og:image" content="https://www.landofgod.in/logo.png" />
+        <meta property="og:image:secure_url" content="https://www.landofgod.in/logo.png" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1024" />
         <meta property="og:image:height" content="1024" />
         <meta property="og:image:alt" content="Land of God Tattoo Studio Official Logo" />
-        <meta name="twitter:image" content="https://land-of-god-nine.vercel.app/logo.png" />
-        <link rel="canonical" href="https://land-of-god-nine.vercel.app/" />
+        <meta name="twitter:image" content="https://www.landofgod.in/logo.png" />
+        <link rel="canonical" href="https://www.landofgod.in/" />
       </Helmet>
 
       {/* Main Sections Stream */}
