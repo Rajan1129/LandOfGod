@@ -77,7 +77,7 @@ export const ANATOMICAL_COLORS = {
   Ankle: { hex: '#cbd5e1', bg: 'rgba(203, 213, 225, 0.55)', border: '#94a3b8', name: 'Ankle / Foot' },
 };
 
-// Comprehensive Bilateral Hit Zones on the 3D Muscular Mannequin across 360° frames
+// Comprehensive Bilateral Hit Zones with unique IDs on the 3D Muscular Mannequin
 export const HIT_ZONES = [
   // 1. Chest (Pectorals)
   {
@@ -209,7 +209,7 @@ export const HIT_ZONES = [
   {
     id: 'ribs_center',
     key: 'Ribs',
-    label: 'Abdominals & Obliques',
+    label: 'Abdominals & Core',
     defaultTheta: 0,
     frames: {
       0: { left: 50.0, top: 35.5, width: 22.0, height: 17.0, rotate: 0, opacity: 1 },
@@ -470,14 +470,15 @@ const getInterpolatedZoneCoords = (zone, theta) => {
 };
 
 export const Interactive3DStudio = ({
-  selectedBodyArea = 'Chest',
+  selectedBodyArea = null, // null by default so no body part is highlighted until client clicks
   onSelectBodyArea,
+  selectedZoneId: controlledZoneId = null,
+  onSelectZoneId,
   selectedDesign = null,
   onSelectDesign,
   isTattooPreviewActive = false,
   onToggleTattooPreview,
   designs = [],
-  placedTattoos = [],
   compact = false,
   avatarGender: controlledGender,
   onAvatarGenderChange,
@@ -485,7 +486,7 @@ export const Interactive3DStudio = ({
   onToggleOptionsDrawer,
   onNavigateBack,
 }) => {
-  // Model Avatar State: Default to 'anatomy' (Anatomical Character from Client Reference)
+  // Model Avatar State: Default to 'anatomy'
   const [internalGender, setInternalGender] = useState('anatomy');
   const avatarGender = controlledGender !== undefined ? controlledGender : internalGender;
   const setAvatarGender = (g) => {
@@ -499,6 +500,10 @@ export const Interactive3DStudio = ({
       : avatarGender === 'female'
         ? FEMININE_360_FRAMES
         : MASCULINE_360_FRAMES;
+
+  // Track the EXACT clicked zone ID so ONLY that part highlights and blinks (not others!)
+  const [internalZoneId, setInternalZoneId] = useState(null);
+  const currentZoneId = controlledZoneId !== undefined ? controlledZoneId : internalZoneId;
 
   // Fluid angle physics refs
   const targetAngleRef = useRef(0);
@@ -514,7 +519,7 @@ export const Interactive3DStudio = ({
   const [hoveredZoneId, setHoveredZoneId] = useState(null);
   const [isAutoSpin, setIsAutoSpin] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [internalOptionsOpen, setInternalOptionsOpen] = useState(false);
+  const [internalOptionsOpen, setInternalOptionsOpen] = useState(true);
   const [styleFilter, setStyleFilter] = useState('All');
 
   const optionsOpen = showOptionsDrawer !== undefined ? showOptionsDrawer : internalOptionsOpen;
@@ -597,12 +602,15 @@ export const Interactive3DStudio = ({
 
   // Smoothly align angle when a body region is chosen
   useEffect(() => {
-    const matchingZone = HIT_ZONES.find((z) => z.key.toLowerCase() === selectedBodyArea.toLowerCase());
-    if (matchingZone && typeof matchingZone.defaultTheta === 'number') {
+    if (!selectedBodyArea && !currentZoneId) return;
+    const activeZone =
+      HIT_ZONES.find((z) => z.id === currentZoneId) ||
+      HIT_ZONES.find((z) => z.key.toLowerCase() === (selectedBodyArea || '').toLowerCase());
+    if (activeZone && typeof activeZone.defaultTheta === 'number') {
       velocityRef.current = 0;
-      targetAngleRef.current = matchingZone.defaultTheta;
+      targetAngleRef.current = activeZone.defaultTheta;
     }
-  }, [selectedBodyArea]);
+  }, [currentZoneId, selectedBodyArea]);
 
   // Pointer drag controls
   const handlePointerDown = (e) => {
@@ -656,7 +664,7 @@ export const Interactive3DStudio = ({
     isDraggingRef.current = false;
   };
 
-  // Step rotation (e.g. 45 degrees)
+  // Step rotation
   const handleStepRotate = (delta) => {
     velocityRef.current = 0;
     setIsAutoSpin(false);
@@ -679,14 +687,16 @@ export const Interactive3DStudio = ({
     velocityRef.current = 0;
   };
 
-  // Body part selection handler:
-  // HIGHLIGHTS AND BLINKS the body part, does NOT show tattoo automatically, and OPENS tattoo options for that part!
-  const handleBodyPartClick = (zoneKey) => {
-    if (onSelectBodyArea) {
-      onSelectBodyArea(zoneKey);
-    }
-    // Open options panel so client sees tattoo options for this part
-    setOptionsOpen(true);
+  // Body part click handler:
+  // ONLY that clicked zone is highlighted and blinks!
+  // No tattoo displays automatically.
+  // Tattoo options for that part are immediately shown!
+  const handleBodyPartClick = (zone) => {
+    setInternalZoneId(zone.id);
+    if (onSelectZoneId) onSelectZoneId(zone.id);
+    if (onSelectBodyArea) onSelectBodyArea(zone.key);
+    if (onToggleTattooPreview) onToggleTattooPreview(false); // Clean skin on click!
+    setOptionsOpen(true); // Open the options for this part!
   };
 
   const normalizedTheta = ((displayAngle % 360) + 360) % 360;
@@ -696,28 +706,38 @@ export const Interactive3DStudio = ({
   while (relativeAngle < -180) relativeAngle += 360;
   while (relativeAngle > 180) relativeAngle -= 360;
 
-  // Selected muscle group color definition
-  const currentColor = ANATOMICAL_COLORS[selectedBodyArea] || {
-    hex: '#fbbf24',
-    bg: 'rgba(251, 191, 36, 0.55)',
-    border: '#f59e0b',
-    name: selectedBodyArea,
-  };
+  // Active zone details
+  const activeZone =
+    HIT_ZONES.find((z) => z.id === currentZoneId) ||
+    (selectedBodyArea ? HIT_ZONES.find((z) => z.key.toLowerCase() === selectedBodyArea.toLowerCase()) : null);
 
-  // Filter available designs for the selected body part
-  const matchingDesigns = designs.filter((d) =>
-    (d.bodyAreas || []).some(
-      (a) =>
-        a.toLowerCase() === selectedBodyArea.toLowerCase() ||
-        selectedBodyArea.toLowerCase().includes(a.toLowerCase())
-    )
-  );
+  const activeKey = activeZone?.key || selectedBodyArea;
+
+  const currentColor = activeKey
+    ? ANATOMICAL_COLORS[activeKey] || {
+        hex: '#fbbf24',
+        bg: 'rgba(251, 191, 36, 0.55)',
+        border: '#f59e0b',
+        name: activeKey,
+      }
+    : null;
+
+  // Matching designs for active body part
+  const matchingDesigns = activeKey
+    ? designs.filter((d) =>
+        (d.bodyAreas || []).some(
+          (a) =>
+            a.toLowerCase() === activeKey.toLowerCase() ||
+            activeKey.toLowerCase().includes(a.toLowerCase())
+        )
+      )
+    : [];
 
   const displayDesigns = matchingDesigns.length > 0 ? matchingDesigns : designs;
   const filteredDesigns =
     styleFilter === 'All' ? displayDesigns : displayDesigns.filter((d) => d.style === styleFilter);
 
-  // Quick 3 view angles matching user reference image: Front, 3/4 Side, Back
+  // Quick 3 views matching user reference image
   const referenceAnglePresets = [
     { label: 'Front View', angle: 0 },
     { label: '3/4 Side View', angle: 45 },
@@ -734,7 +754,10 @@ export const Interactive3DStudio = ({
         <div className="flex items-center space-x-2">
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs"
-            style={{ backgroundColor: `${currentColor.hex}22`, color: currentColor.hex }}
+            style={{
+              backgroundColor: currentColor ? `${currentColor.hex}22` : '#ffffff10',
+              color: currentColor ? currentColor.hex : '#ffffff',
+            }}
           >
             <Compass className="w-4 h-4" />
           </div>
@@ -748,7 +771,7 @@ export const Interactive3DStudio = ({
           </div>
         </div>
 
-        {/* Center: Character Model Selector (Anatomical Character Default, Male, Female) */}
+        {/* Center: Character Model Selector (Anatomical Character Default) */}
         <div className="flex items-center p-1 bg-black/70 rounded-xl border border-white/10 shadow-inner">
           <button
             type="button"
@@ -758,7 +781,7 @@ export const Interactive3DStudio = ({
                 ? 'bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 text-black shadow-md shadow-emerald-400/25 font-black'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
             }`}
-            title="Anatomical Muscle Model (As in Reference)"
+            title="Anatomical Muscle Character"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Anatomical Character</span>
@@ -830,7 +853,7 @@ export const Interactive3DStudio = ({
         onPointerLeave={handlePointerLeave}
         style={{ touchAction: 'none', userSelect: 'none' }}
       >
-        {/* TOP-LEFT BACK BUTTON (Exact match to reference image < icon) */}
+        {/* TOP-LEFT BACK BUTTON */}
         <button
           type="button"
           onClick={() => {
@@ -844,38 +867,46 @@ export const Interactive3DStudio = ({
         </button>
 
         {/* ACTIVE BLINKING BODY PART STATUS BANNER */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-black/85 backdrop-blur-md border shadow-2xl transition-all"
-          style={{ borderColor: `${currentColor.hex}66` }}
-        >
+        {currentColor ? (
           <div
-            className="w-2.5 h-2.5 rounded-full animate-ping"
-            style={{ backgroundColor: currentColor.hex }}
-          />
-          <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-white">
-            {currentColor.name}
-          </span>
-          <span className="text-[10px] text-zinc-400 font-bold hidden sm:inline">•</span>
-          <span
-            className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline"
-            style={{ color: currentColor.hex }}
+            className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-black/85 backdrop-blur-md border shadow-2xl transition-all"
+            style={{ borderColor: `${currentColor.hex}66` }}
           >
-            Blinking Active
-          </span>
-          <button
-            type="button"
-            onClick={() => setOptionsOpen(true)}
-            className="ml-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-colors"
-          >
-            See Options ({matchingDesigns.length})
-          </button>
-        </div>
+            <div
+              className="w-2.5 h-2.5 rounded-full animate-ping"
+              style={{ backgroundColor: currentColor.hex }}
+            />
+            <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-white">
+              {activeZone?.label || currentColor.name}
+            </span>
+            <span className="text-[10px] text-zinc-400 font-bold hidden sm:inline">•</span>
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline"
+              style={{ color: currentColor.hex }}
+            >
+              Highlight & Blinking
+            </span>
+            <button
+              type="button"
+              onClick={() => setOptionsOpen(!optionsOpen)}
+              className="ml-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-colors"
+            >
+              {optionsOpen ? 'Hide Options' : `Options (${matchingDesigns.length})`}
+            </button>
+          </div>
+        ) : (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 shadow-xl text-zinc-300 text-[11px] font-bold">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span>Click any body part to highlight it and view tattoo options</span>
+          </div>
+        )}
 
-        {/* BOTTOM-RIGHT 360° ROTATE BUTTON (Exact match to circular arrow in reference image) */}
+        {/* BOTTOM-RIGHT 360° ROTATE BUTTON */}
         <button
           type="button"
           onClick={() => handleStepRotate(45)}
           className="absolute bottom-4 right-4 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-black text-amber-300 hover:text-white border border-amber-400/40 backdrop-blur-md shadow-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-          title="Rotate 45° (Drag horizontally to rotate 360°)"
+          title="Rotate 45°"
         >
           <RotateCw className="w-5 h-5 transition-transform group-hover:rotate-45" />
         </button>
@@ -931,7 +962,7 @@ export const Interactive3DStudio = ({
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[140px] opacity-20 pointer-events-none transition-colors duration-500"
-            style={{ backgroundColor: currentColor.hex }}
+            style={{ backgroundColor: currentColor ? currentColor.hex : '#38bdf8' }}
           />
         </div>
 
@@ -975,67 +1006,61 @@ export const Interactive3DStudio = ({
               );
             })}
 
-            {/* HIGHLIGHT AND BLINKING EFFECT FOR SELECTED BODY PART */}
-            {HIT_ZONES.filter((zone) => zone.key.toLowerCase() === selectedBodyArea.toLowerCase()).map(
-              (selectedZone) => {
-                const dynamicCoords = getInterpolatedZoneCoords(selectedZone, displayAngle);
-                if (!dynamicCoords || dynamicCoords.opacity < 0.12) return null;
+            {/* HIGHLIGHT ONLY ON THE EXACT CLICKED PART (NOT ON OTHER PARTS) */}
+            {activeZone && (() => {
+              const dynamicCoords = getInterpolatedZoneCoords(activeZone, displayAngle);
+              if (!dynamicCoords || dynamicCoords.opacity < 0.12) return null;
 
-                return (
+              return (
+                <div
+                  key={`highlight-${activeZone.id}`}
+                  className="absolute z-15 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                  style={{
+                    left: `${dynamicCoords.left + userOffsetX}%`,
+                    top: `${dynamicCoords.top + userOffsetY}%`,
+                    width: `${Math.max(dynamicCoords.width * 1.5, 16)}%`,
+                    height: `${Math.max(dynamicCoords.height * 1.5, 16)}%`,
+                    transform: `translate3d(-50%, -50%, 0) rotate(${dynamicCoords.rotate + userRotate}deg)`,
+                    transformOrigin: '50% 50%',
+                    opacity: dynamicCoords.opacity,
+                  }}
+                >
+                  {/* Outer Expanding Radar Wave Ping */}
                   <div
-                    key={`highlight-${selectedZone.id}`}
-                    className="absolute z-15 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                    className="absolute inset-0 rounded-full animate-radar-ping pointer-events-none"
                     style={{
-                      left: `${dynamicCoords.left + userOffsetX}%`,
-                      top: `${dynamicCoords.top + userOffsetY}%`,
-                      width: `${Math.max(dynamicCoords.width * 1.5, 16)}%`,
-                      height: `${Math.max(dynamicCoords.height * 1.5, 16)}%`,
-                      transform: `translate3d(-50%, -50%, 0) rotate(${dynamicCoords.rotate + userRotate}deg)`,
-                      transformOrigin: '50% 50%',
-                      opacity: dynamicCoords.opacity,
+                      backgroundColor: currentColor.hex,
+                      boxShadow: `0 0 28px ${currentColor.hex}`,
                     }}
-                  >
-                    {/* Outer Expanding Radar Wave Ping */}
-                    <div
-                      className="absolute inset-0 rounded-full animate-radar-ping pointer-events-none"
-                      style={{
-                        backgroundColor: currentColor.hex,
-                        boxShadow: `0 0 25px ${currentColor.hex}`,
-                      }}
-                    />
+                  />
 
-                    {/* Blinking Core Highlight */}
-                    <div
-                      className="w-full h-full rounded-full animate-anatomical-blink pointer-events-none"
-                      style={{
-                        color: currentColor.hex,
-                        background: `radial-gradient(ellipse at center, ${currentColor.hex}88 0%, ${currentColor.hex}44 45%, ${currentColor.hex}11 70%, transparent 85%)`,
-                        filter: 'blur(8px)',
-                        mixBlendMode: 'screen',
-                      }}
-                    />
+                  {/* Blinking Core Highlight */}
+                  <div
+                    className="w-full h-full rounded-full animate-anatomical-blink pointer-events-none"
+                    style={{
+                      color: currentColor.hex,
+                      background: `radial-gradient(ellipse at center, ${currentColor.hex}99 0%, ${currentColor.hex}44 45%, ${currentColor.hex}11 70%, transparent 85%)`,
+                      filter: 'blur(8px)',
+                      mixBlendMode: 'screen',
+                    }}
+                  />
 
-                    {/* Concentric Sharp Luminous Center */}
-                    <div
-                      className="absolute inset-2 rounded-full pointer-events-none animate-pulse"
-                      style={{
-                        background: `radial-gradient(ellipse at center, #ffffff 0%, ${currentColor.hex} 60%, transparent 85%)`,
-                        filter: 'blur(4px)',
-                        mixBlendMode: 'color-dodge',
-                      }}
-                    />
-                  </div>
-                );
-              }
-            )}
+                  {/* Concentric Sharp Luminous Center */}
+                  <div
+                    className="absolute inset-2 rounded-full pointer-events-none animate-pulse"
+                    style={{
+                      background: `radial-gradient(ellipse at center, #ffffff 0%, ${currentColor.hex} 60%, transparent 85%)`,
+                      filter: 'blur(4px)',
+                      mixBlendMode: 'color-dodge',
+                    }}
+                  />
+                </div>
+              );
+            })()}
 
             {/* TATTOO DISPLAY: ONLY IF EXPLICITLY ACTIVATED BY CLIENT */}
-            {isTattooPreviewActive && selectedDesign && (() => {
-              const matchingZone = HIT_ZONES.find(
-                (z) => z.key.toLowerCase() === selectedBodyArea.toLowerCase()
-              );
-              if (!matchingZone) return null;
-              const coords = getInterpolatedZoneCoords(matchingZone, displayAngle);
+            {isTattooPreviewActive && selectedDesign && activeZone && (() => {
+              const coords = getInterpolatedZoneCoords(activeZone, displayAngle);
               if (!coords || coords.opacity < 0.1) return null;
 
               const rawSrc =
@@ -1106,7 +1131,8 @@ export const Interactive3DStudio = ({
               const dynamicPlacement = getInterpolatedZoneCoords(zone, displayAngle);
               if (!dynamicPlacement || dynamicPlacement.opacity < 0.25) return null;
 
-              const isSelected = selectedBodyArea.toLowerCase() === zone.key.toLowerCase();
+              // Only the EXACT clicked zone is considered selected
+              const isSelected = currentZoneId === zone.id;
               const isHovered = hoveredZoneId === zone.id;
               const zoneColor = ANATOMICAL_COLORS[zone.key]?.hex || '#fbbf24';
 
@@ -1116,7 +1142,7 @@ export const Interactive3DStudio = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (dragDistanceRef.current > 8) return;
-                    handleBodyPartClick(zone.key);
+                    handleBodyPartClick(zone);
                   }}
                   onMouseEnter={() => setHoveredZoneId(zone.id)}
                   onMouseLeave={() => setHoveredZoneId(null)}
@@ -1146,16 +1172,132 @@ export const Interactive3DStudio = ({
           </div>
         </div>
 
-        {/* BOTTOM DRAG INSTRUCTION PILL */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none z-20 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-[10px] text-zinc-300 shadow-xl flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Click any body part to highlight, blink & view tattoo options</span>
-        </div>
+        {/* FLOATING OVERLAY: TATTOO OPTIONS FOR CLICKED BODY PART DIRECTLY IN VIEWPORT */}
+        {activeKey && optionsOpen && (
+          <div
+            className="absolute bottom-3 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-black/92 border border-amber-500/35 rounded-2xl p-3 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.95)] transition-all animate-in fade-in slide-in-from-bottom-3 duration-250 pointer-events-auto"
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+              <div className="flex items-center space-x-2">
+                <span
+                  className="w-2.5 h-2.5 rounded-full animate-ping shrink-0"
+                  style={{ backgroundColor: currentColor.hex }}
+                />
+                <span className="text-xs font-black uppercase tracking-wider text-white">
+                  Tattoo Options for {activeZone?.label || activeKey}
+                </span>
+                <span className="text-[10px] text-zinc-400 font-mono hidden sm:inline">
+                  ({matchingDesigns.length} designs available)
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setOptionsOpen(false)}
+                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                title="Dismiss overlay"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Horizontal Scroll of Tattoo Cards with Large Images */}
+            <div className="flex items-stretch gap-2.5 overflow-x-auto no-scrollbar py-1">
+              {matchingDesigns.map((d) => {
+                const isCurrentlySelected =
+                  selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
+                const isPreviewing = isCurrentlySelected && isTattooPreviewActive;
+                const rawImg = d.previewImage || d.dataUri || '';
+                const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
+
+                return (
+                  <div
+                    key={d.id || d._id || d.name}
+                    className={`w-44 sm:w-52 shrink-0 rounded-xl p-2.5 flex flex-col justify-between border transition-all ${
+                      isPreviewing
+                        ? 'bg-amber-400/20 border-amber-400 ring-2 ring-amber-400/40 shadow-lg'
+                        : 'bg-zinc-900/90 border-white/10 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2.5 mb-2">
+                      <div className="w-12 h-12 rounded-lg bg-black/90 border border-white/10 p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                        <img
+                          src={imgSrc}
+                          alt={d.name}
+                          className="w-full h-full object-contain filter drop-shadow"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/images/tattoos/mahadev_trishul.png';
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <span className="text-[9px] font-extrabold uppercase text-amber-400 block truncate">
+                          {d.style || 'Custom'}
+                        </span>
+                        <h5 className="text-[11px] font-bold text-white truncate leading-tight">
+                          {d.name}
+                        </h5>
+                        <span className="text-[9px] text-zinc-400 font-mono">
+                          {d.estTime || '2-3 hrs'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 pt-1 border-t border-white/5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onSelectDesign) onSelectDesign(d);
+                          if (onToggleTattooPreview) onToggleTattooPreview(!isPreviewing);
+                        }}
+                        className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1 ${
+                          isPreviewing
+                            ? 'bg-amber-400 text-black shadow-md'
+                            : 'bg-white/10 hover:bg-white/20 text-white hover:text-amber-300'
+                        }`}
+                      >
+                        {isPreviewing ? (
+                          <>
+                            <Check className="w-3 h-3 stroke-[3]" />
+                            <span>On Body</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-3 h-3" />
+                            <span>Preview</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const waUrl = createArtworkInquiryUrl(
+                            d.name,
+                            'Land of God Studio',
+                            activeKey
+                          );
+                          window.open(waUrl, '_blank');
+                        }}
+                        className="p-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/40"
+                        title="WhatsApp Inquiry"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
       </div>
 
       {/* 3. STENCIL FINE-TUNING HUD (ONLY ACTIVE IF A TATTOO IS CURRENTLY PREVIEWED ON SKIN) */}
-      {isTattooPreviewActive && selectedDesign && (
+      {isTattooPreviewActive && selectedDesign && activeKey && (
         <div className="w-full bg-zinc-950/90 border border-amber-500/30 rounded-2xl p-3 px-4 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 shadow-lg">
           <div className="flex items-center space-x-2">
             <Sliders className="w-4 h-4 text-amber-400" />
@@ -1163,7 +1305,7 @@ export const Interactive3DStudio = ({
               Stencil Fit:
             </span>
             <span className="text-xs text-amber-300 font-semibold">
-              {selectedDesign.name} on {selectedBodyArea}
+              {selectedDesign.name} on {activeZone?.label || activeKey}
             </span>
           </div>
 
@@ -1226,181 +1368,181 @@ export const Interactive3DStudio = ({
               }}
               className="px-2.5 py-1 rounded-xl bg-red-950/60 hover:bg-red-900/80 text-red-300 border border-red-500/40 text-[10px] font-bold uppercase tracking-wider transition-all"
             >
-              Remove Tattoo From Body
+              Clear Tattoo From Body
             </button>
           </div>
         </div>
       )}
 
-      {/* 4. TATTOO OPTIONS FOR CLICKED BODY PART (CLIENT SEES THE OPTIONS WHICH TATTOO HE WANTS) */}
-      <div className="w-full bg-zinc-950/90 border border-white/10 rounded-3xl p-5 backdrop-blur-2xl shadow-2xl transition-all">
-        
-        {/* Header with Selected Body Part & Blinking Badge */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
-          <div className="flex items-center space-x-3">
-            <div
-              className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg shrink-0"
-              style={{ backgroundColor: `${currentColor.hex}33`, border: `2px solid ${currentColor.hex}` }}
-            >
-              <Sparkles className="w-5 h-5" style={{ color: currentColor.hex }} />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-[10px] uppercase font-black tracking-widest text-zinc-400">
-                  Body Part Options
-                </span>
-                <span
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest"
-                  style={{ backgroundColor: `${currentColor.hex}22`, color: currentColor.hex }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: currentColor.hex }} />
-                  Highlight & Blink
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                Tattoos Suitable for <span style={{ color: currentColor.hex }}>{selectedBodyArea}</span>
-              </h3>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-400 font-semibold">
-              {filteredDesigns.length} curated design{filteredDesigns.length !== 1 ? 's' : ''} available
-            </span>
-          </div>
-        </div>
-
-        {/* Style Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto py-3 no-scrollbar">
-          {['All', 'Sacred Devbhoomi', 'Geometric', 'Fine Line', 'Blackwork', 'Japanese', 'Traditional', 'Mandala'].map(
-            (style) => (
-              <button
-                key={style}
-                type="button"
-                onClick={() => setStyleFilter(style)}
-                className={`px-3 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border ${
-                  styleFilter === style
-                    ? 'bg-amber-400 text-black border-amber-400 shadow-md font-extrabold'
-                    : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white hover:bg-zinc-800'
-                }`}
-              >
-                {style}
-              </button>
-            )
-          )}
-        </div>
-
-        {/* Tattoo Options Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
-          {filteredDesigns.map((d) => {
-            const isCurrentlySelected =
-              selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
-            const isPreviewingThis = isCurrentlySelected && isTattooPreviewActive;
-            const rawImg = d.previewImage || d.dataUri || '';
-            const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
-
-            return (
+      {/* 4. EXPANDED TATTOO OPTIONS SECTION */}
+      {activeKey && (
+        <div className="w-full bg-zinc-950/90 border border-white/10 rounded-3xl p-5 backdrop-blur-2xl shadow-2xl transition-all">
+          
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
+            <div className="flex items-center space-x-3">
               <div
-                key={d.id || d._id || d.name}
-                className={`relative rounded-2xl p-3.5 flex flex-col justify-between transition-all border ${
-                  isPreviewingThis
-                    ? 'bg-amber-400/10 border-amber-400 ring-2 ring-amber-400/40 shadow-xl'
-                    : 'bg-zinc-900/80 border-white/10 hover:border-white/20 hover:bg-zinc-900'
-                }`}
+                className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-white shadow-lg shrink-0"
+                style={{ backgroundColor: `${currentColor.hex}33`, border: `2px solid ${currentColor.hex}` }}
               >
-                {/* Top Section with Image & Meta */}
-                <div className="flex items-start space-x-3.5">
-                  <div className="relative w-20 h-20 rounded-xl bg-black/90 border border-white/10 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
-                    <img
-                      src={imgSrc}
-                      alt={d.name}
-                      className="w-full h-full object-contain filter drop-shadow"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/images/tattoos/mahadev_trishul.png';
-                      }}
-                    />
-                    {isPreviewingThis && (
-                      <div className="absolute top-1 right-1 px-1 py-0.5 rounded bg-amber-400 text-black text-[8px] font-black uppercase">
-                        ON BODY
-                      </div>
-                    )}
-                  </div>
+                <Sparkles className="w-5 h-5" style={{ color: currentColor.hex }} />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] uppercase font-black tracking-widest text-zinc-400">
+                    Selected Body Part
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest"
+                    style={{ backgroundColor: `${currentColor.hex}22`, color: currentColor.hex }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: currentColor.hex }} />
+                    Active & Blinking
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
+                  Tattoo Options for <span style={{ color: currentColor.hex }}>{activeZone?.label || activeKey}</span>
+                </h3>
+              </div>
+            </div>
 
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400">
-                      {d.style || 'Custom Design'}
-                    </span>
-                    <h4 className="text-sm font-extrabold text-white leading-tight line-clamp-1">
-                      {d.name}
-                    </h4>
-                    <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
-                      {d.description || 'Custom studio artwork by Master Rahul Choudhary.'}
-                    </p>
-                    <div className="flex items-center gap-2 text-[10px] text-zinc-400 pt-0.5">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-amber-400" />
-                        {d.estTime || '2-3 hrs'}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-zinc-400 font-semibold">
+                {filteredDesigns.length} curated design{filteredDesigns.length !== 1 ? 's' : ''} available
+              </span>
+            </div>
+          </div>
+
+          {/* Style Filters */}
+          <div className="flex items-center gap-1.5 overflow-x-auto py-3 no-scrollbar">
+            {['All', 'Sacred Devbhoomi', 'Geometric', 'Fine Line', 'Blackwork', 'Japanese', 'Traditional', 'Mandala'].map(
+              (style) => (
+                <button
+                  key={style}
+                  type="button"
+                  onClick={() => setStyleFilter(style)}
+                  className={`px-3 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border ${
+                    styleFilter === style
+                      ? 'bg-amber-400 text-black border-amber-400 shadow-md font-extrabold'
+                      : 'bg-zinc-900 text-zinc-400 border-white/5 hover:text-white hover:bg-zinc-800'
+                  }`}
+                >
+                  {style}
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Tattoo Options Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+            {filteredDesigns.map((d) => {
+              const isCurrentlySelected =
+                selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
+              const isPreviewingThis = isCurrentlySelected && isTattooPreviewActive;
+              const rawImg = d.previewImage || d.dataUri || '';
+              const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
+
+              return (
+                <div
+                  key={d.id || d._id || d.name}
+                  className={`relative rounded-2xl p-3.5 flex flex-col justify-between transition-all border ${
+                    isPreviewingThis
+                      ? 'bg-amber-400/10 border-amber-400 ring-2 ring-amber-400/40 shadow-xl'
+                      : 'bg-zinc-900/80 border-white/10 hover:border-white/20 hover:bg-zinc-900'
+                  }`}
+                >
+                  <div className="flex items-start space-x-3.5">
+                    <div className="relative w-20 h-20 rounded-xl bg-black/90 border border-white/10 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+                      <img
+                        src={imgSrc}
+                        alt={d.name}
+                        className="w-full h-full object-contain filter drop-shadow"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/images/tattoos/mahadev_trishul.png';
+                        }}
+                      />
+                      {isPreviewingThis && (
+                        <div className="absolute top-1 right-1 px-1 py-0.5 rounded bg-amber-400 text-black text-[8px] font-black uppercase">
+                          ON BODY
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400">
+                        {d.style || 'Custom Design'}
                       </span>
-                      <span>•</span>
-                      <span className="text-emerald-400 font-semibold">
-                        {d.difficulty || 'Custom Masterpiece'}
-                      </span>
+                      <h4 className="text-sm font-extrabold text-white leading-tight line-clamp-1">
+                        {d.name}
+                      </h4>
+                      <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed">
+                        {d.description || 'Custom studio artwork by Master Rahul Choudhary.'}
+                      </p>
+                      <div className="flex items-center gap-2 text-[10px] text-zinc-400 pt-0.5">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-amber-400" />
+                          {d.estTime || '2-3 hrs'}
+                        </span>
+                        <span>•</span>
+                        <span className="text-emerald-400 font-semibold">
+                          {d.difficulty || 'Custom Masterpiece'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Bottom Actions: Preview on Body OR Book */}
-                <div className="mt-3.5 pt-3 border-t border-white/5 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onSelectDesign) onSelectDesign(d);
-                      if (onToggleTattooPreview) {
-                        onToggleTattooPreview(!isPreviewingThis);
-                      }
-                    }}
-                    className={`flex-1 py-2 px-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
-                      isPreviewingThis
-                        ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/20'
-                        : 'bg-white/10 hover:bg-white/15 text-white hover:text-amber-300 border border-white/10'
-                    }`}
-                  >
-                    {isPreviewingThis ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 stroke-[3]" />
-                        <span>Previewing (Tap to Hide)</span>
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Preview Tattoo on Body</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="mt-3.5 pt-3 border-t border-white/5 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onSelectDesign) onSelectDesign(d);
+                        if (onToggleTattooPreview) {
+                          onToggleTattooPreview(!isPreviewingThis);
+                        }
+                      }}
+                      className={`flex-1 py-2 px-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${
+                        isPreviewingThis
+                          ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/20'
+                          : 'bg-white/10 hover:bg-white/15 text-white hover:text-amber-300 border border-white/10'
+                      }`}
+                    >
+                      {isPreviewingThis ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          <span>Previewing (Tap to Hide)</span>
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Preview Tattoo on Body</span>
+                        </>
+                      )}
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const waUrl = createArtworkInquiryUrl(
-                        d.name,
-                        'Land of God Studio',
-                        selectedBodyArea
-                      );
-                      window.open(waUrl, '_blank');
-                    }}
-                    className="p-2 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-300 border border-emerald-500/40 transition-colors"
-                    title={`Inquire about ${d.name} on WhatsApp`}
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const waUrl = createArtworkInquiryUrl(
+                          d.name,
+                          'Land of God Studio',
+                          activeKey
+                        );
+                        window.open(waUrl, '_blank');
+                      }}
+                      className="p-2 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-300 border border-emerald-500/40 transition-colors"
+                      title={`Inquire about ${d.name} on WhatsApp`}
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
         </div>
-
-      </div>
+      )}
 
     </div>
   );

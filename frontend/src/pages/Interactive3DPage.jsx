@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { Interactive3DStudio, ANATOMICAL_COLORS } from '../components/tattoo-studio/Interactive3DStudio';
+import { Interactive3DStudio, ANATOMICAL_COLORS, HIT_ZONES } from '../components/tattoo-studio/Interactive3DStudio';
 import { designsAPI } from '../services/api';
 import { Sparkles, ArrowRight, Star, X, Image as ImageIcon, Sliders, Check, Layers, RotateCcw, Flame, Palette, Clock, Award, ShieldCheck, ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,13 +11,17 @@ import { TATTOO_ARTWORKS_CATALOG } from '../components/tattoo-studio/TattooArtwo
 import { getFullImageUrl } from '../utils/imageHelper';
 
 export const Interactive3DPage = () => {
-  const [selectedBodyArea, setSelectedBodyArea] = useState('Chest');
+  // Start with null so NO body part is highlighted until the client clicks
+  const [selectedBodyArea, setSelectedBodyArea] = useState(null);
+  const [selectedZoneId, setSelectedZoneId] = useState(null);
+
   // Default to 'anatomy' (Anatomical Color-Coded Muscle Mannequin Matching Client Reference)
   const [avatarGender, setAvatarGender] = useState('anatomy');
   const [selectedStyle, setSelectedStyle] = useState('All');
   const [designs, setDesigns] = useState(TATTOO_ARTWORKS_CATALOG);
   const [selectedDesign, setSelectedDesign] = useState(null);
-  // Key requirement: No tattoo should display automatically on click!
+  
+  // No tattoo displayed automatically on click
   const [isTattooPreviewActive, setIsTattooPreviewActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -74,32 +78,49 @@ export const Interactive3DPage = () => {
   }, []);
 
   // When a body part is clicked:
-  // 1. Highlight and blink that body part.
-  // 2. DO NOT automatically display tattoo on that part.
-  // 3. Show tattoo options for that specific body part!
-  const handleSelectBodyArea = (area) => {
+  // 1. Only that exact part highlights and blinks.
+  // 2. NO tattoo displayed automatically.
+  // 3. Tattoo options for that part immediately show.
+  const handleSelectArea = (area) => {
     setSelectedBodyArea(area);
-    setIsTattooPreviewActive(false); // DO NOT display tattoo automatically on click!
-    toast.info(`${area} selected! Choose a tattoo below to preview on body.`, {
-      duration: 2500,
+    const matchingZone = HIT_ZONES.find((z) => z.key.toLowerCase() === area.toLowerCase());
+    if (matchingZone) {
+      setSelectedZoneId(matchingZone.id);
+    }
+    setIsTattooPreviewActive(false);
+    toast.info(`${area} selected! Choose a tattoo from the options to preview on body.`, {
+      duration: 2200,
       id: 'body-area-switch',
     });
+  };
+
+  const handleSelectZone = (zoneId) => {
+    setSelectedZoneId(zoneId);
+    const zone = HIT_ZONES.find((z) => z.id === zoneId);
+    if (zone) {
+      setSelectedBodyArea(zone.key);
+      toast.info(`${zone.label} selected! Showing matching tattoo options.`, {
+        duration: 2000,
+        id: 'body-zone-switch',
+      });
+    }
+    setIsTattooPreviewActive(false);
   };
 
   const handleProceedToBooking = () => {
     const designParam = selectedDesign ? selectedDesign.name : 'Custom Masterpiece';
     const styleParam = selectedDesign ? selectedDesign.style : 'Custom';
+    const placementParam = selectedBodyArea || 'Custom Placement';
     navigate(
       `/booking?style=${encodeURIComponent(styleParam)}&placement=${encodeURIComponent(
-        selectedBodyArea
+        placementParam
       )}&design=${encodeURIComponent(designParam)}`
     );
   };
 
-  const activeColor = ANATOMICAL_COLORS[selectedBodyArea] || {
-    hex: '#fbbf24',
-    name: selectedBodyArea,
-  };
+  const activeColor = selectedBodyArea
+    ? ANATOMICAL_COLORS[selectedBodyArea] || { hex: '#fbbf24', name: selectedBodyArea }
+    : null;
 
   return (
     <div className="min-h-screen pt-24 pb-16 bg-[#090b0e] text-left text-zinc-100 relative w-full max-w-full overflow-x-hidden">
@@ -107,7 +128,7 @@ export const Interactive3DPage = () => {
         <title>3D Anatomical Tattoo Placement Studio — LAND OF GOD TATTOO STUDIO (Una)</title>
         <meta
           name="description"
-          content="Select any body part on our 3D anatomical model to highlight, blink, and explore curated tattoo designs before getting inked in Una."
+          content="Select any body part on our 3D anatomical model to highlight only that part, blink, and explore curated tattoo designs before getting inked in Una."
         />
       </Helmet>
 
@@ -135,25 +156,27 @@ export const Interactive3DPage = () => {
                 3D Anatomical Tattoo Placement Simulator
               </h1>
               <h2 className="text-xs sm:text-sm text-studio-gold font-serif">
-                Touch any body part on the character to highlight, blink, and see curated tattoo options
+                Touch any body part on the character to highlight only that part and see tattoo options
               </h2>
               <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-serif">
-                Click any anatomical muscle zone on the character. The part will highlight and pulse with blinking light while presenting you with all suitable tattoo designs for that placement.
+                Click any body part on the 3D character. Only that exact part will highlight and pulse with blinking light while displaying the curated tattoo designs for that placement.
               </p>
             </div>
 
             {/* Active Highlight Badge */}
-            <div className="flex items-center space-x-2.5 bg-black/80 border border-white/15 px-4 py-2.5 rounded-xl text-xs shadow-xl backdrop-blur-md self-start md:self-end">
-              <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeColor.hex }} />
-              <span className="text-zinc-400 font-medium">Selected Zone:</span>
-              <span className="font-bold text-white uppercase tracking-wider">{selectedBodyArea}</span>
-              {isTattooPreviewActive && selectedDesign && (
-                <>
-                  <span className="text-zinc-600">•</span>
-                  <span className="text-amber-400 font-semibold">{selectedDesign.name}</span>
-                </>
-              )}
-            </div>
+            {selectedBodyArea && activeColor && (
+              <div className="flex items-center space-x-2.5 bg-black/80 border border-white/15 px-4 py-2.5 rounded-xl text-xs shadow-xl backdrop-blur-md self-start md:self-end">
+                <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeColor.hex }} />
+                <span className="text-zinc-400 font-medium">Selected:</span>
+                <span className="font-bold text-white uppercase tracking-wider">{selectedBodyArea}</span>
+                {isTattooPreviewActive && selectedDesign && (
+                  <>
+                    <span className="text-zinc-600">•</span>
+                    <span className="text-amber-400 font-semibold">{selectedDesign.name}</span>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -203,7 +226,7 @@ export const Interactive3DPage = () => {
           </div>
 
           <div className="text-[11px] text-zinc-400 hidden md:block">
-            Click any body part to highlight & blink • Drag horizontally to rotate 360°
+            Click any body part on the character to highlight only that part • Drag to rotate 360°
           </div>
         </div>
 
@@ -213,12 +236,12 @@ export const Interactive3DPage = () => {
             Target Muscle:
           </span>
           {bodyAreas.map((area) => {
-            const isSelected = selectedBodyArea.toLowerCase() === area.toLowerCase();
+            const isSelected = selectedBodyArea?.toLowerCase() === area.toLowerCase();
             const color = ANATOMICAL_COLORS[area]?.hex || '#fbbf24';
             return (
               <button
                 key={area}
-                onClick={() => handleSelectBodyArea(area)}
+                onClick={() => handleSelectArea(area)}
                 className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                   isSelected
                     ? 'text-black font-black shadow-md'
@@ -242,7 +265,9 @@ export const Interactive3DPage = () => {
         <div className="relative w-full">
           <Interactive3DStudio
             selectedBodyArea={selectedBodyArea}
-            onSelectBodyArea={handleSelectBodyArea}
+            onSelectBodyArea={handleSelectArea}
+            selectedZoneId={selectedZoneId}
+            onSelectZoneId={handleSelectZone}
             selectedDesign={selectedDesign}
             onSelectDesign={setSelectedDesign}
             isTattooPreviewActive={isTattooPreviewActive}
@@ -255,7 +280,7 @@ export const Interactive3DPage = () => {
         </div>
 
         {/* BOTTOM ACTION BAR WHEN A TATTOO IS ACTIVE */}
-        {isTattooPreviewActive && selectedDesign && (
+        {isTattooPreviewActive && selectedDesign && selectedBodyArea && (
           <div className="mt-6 bg-zinc-900/90 border border-amber-500/20 rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-all">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
               
