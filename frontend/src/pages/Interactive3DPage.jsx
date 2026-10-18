@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { Interactive3DStudio, ANATOMICAL_COLORS, HIT_ZONES } from '../components/tattoo-studio/Interactive3DStudio';
+import { Interactive3DStudio, ANATOMICAL_COLORS, HIT_ZONES, BODY_PART_SUGGESTIONS } from '../components/tattoo-studio/Interactive3DStudio';
 import { designsAPI } from '../services/api';
 import { Sparkles, ArrowRight, Star, X, Image as ImageIcon, Sliders, Check, Layers, RotateCcw, Flame, Palette, Clock, Award, ShieldCheck, ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -88,10 +88,16 @@ export const Interactive3DPage = () => {
       setSelectedZoneId(matchingZone.id);
     }
     setIsTattooPreviewActive(false);
-    toast.info(`${area} selected! Choose a tattoo from the options to preview on body.`, {
-      duration: 2200,
-      id: 'body-area-switch',
-    });
+    const suggestion = BODY_PART_SUGGESTIONS[area];
+    toast.info(
+      suggestion
+        ? `🎯 Suggested for ${area}: ${suggestion.primaryDesignName}!`
+        : `${area} selected! Showing matching tattoo options.`,
+      {
+        duration: 2500,
+        id: 'body-area-switch',
+      }
+    );
   };
 
   const handleSelectZone = (zoneId) => {
@@ -99,10 +105,16 @@ export const Interactive3DPage = () => {
     const zone = HIT_ZONES.find((z) => z.id === zoneId);
     if (zone) {
       setSelectedBodyArea(zone.key);
-      toast.info(`${zone.label} selected! Showing matching tattoo options.`, {
-        duration: 2000,
-        id: 'body-zone-switch',
-      });
+      const suggestion = BODY_PART_SUGGESTIONS[zone.key];
+      toast.info(
+        suggestion
+          ? `🎯 Suggested for ${zone.label}: ${suggestion.primaryDesignName}!`
+          : `${zone.label} selected! Showing matching tattoo options.`,
+        {
+          duration: 2500,
+          id: 'body-zone-switch',
+        }
+      );
     }
     setIsTattooPreviewActive(false);
   };
@@ -257,6 +269,32 @@ export const Interactive3DPage = () => {
             );
           })}
         </div>
+
+        {/* Anatomical Recommendation Indicator */}
+        {selectedBodyArea && BODY_PART_SUGGESTIONS[selectedBodyArea] && (
+          <div className="mb-4 px-4 py-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-lg animate-in fade-in duration-200">
+            <div className="flex items-center space-x-2.5">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+              <div className="space-y-0.5">
+                <span className="text-zinc-200 font-medium">
+                  <strong className="text-amber-300">Suggested Tattoo for {selectedBodyArea}:</strong>{' '}
+                  <span className="text-white font-bold">{BODY_PART_SUGGESTIONS[selectedBodyArea].primaryDesignName}</span>
+                </span>
+                <span className="text-zinc-400 text-[11px] block sm:inline sm:ml-2">
+                  — {BODY_PART_SUGGESTIONS[selectedBodyArea].tagline}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+              <span className="px-2 py-0.5 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-amber-400">
+                Pain: {BODY_PART_SUGGESTIONS[selectedBodyArea].painRating.split('-')[0].trim()}
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-emerald-400">
+                Heals: {BODY_PART_SUGGESTIONS[selectedBodyArea].healingTime}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* CENTER 3D MANNEQUIN CANVAS WITH INTEGRATED OPTIONS */}
         <div className="relative w-full">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Compass,
   RotateCw,
@@ -20,7 +20,10 @@ import {
   Layers,
   ArrowRight,
   MessageCircle,
-  ExternalLink
+  ExternalLink,
+  Star,
+  Info,
+  ShieldCheck,
 } from 'lucide-react';
 import { getFullImageUrl } from '../../utils/imageHelper';
 import { createArtworkInquiryUrl } from '../../utils/whatsapp';
@@ -75,6 +78,118 @@ export const ANATOMICAL_COLORS = {
   Neck: { hex: '#818cf8', bg: 'rgba(129, 140, 248, 0.55)', border: '#6366f1', name: 'Trapezius (Neck)' },
   Wrist: { hex: '#cbd5e1', bg: 'rgba(203, 213, 225, 0.55)', border: '#94a3b8', name: 'Wrist / Hand' },
   Ankle: { hex: '#cbd5e1', bg: 'rgba(203, 213, 225, 0.55)', border: '#94a3b8', name: 'Ankle / Foot' },
+};
+
+// Curated Anatomical Tattoo Suggestions, Placement Guidance & Pain Ratings by Rahul Choudhary
+export const BODY_PART_SUGGESTIONS = {
+  Chest: {
+    primaryDesignName: 'Polygonal Geometric Lion Monarch',
+    reason: 'Pectoral muscle plates provide a broad, flat symmetrical canvas ideal for bold geometric monarchs, animals, and sacred shields.',
+    painRating: 'Moderate (4/10)',
+    healingTime: '2-3 weeks',
+    placementAdvice: 'Center over the sternum or contour symmetrically across the pectoral muscle plate.',
+    suggestedStyles: ['Geometric', 'Sacred Devbhoomi', 'Blackwork'],
+    tagline: 'Bold, commanding presence across pectoral contours',
+  },
+  Forearm: {
+    primaryDesignName: 'Sacred Mahadev Trishul & Damru',
+    reason: 'The natural muscle cylinder of the forearm creates ideal vertical flow for sacred trishuls, calligraphy, and compass designs.',
+    painRating: 'Low (2/10) - Highly Recommended for First Tattoo',
+    healingTime: '10-14 days',
+    placementAdvice: 'Align design along the flexor carpi radialis muscle line for seamless movement without distortion.',
+    suggestedStyles: ['Sacred Devbhoomi', 'Geometric', 'Fine Line'],
+    tagline: 'High everyday visibility & graceful vertical flow',
+  },
+  'Upper Arm': {
+    primaryDesignName: 'Irezumi Dragon Koi Leaping Waves',
+    reason: 'The rounded deltoid & bicep muscles give dynamic 3D curvature to flowing water, dragons, and wrapping half-sleeve motifs.',
+    painRating: 'Low (2.5/10)',
+    healingTime: '12-16 days',
+    placementAdvice: 'Wraps effortlessly from outer bicep towards shoulder cap for a powerful sleeve flow.',
+    suggestedStyles: ['Japanese', 'Blackwork', 'Geometric'],
+    tagline: 'Dynamic curvature that flexes with muscle movement',
+  },
+  Shoulder: {
+    primaryDesignName: 'Devbhoomi Radial Sacred Mandala',
+    reason: 'The spherical deltoid cap serves as the perfect organic anchor for circular radial mandalas and sacred compasses.',
+    painRating: 'Low - Moderate (3/10)',
+    healingTime: '14-18 days',
+    placementAdvice: 'Center the focal origin of the mandala over the acromion joint for 360° radial symmetry.',
+    suggestedStyles: ['Mandala', 'Geometric', 'Sacred Devbhoomi'],
+    tagline: 'Spherical muscle cap creates captivating 360° radial beauty',
+  },
+  Back: {
+    primaryDesignName: 'Phoenix Rising From Sacred Flames',
+    reason: 'The expansive latissimus dorsi canvas allows grand wing spans, high-contrast blackwork, and majestic mythological scale.',
+    painRating: 'Low on lats (3/10), Moderate on spine (6/10)',
+    healingTime: '2-3 weeks',
+    placementAdvice: 'Spreads symmetrically across scapulae blades with tail feathers sweeping down lower lats.',
+    suggestedStyles: ['Blackwork', 'Neo-Traditional', 'Sacred Devbhoomi'],
+    tagline: 'Studio masterpiece canvas with maximum detail depth',
+  },
+  Spine: {
+    primaryDesignName: 'Sacred Trishul Dagger Vertical Spine',
+    reason: 'Vertebral alignment creates an elegant linear axis for sacred scripts, trishul daggers, and vertical chakras.',
+    painRating: 'Spicy / Intense (7/10)',
+    healingTime: '2-3 weeks',
+    placementAdvice: 'Precisely aligned along the thoracic and lumbar spine vertebrae.',
+    suggestedStyles: ['Neo-Traditional', 'Sacred Devbhoomi', 'Fine Line'],
+    tagline: 'Sleek vertebral elongation with profound spiritual symbolism',
+  },
+  Ribs: {
+    primaryDesignName: 'Fine Line Serpent & Blooming Peony',
+    reason: 'Curving intercostal rib contours guide organic s-curves, flora, and undulating serpent forms.',
+    painRating: 'Intense (8/10)',
+    healingTime: '2-3 weeks',
+    placementAdvice: 'Curves along the natural slant of the 6th-9th ribs for an elongated silhouette.',
+    suggestedStyles: ['Fine Line', 'Traditional', 'Blackwork'],
+    tagline: 'Sensual organic contour along natural rib curvature',
+  },
+  Thigh: {
+    primaryDesignName: 'Nordic Howling Wolf & Forest Moon',
+    reason: 'Massive quad muscle canvas holds large-scale portraits, mythical wolves, and detailed scenery with low pain.',
+    painRating: 'Low (3/10)',
+    healingTime: '14-20 days',
+    placementAdvice: 'Centered on the anterior quadriceps or wrapping towards the outer iliotibial band.',
+    suggestedStyles: ['Geometric', 'Blackwork', 'Neo-Traditional'],
+    tagline: 'Grand scale canvas with low pain & easy concealability',
+  },
+  Calf: {
+    primaryDesignName: 'Baroque Filigree Obsidian Skull',
+    reason: 'The tapered diamond shape of the gastrocnemius muscle frames ornate skulls, shields, and sacred trishuls.',
+    painRating: 'Moderate (4/10)',
+    healingTime: '14-18 days',
+    placementAdvice: 'Fitted centrally between the lateral and medial gastrocnemius heads.',
+    suggestedStyles: ['Blackwork', 'Geometric', 'Sacred Devbhoomi'],
+    tagline: 'Tapered diamond silhouette perfectly framing muscular calves',
+  },
+  Wrist: {
+    primaryDesignName: 'Fine Line Butterfly & Botanical Lavender',
+    reason: 'Delicate wrist tendons and joint require micro-scale fine lines, butterflies, or botanical stems.',
+    painRating: 'Moderate (5/10)',
+    healingTime: '10-12 days',
+    placementAdvice: 'Positioned 1 inch below the distal wrist crease to minimize motion friction during healing.',
+    suggestedStyles: ['Fine Line', 'Minimalist', 'Sacred Devbhoomi'],
+    tagline: 'Delicate micro precision for everyday visibility',
+  },
+  Neck: {
+    primaryDesignName: 'Om Namah Shivaya Sanskrit Mantra',
+    reason: 'Nape and lateral neck curve beautifully accentuate spiritual scripts and sacred emblems.',
+    painRating: 'Spicy (6.5/10)',
+    healingTime: '10-14 days',
+    placementAdvice: 'Centered on the upper nape (C7 vertebra) or subtly curved behind the earlobe.',
+    suggestedStyles: ['Sacred Devbhoomi', 'Fine Line', 'Blackwork'],
+    tagline: 'Distinguished sacred statement with high reverence',
+  },
+  Ankle: {
+    primaryDesignName: 'Devbhoomi Sacred Lotus Unalome',
+    reason: 'The malleolus bone curve invites vertical unalome spirals ascending upward along the Achilles.',
+    painRating: 'Spicy near bone (6/10)',
+    healingTime: '12-16 days',
+    placementAdvice: 'Anchored just above the lateral malleolus or wrapping smoothly around the achilles tendon.',
+    suggestedStyles: ['Sacred Devbhoomi', 'Fine Line', 'Minimalist'],
+    tagline: 'Graceful ascending geometry along ankle contours',
+  },
 };
 
 // Comprehensive Bilateral Hit Zones with unique IDs on the 3D Muscular Mannequin
@@ -722,16 +837,28 @@ export const Interactive3DStudio = ({
       }
     : null;
 
-  // Matching designs for active body part
-  const matchingDesigns = activeKey
-    ? designs.filter((d) =>
-        (d.bodyAreas || []).some(
-          (a) =>
-            a.toLowerCase() === activeKey.toLowerCase() ||
-            activeKey.toLowerCase().includes(a.toLowerCase())
-        )
+  const suggestionData = activeKey ? BODY_PART_SUGGESTIONS[activeKey] : null;
+
+  // Matching designs for active body part - prioritized so tailored suggestion appears FIRST
+  const matchingDesigns = useMemo(() => {
+    if (!activeKey) return [];
+    const directMatches = designs.filter((d) =>
+      (d.bodyAreas || []).some(
+        (a) =>
+          a.toLowerCase() === activeKey.toLowerCase() ||
+          activeKey.toLowerCase().includes(a.toLowerCase())
       )
-    : [];
+    );
+
+    const primaryName = suggestionData?.primaryDesignName?.toLowerCase();
+    return [...directMatches].sort((a, b) => {
+      const aIsPrimary = primaryName && a.name.toLowerCase().includes(primaryName);
+      const bIsPrimary = primaryName && b.name.toLowerCase().includes(primaryName);
+      if (aIsPrimary && !bIsPrimary) return -1;
+      if (!aIsPrimary && bIsPrimary) return 1;
+      return 0;
+    });
+  }, [activeKey, designs, suggestionData]);
 
   const displayDesigns = matchingDesigns.length > 0 ? matchingDesigns : designs;
   const filteredDesigns =
@@ -1156,27 +1283,43 @@ export const Interactive3DStudio = ({
           </div>
         </div>
 
-        {/* FLOATING OVERLAY: TATTOO OPTIONS FOR CLICKED BODY PART DIRECTLY IN VIEWPORT */}
+        {/* FLOATING OVERLAY: TATTOO SUGGESTIONS FOR CLICKED BODY PART DIRECTLY IN VIEWPORT */}
         {activeKey && optionsOpen && (
           <div
-            className="absolute bottom-3 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-black/92 border border-amber-500/35 rounded-2xl p-3 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.95)] transition-all animate-in fade-in slide-in-from-bottom-3 duration-250 pointer-events-auto"
+            className="absolute bottom-3 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-black/95 border border-amber-500/40 rounded-2xl p-3.5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.95)] transition-all animate-in fade-in slide-in-from-bottom-3 duration-250 pointer-events-auto"
             onPointerDown={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                <span className="text-xs font-black uppercase tracking-wider text-white">
-                  Tattoo Options for {activeZone?.label || activeKey}
-                </span>
-                <span className="text-[10px] text-zinc-400 font-mono hidden sm:inline">
-                  ({matchingDesigns.length} designs available)
-                </span>
+            {/* Header with anatomical suggestion highlights */}
+            <div className="flex items-start justify-between pb-2.5 mb-2.5 border-b border-white/10 gap-2">
+              <div className="min-w-0 space-y-0.5">
+                <div className="flex items-center flex-wrap gap-2">
+                  <div className="flex items-center space-x-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="text-xs font-black uppercase tracking-wider text-white">
+                      Suggested Tattoos for {activeZone?.label || activeKey}
+                    </span>
+                  </div>
+                  {suggestionData && (
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-400/20 text-amber-300 border border-amber-400/35">
+                      ⭐ Top: {suggestionData.primaryDesignName}
+                    </span>
+                  )}
+                  <span className="text-[10px] text-zinc-400 font-mono hidden md:inline">
+                    ({matchingDesigns.length} tailored options)
+                  </span>
+                </div>
+
+                {suggestionData && (
+                  <p className="text-[11px] text-zinc-300 truncate max-w-xl">
+                    <span className="text-amber-400 font-semibold">Artist Tip:</span> {suggestionData.tagline} • <span className="text-zinc-400">Pain: {suggestionData.painRating.split('-')[0].trim()}</span>
+                  </p>
+                )}
               </div>
 
               <button
                 type="button"
                 onClick={() => setOptionsOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"
                 title="Dismiss overlay"
               >
                 <X className="w-4 h-4" />
@@ -1189,18 +1332,30 @@ export const Interactive3DStudio = ({
                 const isCurrentlySelected =
                   selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
                 const isPreviewing = isCurrentlySelected && isTattooPreviewActive;
+                const isPrimary =
+                  suggestionData?.primaryDesignName &&
+                  d.name.toLowerCase().includes(suggestionData.primaryDesignName.toLowerCase());
                 const rawImg = d.previewImage || d.dataUri || '';
                 const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
 
                 return (
                   <div
                     key={d.id || d._id || d.name}
-                    className={`w-44 sm:w-52 shrink-0 rounded-xl p-2.5 flex flex-col justify-between border transition-all ${
-                      isPreviewing
+                    className={`w-48 sm:w-56 shrink-0 rounded-xl p-2.5 flex flex-col justify-between border transition-all relative ${
+                      isPrimary
+                        ? isPreviewing
+                          ? 'bg-amber-400/25 border-amber-400 ring-2 ring-amber-400/50 shadow-lg'
+                          : 'bg-zinc-900/95 border-amber-500/50 hover:border-amber-400'
+                        : isPreviewing
                         ? 'bg-amber-400/20 border-amber-400 ring-2 ring-amber-400/40 shadow-lg'
                         : 'bg-zinc-900/90 border-white/10 hover:border-white/20'
                     }`}
                   >
+                    {isPrimary && (
+                      <div className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black text-[8px] font-black uppercase tracking-wider shadow">
+                        ⭐ Best Match
+                      </div>
+                    )}
                     <div className="flex items-center space-x-2.5 mb-2">
                       <div className="w-12 h-12 rounded-lg bg-black/90 border border-white/10 p-1 flex items-center justify-center shrink-0 overflow-hidden">
                         <img
@@ -1380,17 +1535,51 @@ export const Interactive3DStudio = ({
                   </span>
                 </div>
                 <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-                  Tattoo Options for <span style={{ color: currentColor.hex }}>{activeZone?.label || activeKey}</span>
+                  Suggested Tattoos for <span style={{ color: currentColor.hex }}>{activeZone?.label || activeKey}</span>
                 </h3>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <span className="text-xs text-zinc-400 font-semibold">
-                {filteredDesigns.length} curated design{filteredDesigns.length !== 1 ? 's' : ''} available
+                {filteredDesigns.length} tailored design{filteredDesigns.length !== 1 ? 's' : ''} available
               </span>
             </div>
           </div>
+
+          {/* Anatomical Recommendation Advice Card */}
+          {suggestionData && (
+            <div className="my-4 p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-zinc-900/90 to-zinc-950 border border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg">
+              <div className="space-y-1.5 flex-1 min-w-0">
+                <div className="flex items-center flex-wrap gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-black flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-current" />
+                    <span>Top Studio Recommendation</span>
+                  </span>
+                  <span className="text-xs text-amber-300 font-extrabold">
+                    {suggestionData.primaryDesignName}
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-200 leading-relaxed">
+                  <strong className="text-white">Why this body part:</strong> {suggestionData.reason}
+                </p>
+                <p className="text-[11px] text-zinc-400">
+                  <strong className="text-zinc-300">Placement & Contour Flow:</strong> {suggestionData.placementAdvice}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-white/10 w-full md:w-auto justify-end">
+                <div className="bg-black/60 px-3 py-1.5 rounded-xl border border-white/10 text-center">
+                  <span className="text-[9px] uppercase font-bold text-zinc-400 block">Pain Rating</span>
+                  <span className="text-xs font-mono font-bold text-amber-400">{suggestionData.painRating}</span>
+                </div>
+                <div className="bg-black/60 px-3 py-1.5 rounded-xl border border-white/10 text-center">
+                  <span className="text-[9px] uppercase font-bold text-zinc-400 block">Healing</span>
+                  <span className="text-xs font-mono font-bold text-emerald-400">{suggestionData.healingTime}</span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Style Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto py-3 no-scrollbar">
@@ -1418,6 +1607,9 @@ export const Interactive3DStudio = ({
               const isCurrentlySelected =
                 selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
               const isPreviewingThis = isCurrentlySelected && isTattooPreviewActive;
+              const isPrimary =
+                suggestionData?.primaryDesignName &&
+                d.name.toLowerCase().includes(suggestionData.primaryDesignName.toLowerCase());
               const rawImg = d.previewImage || d.dataUri || '';
               const imgSrc = getFullImageUrl(rawImg.replace(/\.jpg$/, '.png'));
 
@@ -1425,11 +1617,26 @@ export const Interactive3DStudio = ({
                 <div
                   key={d.id || d._id || d.name}
                   className={`relative rounded-2xl p-3.5 flex flex-col justify-between transition-all border ${
-                    isPreviewingThis
+                    isPrimary
+                      ? isPreviewingThis
+                        ? 'bg-amber-400/20 border-amber-400 ring-2 ring-amber-400/50 shadow-xl'
+                        : 'bg-zinc-900/90 border-amber-500/50 hover:border-amber-400 shadow-md'
+                      : isPreviewingThis
                       ? 'bg-amber-400/10 border-amber-400 ring-2 ring-amber-400/40 shadow-xl'
                       : 'bg-zinc-900/80 border-white/10 hover:border-white/20 hover:bg-zinc-900'
                   }`}
                 >
+                  {isPrimary && (
+                    <div className="mb-2 -mt-1 -mx-1 px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-500/25 to-amber-400/10 border border-amber-500/35 flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase text-amber-300 flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span>#1 Suggested for {activeKey}</span>
+                      </span>
+                      <span className="text-[9px] font-mono font-bold text-amber-400/90">
+                        Top Pick
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-start space-x-3.5">
                     <div className="relative w-20 h-20 rounded-xl bg-black/90 border border-white/10 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
                       <img
