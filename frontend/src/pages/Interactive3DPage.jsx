@@ -164,11 +164,11 @@ export const Interactive3DPage = () => {
             </div>
 
             {/* Active Highlight Badge */}
-            {selectedBodyArea && activeColor && (
-              <div className="flex items-center space-x-2.5 bg-black/80 border border-white/15 px-4 py-2.5 rounded-xl text-xs shadow-xl backdrop-blur-md self-start md:self-end">
-                <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeColor.hex }} />
+            {selectedBodyArea && (
+              <div className="flex items-center space-x-2 bg-black/80 border border-amber-400/30 px-3.5 py-2 rounded-xl text-xs shadow-xl backdrop-blur-md self-start md:self-end">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span className="text-zinc-400 font-medium">Selected:</span>
-                <span className="font-bold text-white uppercase tracking-wider">{selectedBodyArea}</span>
+                <span className="font-bold text-amber-300 uppercase tracking-wider">{selectedBodyArea}</span>
                 {isTattooPreviewActive && selectedDesign && (
                   <>
                     <span className="text-zinc-600">•</span>
@@ -252,9 +252,6 @@ export const Interactive3DPage = () => {
                   boxShadow: isSelected ? `0 0 15px ${color}55` : undefined,
                 }}
               >
-                {isSelected && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-black animate-ping" />
-                )}
                 <span>{area}</span>
               </button>
             );

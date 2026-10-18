@@ -866,38 +866,34 @@ export const Interactive3DStudio = ({
           <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
         </button>
 
-        {/* ACTIVE BLINKING BODY PART STATUS BANNER */}
+        {/* ACTIVE BODY PART STATUS BANNER */}
         {currentColor ? (
           <div
             className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-black/85 backdrop-blur-md border shadow-2xl transition-all"
-            style={{ borderColor: `${currentColor.hex}66` }}
+            style={{ borderColor: 'rgba(251, 191, 36, 0.4)' }}
           >
-            <div
-              className="w-2.5 h-2.5 rounded-full animate-ping"
-              style={{ backgroundColor: currentColor.hex }}
-            />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-white">
               {activeZone?.label || currentColor.name}
             </span>
             <span className="text-[10px] text-zinc-400 font-bold hidden sm:inline">•</span>
             <span
-              className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline"
-              style={{ color: currentColor.hex }}
+              className="text-[10px] font-bold uppercase tracking-wider text-amber-300 hidden sm:inline"
             >
-              Highlight & Blinking
+              Selected
             </span>
             <button
               type="button"
               onClick={() => setOptionsOpen(!optionsOpen)}
-              className="ml-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-colors"
+              className="ml-1 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors"
             >
               {optionsOpen ? 'Hide Options' : `Options (${matchingDesigns.length})`}
             </button>
           </div>
         ) : (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 shadow-xl text-zinc-300 text-[11px] font-bold">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span>Click any body part to highlight it and view tattoo options</span>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/10 shadow-xl text-zinc-300 text-[11px] font-bold">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Click any body part to view tattoo options</span>
           </div>
         )}
 
@@ -1025,31 +1021,19 @@ export const Interactive3DStudio = ({
                     opacity: dynamicCoords.opacity,
                   }}
                 >
-                  {/* Outer Expanding Radar Wave Ping */}
+                  {/* Smooth Anatomical Muscle Glow (No Green Dots, No Radar Ping) */}
                   <div
-                    className="absolute inset-0 rounded-full animate-radar-ping pointer-events-none"
+                    className="w-full h-full rounded-2xl animate-pulse pointer-events-none"
                     style={{
-                      backgroundColor: currentColor.hex,
-                      boxShadow: `0 0 28px ${currentColor.hex}`,
-                    }}
-                  />
-
-                  {/* Blinking Core Highlight */}
-                  <div
-                    className="w-full h-full rounded-full animate-anatomical-blink pointer-events-none"
-                    style={{
-                      color: currentColor.hex,
-                      background: `radial-gradient(ellipse at center, ${currentColor.hex}99 0%, ${currentColor.hex}44 45%, ${currentColor.hex}11 70%, transparent 85%)`,
+                      background: 'radial-gradient(ellipse at center, rgba(251, 191, 36, 0.45) 0%, rgba(245, 158, 11, 0.18) 50%, transparent 80%)',
                       filter: 'blur(8px)',
                       mixBlendMode: 'screen',
                     }}
                   />
-
-                  {/* Concentric Sharp Luminous Center */}
                   <div
-                    className="absolute inset-2 rounded-full pointer-events-none animate-pulse"
+                    className="absolute inset-1 rounded-2xl pointer-events-none"
                     style={{
-                      background: `radial-gradient(ellipse at center, #ffffff 0%, ${currentColor.hex} 60%, transparent 85%)`,
+                      background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(251, 191, 36, 0.15) 55%, transparent 75%)',
                       filter: 'blur(4px)',
                       mixBlendMode: 'color-dodge',
                     }}
@@ -1180,10 +1164,7 @@ export const Interactive3DStudio = ({
           >
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
               <div className="flex items-center space-x-2">
-                <span
-                  className="w-2.5 h-2.5 rounded-full animate-ping shrink-0"
-                  style={{ backgroundColor: currentColor.hex }}
-                />
+                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
                 <span className="text-xs font-black uppercase tracking-wider text-white">
                   Tattoo Options for {activeZone?.label || activeKey}
                 </span>
@@ -1393,11 +1374,9 @@ export const Interactive3DStudio = ({
                     Selected Body Part
                   </span>
                   <span
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest"
-                    style={{ backgroundColor: `${currentColor.hex}22`, color: currentColor.hex }}
+                    className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-amber-400/20 text-amber-300 border border-amber-400/30"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: currentColor.hex }} />
-                    Active & Blinking
+                    Active Placement
                   </span>
                 </div>
                 <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
