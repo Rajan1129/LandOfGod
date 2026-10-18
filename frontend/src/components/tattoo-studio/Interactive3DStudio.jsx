@@ -66,18 +66,18 @@ export const FEMININE_360_FRAMES = [
 
 // Color palette mapping for anatomical muscle groups matching reference character
 export const ANATOMICAL_COLORS = {
-  Chest: { hex: '#22c55e', bg: 'rgba(34, 197, 94, 0.55)', border: '#4ade80', name: 'Pectorals (Chest)' },
-  Shoulder: { hex: '#fb7185', bg: 'rgba(251, 113, 133, 0.55)', border: '#f43f5e', name: 'Deltoids (Shoulders)' },
-  'Upper Arm': { hex: '#38bdf8', bg: 'rgba(56, 189, 248, 0.55)', border: '#0284c7', name: 'Biceps & Triceps (Arm)' },
-  Forearm: { hex: '#2dd4bf', bg: 'rgba(45, 212, 191, 0.55)', border: '#14b8a6', name: 'Brachioradialis (Forearm)' },
-  Ribs: { hex: '#f472b6', bg: 'rgba(244, 114, 182, 0.55)', border: '#ec4899', name: 'Serratus & Core (Ribs)' },
-  Back: { hex: '#10b981', bg: 'rgba(16, 185, 129, 0.55)', border: '#059669', name: 'Latissimus Dorsi (Back)' },
-  Spine: { hex: '#f87171', bg: 'rgba(248, 113, 113, 0.55)', border: '#ef4444', name: 'Erector Spinae (Spine)' },
-  Thigh: { hex: '#fbbf24', bg: 'rgba(251, 191, 36, 0.55)', border: '#f59e0b', name: 'Quadriceps (Thigh)' },
-  Calf: { hex: '#c084fc', bg: 'rgba(192, 132, 252, 0.55)', border: '#a855f7', name: 'Gastrocnemius (Calf)' },
-  Neck: { hex: '#818cf8', bg: 'rgba(129, 140, 248, 0.55)', border: '#6366f1', name: 'Trapezius (Neck)' },
-  Wrist: { hex: '#cbd5e1', bg: 'rgba(203, 213, 225, 0.55)', border: '#94a3b8', name: 'Wrist / Hand' },
-  Ankle: { hex: '#cbd5e1', bg: 'rgba(203, 213, 225, 0.55)', border: '#94a3b8', name: 'Ankle / Foot' },
+  Chest: { hex: '#22c55e', rgb: '34, 197, 94', bg: 'rgba(34, 197, 94, 0.55)', border: '#4ade80', name: 'Pectorals (Chest)' },
+  Shoulder: { hex: '#ef4444', rgb: '239, 68, 68', bg: 'rgba(239, 68, 68, 0.55)', border: '#f87171', name: 'Deltoids (Shoulders)' },
+  'Upper Arm': { hex: '#0ea5e9', rgb: '14, 165, 233', bg: 'rgba(14, 165, 233, 0.55)', border: '#38bdf8', name: 'Biceps & Triceps (Arm)' },
+  Forearm: { hex: '#14b8a6', rgb: '20, 184, 166', bg: 'rgba(20, 184, 166, 0.55)', border: '#2dd4bf', name: 'Brachioradialis (Forearm)' },
+  Ribs: { hex: '#ec4899', rgb: '236, 72, 153', bg: 'rgba(236, 72, 153, 0.55)', border: '#f472b6', name: 'Serratus & Core (Ribs)' },
+  Back: { hex: '#10b981', rgb: '16, 185, 129', bg: 'rgba(16, 185, 129, 0.55)', border: '#34d399', name: 'Latissimus Dorsi (Back)' },
+  Spine: { hex: '#ef4444', rgb: '239, 68, 68', bg: 'rgba(239, 68, 68, 0.55)', border: '#f87171', name: 'Erector Spinae (Spine)' },
+  Thigh: { hex: '#eab308', rgb: '234, 179, 8', bg: 'rgba(234, 179, 8, 0.55)', border: '#facc15', name: 'Quadriceps (Thigh)' },
+  Calf: { hex: '#a855f7', rgb: '168, 85, 247', bg: 'rgba(168, 85, 247, 0.55)', border: '#c084fc', name: 'Gastrocnemius (Calf)' },
+  Neck: { hex: '#6366f1', rgb: '99, 102, 241', bg: 'rgba(99, 102, 241, 0.55)', border: '#818cf8', name: 'Trapezius (Neck)' },
+  Wrist: { hex: '#38bdf8', rgb: '56, 189, 248', bg: 'rgba(56, 189, 248, 0.55)', border: '#7dd3fc', name: 'Wrist / Hand' },
+  Ankle: { hex: '#c084fc', rgb: '192, 132, 252', bg: 'rgba(192, 132, 252, 0.55)', border: '#d8b4fe', name: 'Ankle / Foot' },
 };
 
 // Curated Anatomical Tattoo Suggestions, Placement Guidance & Pain Ratings by Rahul Choudhary
@@ -945,22 +945,27 @@ export const Interactive3DStudio = ({
         {currentColor ? (
           <div
             className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-black/85 backdrop-blur-md border shadow-2xl transition-all"
-            style={{ borderColor: 'rgba(251, 191, 36, 0.4)' }}
+            style={{
+              borderColor: `${currentColor.hex}66`,
+              boxShadow: `0 10px 30px ${currentColor.hex}25`,
+            }}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5" style={{ color: currentColor.hex }} />
             <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-white">
               {activeZone?.label || currentColor.name}
             </span>
             <span className="text-[10px] text-zinc-400 font-bold hidden sm:inline">•</span>
             <span
-              className="text-[10px] font-bold uppercase tracking-wider text-amber-300 hidden sm:inline"
+              className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline"
+              style={{ color: currentColor.border || currentColor.hex }}
             >
               Selected
             </span>
             <button
               type="button"
               onClick={() => setOptionsOpen(!optionsOpen)}
-              className="ml-1 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors"
+              className="ml-1 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-black transition-transform active:scale-95"
+              style={{ backgroundColor: currentColor.hex }}
             >
               {optionsOpen ? 'Hide Options' : `Options (${matchingDesigns.length})`}
             </button>
@@ -1128,10 +1133,18 @@ export const Interactive3DStudio = ({
               );
             })}
 
-            {/* HIGHLIGHT ONLY ON THE EXACT CLICKED PART (NOT ON OTHER PARTS) */}
+            {/* HIGHLIGHT ONLY ON THE EXACT CLICKED PART (AUTHENTIC COLOR: EXTRA GREEN IF GREEN, EXTRA RED IF RED) */}
             {activeZone && (() => {
               const dynamicCoords = getInterpolatedZoneCoords(activeZone, displayAngle);
               if (!dynamicCoords || dynamicCoords.opacity < 0.12) return null;
+
+              const partData = ANATOMICAL_COLORS[activeZone.key] || {
+                hex: '#22c55e',
+                rgb: '34, 197, 94',
+                border: '#4ade80',
+                name: activeZone.key,
+              };
+              const rgb = partData.rgb || '34, 197, 94';
 
               return (
                 <div
@@ -1140,28 +1153,52 @@ export const Interactive3DStudio = ({
                   style={{
                     left: `${dynamicCoords.left + userOffsetX}%`,
                     top: `${dynamicCoords.top + userOffsetY}%`,
-                    width: `${Math.max(dynamicCoords.width * 1.5, 16)}%`,
-                    height: `${Math.max(dynamicCoords.height * 1.5, 16)}%`,
+                    width: `${Math.max(dynamicCoords.width * 1.35, 16)}%`,
+                    height: `${Math.max(dynamicCoords.height * 1.35, 16)}%`,
                     transform: `translate3d(-50%, -50%, 0) rotate(${dynamicCoords.rotate + userRotate}deg)`,
                     transformOrigin: '50% 50%',
                     opacity: dynamicCoords.opacity,
                   }}
                 >
-                  {/* Smooth Anatomical Muscle Glow (No Green Dots, No Radar Ping) */}
+                  {/* Layer 1: Muscle Hue & Saturation Super-Boost (mixBlendMode: color) */}
+                  {/* Turns green into extra green, red into extra red while preserving anatomical muscle fibers */}
                   <div
-                    className="w-full h-full rounded-2xl animate-pulse pointer-events-none"
+                    className="absolute inset-0 rounded-2xl pointer-events-none animate-pulse"
                     style={{
-                      background: 'radial-gradient(ellipse at center, rgba(251, 191, 36, 0.45) 0%, rgba(245, 158, 11, 0.18) 50%, transparent 80%)',
-                      filter: 'blur(8px)',
-                      mixBlendMode: 'screen',
+                      background: `radial-gradient(ellipse at center, rgba(${rgb}, 0.95) 0%, rgba(${rgb}, 0.75) 55%, transparent 88%)`,
+                      mixBlendMode: 'color',
+                      filter: 'contrast(1.4) saturate(2.8)',
                     }}
                   />
+
+                  {/* Layer 2: Luminous Radiance & Glow (mixBlendMode: screen) */}
+                  {/* Makes this exact muscle part significantly brighter and vibrant compared to the full body */}
+                  <div
+                    className="absolute inset-0 rounded-2xl pointer-events-none animate-pulse"
+                    style={{
+                      background: `radial-gradient(ellipse at center, rgba(${rgb}, 0.8) 0%, rgba(${rgb}, 0.45) 50%, transparent 85%)`,
+                      mixBlendMode: 'screen',
+                      filter: 'blur(5px)',
+                    }}
+                  />
+
+                  {/* Layer 3: Core Vibrant Highlight & Pop (mixBlendMode: color-dodge) */}
+                  {/* Explodes the underlying muscle fibers into extra vibrant intensity */}
                   <div
                     className="absolute inset-1 rounded-2xl pointer-events-none"
                     style={{
-                      background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(251, 191, 36, 0.15) 55%, transparent 75%)',
-                      filter: 'blur(4px)',
+                      background: `radial-gradient(ellipse at center, rgba(${rgb}, 0.85) 0%, rgba(${rgb}, 0.3) 45%, transparent 75%)`,
                       mixBlendMode: 'color-dodge',
+                      filter: 'blur(3px)',
+                    }}
+                  />
+
+                  {/* Layer 4: Active Anatomical Contour Boundary with Pulsing Aura */}
+                  <div
+                    className="absolute inset-0 rounded-2xl pointer-events-none animate-pulse"
+                    style={{
+                      border: `1.5px solid rgba(${rgb}, 0.7)`,
+                      boxShadow: `0 0 24px rgba(${rgb}, 0.8), inset 0 0 14px rgba(${rgb}, 0.5)`,
                     }}
                   />
                 </div>
@@ -1284,7 +1321,8 @@ export const Interactive3DStudio = ({
         {/* FLOATING OVERLAY: TATTOO SUGGESTIONS FOR CLICKED BODY PART DIRECTLY IN VIEWPORT */}
         {activeKey && optionsOpen && (
           <div
-            className="absolute bottom-3 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-black/95 border border-amber-500/40 rounded-2xl p-3.5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.95)] transition-all animate-in fade-in slide-in-from-bottom-3 duration-250 pointer-events-auto"
+            className="absolute bottom-3 left-3 right-3 sm:left-4 sm:right-4 z-40 bg-black/95 border rounded-2xl p-3.5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.95)] transition-all animate-in fade-in slide-in-from-bottom-3 duration-250 pointer-events-auto"
+            style={{ borderColor: currentColor ? `${currentColor.hex}55` : 'rgba(251, 191, 36, 0.4)' }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             {/* Header with anatomical suggestion highlights */}
@@ -1292,7 +1330,7 @@ export const Interactive3DStudio = ({
               <div className="min-w-0 space-y-0.5">
                 <div className="flex items-center flex-wrap gap-2">
                   <div className="flex items-center space-x-1.5">
-                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                    <Sparkles className="w-4 h-4 shrink-0" style={{ color: currentColor?.hex || '#fbbf24' }} />
                     <span className="text-xs font-black uppercase tracking-wider text-white">
                       Suggested Tattoos for {activeZone?.label || activeKey}
                     </span>
