@@ -238,7 +238,7 @@ export const Interactive3DPage = () => {
           </div>
 
           <div className="text-[11px] text-zinc-400 hidden md:block">
-            Click any body part on the character to highlight only that part • Drag to rotate 360°
+            Click any body part on the character to highlight only that part • Use buttons to turn around
           </div>
         </div>
 

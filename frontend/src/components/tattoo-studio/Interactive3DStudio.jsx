@@ -620,13 +620,9 @@ export const Interactive3DStudio = ({
   const [internalZoneId, setInternalZoneId] = useState(null);
   const currentZoneId = controlledZoneId !== undefined ? controlledZoneId : internalZoneId;
 
-  // Fluid angle physics refs
+  // Fluid angle physics refs for button-triggered rotation (no drag by hand)
   const targetAngleRef = useRef(0);
   const currentAngleRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const lastPointerXRef = useRef(0);
-  const velocityRef = useRef(0);
-  const dragDistanceRef = useRef(0);
   const isAutoSpinRef = useRef(false);
 
   // States
@@ -663,19 +659,9 @@ export const Interactive3DStudio = ({
       const img = new Image();
       img.src = frame.src;
     });
-
-    const handleGlobalRelease = () => {
-      isDraggingRef.current = false;
-    };
-    window.addEventListener('pointerup', handleGlobalRelease);
-    window.addEventListener('pointercancel', handleGlobalRelease);
-    return () => {
-      window.removeEventListener('pointerup', handleGlobalRelease);
-      window.removeEventListener('pointercancel', handleGlobalRelease);
-    };
   }, []);
 
-  // Smooth 60fps momentum damping loop
+  // Smooth 60fps momentum damping loop for button-driven rotation
   useEffect(() => {
     let animId;
     let lastTime = performance.now();
@@ -684,15 +670,8 @@ export const Interactive3DStudio = ({
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
-      if (isAutoSpinRef.current && !isDraggingRef.current) {
+      if (isAutoSpinRef.current) {
         targetAngleRef.current = ((targetAngleRef.current + 22 * dt) % 360 + 360) % 360;
-      }
-
-      if (!isDraggingRef.current && Math.abs(velocityRef.current) > 0.02) {
-        targetAngleRef.current = ((targetAngleRef.current - velocityRef.current * 42 * dt) % 360 + 360) % 360;
-        velocityRef.current *= Math.pow(0.85, dt * 60);
-      } else if (!isDraggingRef.current) {
-        velocityRef.current = 0;
       }
 
       let diff = targetAngleRef.current - currentAngleRef.current;
@@ -722,66 +701,12 @@ export const Interactive3DStudio = ({
       HIT_ZONES.find((z) => z.id === currentZoneId) ||
       HIT_ZONES.find((z) => z.key.toLowerCase() === (selectedBodyArea || '').toLowerCase());
     if (activeZone && typeof activeZone.defaultTheta === 'number') {
-      velocityRef.current = 0;
       targetAngleRef.current = activeZone.defaultTheta;
     }
   }, [currentZoneId, selectedBodyArea]);
 
-  // Pointer drag controls
-  const handlePointerDown = (e) => {
-    isDraggingRef.current = true;
-    dragDistanceRef.current = 0;
-    velocityRef.current = 0;
-
-    if (isAutoSpinRef.current) {
-      isAutoSpinRef.current = false;
-      setIsAutoSpin(false);
-    }
-
-    const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX) ?? 0;
-    lastPointerXRef.current = clientX;
-
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch (_) {}
-  };
-
-  const handlePointerMove = (e) => {
-    if (!isDraggingRef.current) return;
-
-    const clientX = e.clientX ?? 0;
-    const deltaX = clientX - lastPointerXRef.current;
-
-    dragDistanceRef.current += Math.abs(deltaX);
-    lastPointerXRef.current = clientX;
-
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const speed = isMobile ? 1.15 : 0.75;
-
-    const nextAngle = ((targetAngleRef.current - deltaX * speed) % 360 + 360) % 360;
-    targetAngleRef.current = nextAngle;
-    currentAngleRef.current = nextAngle;
-    setDisplayAngle(nextAngle);
-
-    velocityRef.current = velocityRef.current * 0.4 + (deltaX * 0.35) * 0.6;
-  };
-
-  const handlePointerUp = (e) => {
-    isDraggingRef.current = false;
-    try {
-      if (e?.currentTarget?.hasPointerCapture?.(e.pointerId)) {
-        e.currentTarget.releasePointerCapture(e.pointerId);
-      }
-    } catch (_) {}
-  };
-
-  const handlePointerLeave = () => {
-    isDraggingRef.current = false;
-  };
-
-  // Step rotation
+  // Button-driven rotation handlers:
   const handleStepRotate = (delta) => {
-    velocityRef.current = 0;
     setIsAutoSpin(false);
     isAutoSpinRef.current = false;
     const currentBase = Math.round(targetAngleRef.current / 45) * 45;
@@ -789,7 +714,6 @@ export const Interactive3DStudio = ({
   };
 
   const handleSnapToAngle = (angle) => {
-    velocityRef.current = 0;
     setIsAutoSpin(false);
     isAutoSpinRef.current = false;
     targetAngleRef.current = ((angle % 360) + 360) % 360;
@@ -799,7 +723,6 @@ export const Interactive3DStudio = ({
     const nextVal = !isAutoSpin;
     setIsAutoSpin(nextVal);
     isAutoSpinRef.current = nextVal;
-    velocityRef.current = 0;
   };
 
   // Body part click handler:
@@ -863,11 +786,12 @@ export const Interactive3DStudio = ({
   const filteredDesigns =
     styleFilter === 'All' ? displayDesigns : displayDesigns.filter((d) => d.style === styleFilter);
 
-  // Quick 3 views matching user reference image
+  // Quick angle presets for buttons
   const referenceAnglePresets = [
-    { label: 'Front View', angle: 0 },
-    { label: '3/4 Side View', angle: 45 },
-    { label: 'Back View', angle: 180 },
+    { label: 'Front (0°)', angle: 0 },
+    { label: 'Right (90°)', angle: 90 },
+    { label: 'Back (180°)', angle: 180 },
+    { label: 'Left (270°)', angle: 270 },
   ];
 
   return (
@@ -942,8 +866,18 @@ export const Interactive3DStudio = ({
           </button>
         </div>
 
-        {/* Right: Quick Angles (Front, 3/4 Side, Back) matching user image */}
-        <div className="hidden md:flex items-center space-x-1.5 bg-black/60 p-1 rounded-xl border border-white/10">
+        {/* Right: Turn Controls in Top Bar */}
+        <div className="hidden lg:flex items-center space-x-1.5 bg-black/60 p-1 rounded-xl border border-white/10">
+          <button
+            type="button"
+            onClick={() => handleStepRotate(-45)}
+            className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-300 hover:text-white hover:bg-white/10 flex items-center gap-1 transition-all"
+            title="Turn Left (-45°)"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+            <span>Turn Left</span>
+          </button>
+
           {referenceAnglePresets.map((preset) => {
             const isNear =
               Math.abs(normalizedTheta - preset.angle) < 22.5 ||
@@ -953,9 +887,9 @@ export const Interactive3DStudio = ({
                 key={preset.label}
                 type="button"
                 onClick={() => handleSnapToAngle(preset.angle)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
                   isNear
-                    ? 'bg-amber-400 text-black font-bold shadow-sm'
+                    ? 'bg-amber-400 text-black shadow-sm font-extrabold'
                     : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -963,21 +897,36 @@ export const Interactive3DStudio = ({
               </button>
             );
           })}
+
+          <button
+            type="button"
+            onClick={() => handleStepRotate(45)}
+            className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-300 hover:text-white hover:bg-white/10 flex items-center gap-1 transition-all"
+            title="Turn Right (+45°)"
+          >
+            <span>Turn Right</span>
+            <RotateCw className="w-3.5 h-3.5 text-amber-400" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleStepRotate(180)}
+            className="px-3 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider bg-amber-400/20 hover:bg-amber-400 hover:text-black text-amber-300 border border-amber-400/40 shadow-sm transition-all flex items-center gap-1"
+            title="Turn Character Around 180°"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Turn Around</span>
+          </button>
         </div>
 
       </div>
 
-      {/* 2. MAIN 3D MANNEQUIN TURNTABLE VIEWPORT */}
+      {/* 2. MAIN 3D MANNEQUIN TURNTABLE VIEWPORT (No hand dragging; buttons to move and turn around) */}
       <div
         className={`relative w-full ${
           compact ? 'h-[420px] sm:h-[500px]' : 'h-[460px] sm:h-[560px] md:h-[640px]'
-        } flex items-center justify-center bg-[#181a1c] rounded-2xl sm:rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-grab active:cursor-grabbing select-none`}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-        onPointerLeave={handlePointerLeave}
-        style={{ touchAction: 'none', userSelect: 'none' }}
+        } flex items-center justify-center bg-[#181a1c] rounded-2xl sm:rounded-3xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden cursor-default select-none`}
+        style={{ userSelect: 'none' }}
       >
         {/* TOP-LEFT BACK BUTTON */}
         <button
@@ -1023,15 +972,66 @@ export const Interactive3DStudio = ({
           </div>
         )}
 
-        {/* BOTTOM-RIGHT 360° ROTATE BUTTON */}
+        {/* FLOATING LEFT TURN BUTTON */}
+        <button
+          type="button"
+          onClick={() => handleStepRotate(-45)}
+          className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 p-3 sm:px-4 sm:py-3.5 rounded-2xl bg-black/85 hover:bg-black text-amber-300 hover:text-white border border-amber-400/40 backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.85)] flex items-center gap-2 transition-all hover:scale-110 active:scale-95 group"
+          title="Turn Character Left (-45°)"
+        >
+          <RotateCcw className="w-5 h-5 transition-transform group-hover:-rotate-45" />
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline">Turn Left</span>
+        </button>
+
+        {/* FLOATING RIGHT TURN BUTTON */}
         <button
           type="button"
           onClick={() => handleStepRotate(45)}
-          className="absolute bottom-4 right-4 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-black text-amber-300 hover:text-white border border-amber-400/40 backdrop-blur-md shadow-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-          title="Rotate 45°"
+          className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 p-3 sm:px-4 sm:py-3.5 rounded-2xl bg-black/85 hover:bg-black text-amber-300 hover:text-white border border-amber-400/40 backdrop-blur-md shadow-[0_10px_35px_rgba(0,0,0,0.85)] flex items-center gap-2 transition-all hover:scale-110 active:scale-95 group"
+          title="Turn Character Right (+45°)"
         >
+          <span className="text-xs font-black uppercase tracking-wider hidden sm:inline">Turn Right</span>
           <RotateCw className="w-5 h-5 transition-transform group-hover:rotate-45" />
         </button>
+
+        {/* FLOATING TURN AROUND (180°) BUTTON */}
+        <button
+          type="button"
+          onClick={() => handleStepRotate(180)}
+          className="absolute bottom-4 right-4 z-30 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-amber-500/25 via-black/90 to-amber-500/25 hover:from-amber-400 hover:to-amber-500 text-amber-300 hover:text-black border border-amber-400/60 backdrop-blur-md shadow-2xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 text-xs font-black uppercase tracking-wider"
+          title="Turn Character Around 180° (Front ↔ Back)"
+        >
+          <RefreshCw className="w-4 h-4" />
+          <span>Turn Around (180°)</span>
+        </button>
+
+        {/* BOTTOM CENTER QUICK-TURN ANGLE PRESETS */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 hidden sm:flex items-center gap-1.5 p-1 bg-black/85 rounded-2xl border border-white/15 backdrop-blur-md shadow-xl">
+          {[
+            { label: 'Front (0°)', angle: 0 },
+            { label: 'Right (90°)', angle: 90 },
+            { label: 'Back (180°)', angle: 180 },
+            { label: 'Left (270°)', angle: 270 },
+          ].map((preset) => {
+            const isNear =
+              Math.abs(normalizedTheta - preset.angle) < 22.5 ||
+              (preset.angle === 0 && normalizedTheta > 337.5);
+            return (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => handleSnapToAngle(preset.angle)}
+                className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                  isNear
+                    ? 'bg-amber-400 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {preset.label}
+              </button>
+            );
+          })}
+        </div>
 
         {/* BOTTOM-LEFT AUTO-SPIN & ZOOM CONTROLS */}
         <div className="absolute bottom-4 left-4 z-30 flex items-center space-x-1.5 p-1 bg-black/80 rounded-2xl border border-white/15 backdrop-blur-md shadow-xl">
@@ -1251,7 +1251,6 @@ export const Interactive3DStudio = ({
                   key={zone.id}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (dragDistanceRef.current > 8) return;
                     handleBodyPartClick(zone);
                   }}
                   onMouseEnter={() => setHoveredZoneId(zone.id)}
