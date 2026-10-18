@@ -53,7 +53,7 @@ export const Interactive3DPage = () => {
               difficulty: d.difficulty || 'Custom',
               previewImage: d.previewImage,
               dataUri: d.previewImage || d.transparentOverlay,
-              bodyAreas: d.bodyAreas || ['Chest'],
+              bodyAreas: Array.isArray(d.bodyAreas) && d.bodyAreas.length > 0 ? d.bodyAreas : [],
               isDefaultReference: Boolean(d.isDefaultReference),
               isFromDB: true,
             }));

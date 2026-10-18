@@ -839,14 +839,12 @@ export const Interactive3DStudio = ({
 
   const suggestionData = activeKey ? BODY_PART_SUGGESTIONS[activeKey] : null;
 
-  // Matching designs for active body part - prioritized so tailored suggestion appears FIRST
+  // Matching designs STRICTLY for active body part - ONLY that part's tattoo designs will show!
   const matchingDesigns = useMemo(() => {
     if (!activeKey) return [];
     const directMatches = designs.filter((d) =>
       (d.bodyAreas || []).some(
-        (a) =>
-          a.toLowerCase() === activeKey.toLowerCase() ||
-          activeKey.toLowerCase().includes(a.toLowerCase())
+        (a) => a.trim().toLowerCase() === activeKey.trim().toLowerCase()
       )
     );
 
@@ -860,7 +858,8 @@ export const Interactive3DStudio = ({
     });
   }, [activeKey, designs, suggestionData]);
 
-  const displayDesigns = matchingDesigns.length > 0 ? matchingDesigns : designs;
+  // STRICT: ONLY show designs for the clicked body part, never fallback to other parts!
+  const displayDesigns = activeKey ? matchingDesigns : [];
   const filteredDesigns =
     styleFilter === 'All' ? displayDesigns : displayDesigns.filter((d) => d.style === styleFilter);
 
@@ -1602,8 +1601,13 @@ export const Interactive3DStudio = ({
           </div>
 
           {/* Tattoo Options Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
-            {filteredDesigns.map((d) => {
+          {filteredDesigns.length === 0 ? (
+            <div className="py-12 text-center text-zinc-400 text-xs bg-zinc-900/50 rounded-2xl border border-white/5 my-2">
+              No tattoos found matching style "{styleFilter}" for {activeZone?.label || activeKey}.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+              {filteredDesigns.map((d) => {
               const isCurrentlySelected =
                 selectedDesign?.id === d.id || selectedDesign?._id === d._id || selectedDesign?.name === d.name;
               const isPreviewingThis = isCurrentlySelected && isTattooPreviewActive;
@@ -1726,6 +1730,7 @@ export const Interactive3DStudio = ({
               );
             })}
           </div>
+          )}
 
         </div>
       )}
