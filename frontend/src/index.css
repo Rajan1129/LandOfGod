@@ -161,3 +161,37 @@
   color: var(--studio-text-main);
   font-weight: 800;
 }
+
+/* Anatomical Body Part Highlight and Blinking Animations */
+@keyframes anatomicalPulseBlink {
+  0%, 100% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1);
+    filter: drop-shadow(0 0 16px currentColor) drop-shadow(0 0 30px currentColor);
+  }
+  50% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(1.08);
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+}
+
+@keyframes anatomicalRadarPing {
+  0% {
+    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-anatomical-blink {
+  animation: anatomicalPulseBlink 0.95s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-radar-ping {
+  animation: anatomicalRadarPing 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
